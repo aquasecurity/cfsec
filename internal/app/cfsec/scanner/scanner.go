@@ -7,14 +7,13 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/resource"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/result"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/severity"
 )
 
 var registeredRules []rule.Rule
 
 func RegisterCheckRule(rule rule.Rule) {
-
 	registeredRules = append(registeredRules, rule)
-
 }
 
 type Scanner struct {
@@ -43,11 +42,18 @@ func (scanner *Scanner) Scan(resources resource.Resources) []result.Result {
 		for _, b := range resources {
 			for _, t := range r.RequiredTypes {
 				if t == b.Type() {
-					resultSet := result.NewSet(b)
+					resultSet := result.NewSet(b).
+						WithRuleID(r.ID()).
+						WithLinks(r.Documentation.Links).
+						WithLocation(b.Filepath())
 
 					r.CheckFunc(resultSet, b)
 					for _, result := range resultSet.All() {
+						if result.Severity == severity.None {
+							result.Severity = r.DefaultSeverity
+						}
 						results = append(results, *result)
+
 					}
 				}
 			}

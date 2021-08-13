@@ -1,6 +1,18 @@
+Parameters:
+  BucketName: 
+    Type: String
+    Default: naughty
+  BucketKeyEnabled:
+    Type: Boolean
+    Default: false
+
 Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
-    DeletionPolicy: Retain
     Properties:
-      BucketName: bad-example
+      BucketName: 
+        Ref: BucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: 
+            Ref: BucketKeyEnabled

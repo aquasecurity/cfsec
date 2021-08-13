@@ -7,4 +7,6 @@ type Resource interface {
 	Underlying() cloudformation.Resource
 	IsNil() bool
 	Name() string
+	Render() (string, error)
+	Filepath() string
 }

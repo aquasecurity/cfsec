@@ -12,6 +12,7 @@ type Set interface {
 	WithImpact(impact string) Set
 	WithResolution(resolution string) Set
 	WithLinks(links []string) Set
+	WithLocation(location string) Set
 	All() []*Result
 }
 
@@ -29,6 +30,7 @@ type resultSet struct {
 	ruleSummary   string
 	impact        string
 	resolution    string
+	location      string
 	links         []string
 }
 
@@ -39,7 +41,8 @@ func (s *resultSet) AddResult() *Result {
 		WithRuleSummary(s.ruleSummary).
 		WithImpact(s.impact).
 		WithResolution(s.resolution).
-		WithLinks(s.links)
+		WithLinks(s.links).
+		WithLocation(s.location)
 	s.results = append(s.results, result)
 	return result
 }
@@ -75,5 +78,10 @@ func (r *resultSet) WithResolution(resolution string) Set {
 
 func (r *resultSet) WithLinks(links []string) Set {
 	r.links = links
+	return r
+}
+
+func (r *resultSet) WithLocation(location string) Set {
+	r.location = location
 	return r
 }

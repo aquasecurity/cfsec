@@ -10,18 +10,19 @@ import (
 // Result is a positive result for a security check. It encapsulates a code unique to the specific check it was raised
 // by, a human-readable description and a range
 type Result struct {
-	RuleID          string            `json:"rule_id"`
-	LegacyRuleID    string            `json:"legacy_rule_id"`
-	RuleSummary     string            `json:"rule_description"`
-	Impact          string            `json:"impact"`
-	Resolution      string            `json:"resolution"`
-	Links           []string          `json:"links"`
-	Description     string            `json:"description"`
-	RangeAnnotation string            `json:"-"`
-	Severity        severity.Severity `json:"severity"`
-	Status          Status            `json:"status"`
+	RuleID       string            `json:"rule_id"`
+	LegacyRuleID string            `json:"legacy_rule_id"`
+	RuleSummary  string            `json:"rule_description"`
+	Impact       string            `json:"impact"`
+	Resolution   string            `json:"resolution"`
+	Links        []string          `json:"links"`
+	Description  string            `json:"description"`
+	Attribute    string            `json:"attribute"`
+	Severity     severity.Severity `json:"severity"`
+	Status       Status            `json:"status"`
 	// Location        block.Range       `json:"location"`
-	blocks resource.Resources
+	blocks   resource.Resources
+	Location string `json:"location"`
 	// attribute       block.Attribute
 }
 
@@ -47,6 +48,10 @@ func (r *Result) Passed() bool {
 
 func (r *Result) Blocks() resource.Resources {
 	return r.blocks
+}
+
+func (r *Result) Resource() resource.Resource {
+	return r.blocks[0]
 }
 
 func (r *Result) HashCode() string {
@@ -92,6 +97,11 @@ func (r *Result) WithLinks(links []string) *Result {
 	return r
 }
 
+func (r *Result) WithLocation(location string) *Result {
+	r.Location = location
+	return r
+}
+
 func (r *Result) WithBlock(block resource.Resource) *Result {
 	if block.IsNil() {
 		return r
@@ -117,5 +127,10 @@ func (r *Result) WithSeverity(sev severity.Severity) *Result {
 
 func (r *Result) WithStatus(status Status) *Result {
 	r.Status = status
+	return r
+}
+
+func (r *Result) WithAttributeAnnotation(attrName string) *Result {
+	r.Attribute = attrName
 	return r
 }

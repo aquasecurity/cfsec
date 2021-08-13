@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/resource"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/formatters"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
-
-	"github.com/awslabs/goformation/v5"
 )
 
 func main() {
@@ -18,23 +16,13 @@ func main() {
 	}
 	filepath := os.Args[1]
 
-	template, err := goformation.Open(filepath)
+	resources, err := parser.New(filepath)
 	if err != nil {
 		panic(err)
 	}
-
-	var resources resource.Resources
-
-	for name, r := range template.Resources {
-		formationType := r.AWSCloudFormationType()
-		resources = append(resources, resource.NewCFResource(&r, formationType, string(name)))
-	}
-
 	s := scanner.New()
 	results := s.Scan(resources)
 
-	for _, r := range results {
-		fmt.Println(r.Description)
-	}
+	formatters.FormatDefault(os.Stdout, results, "")
 
 }

@@ -77,7 +77,6 @@ func printResult(res result.Result, i int, includePassedChecks bool) {
 }
 
 func highlightRender(renderText string, attributeOfInterest string) {
-	fmt.Printf("attribute of interest is %s", attributeOfInterest)
 
 	if attributeOfInterest == "" {
 		tml.Println(renderText)

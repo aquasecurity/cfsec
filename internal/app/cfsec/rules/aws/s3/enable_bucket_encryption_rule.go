@@ -76,7 +76,7 @@ resource "aws_s3_bucket" "good_example" {
 				if !sse.BucketKeyEnabled {
 					set.AddResult().
 						WithDescription("Resource '%s' has BucketKeyEnabled set to false", r.Name()).
-						WithAttributeAnnotation("BucketKeyEnabled:")
+						WithAttributeAnnotation("BucketKeyEnabled")
 				}
 			}
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/result"
@@ -76,14 +77,21 @@ func printResult(res result.Result, i int, includePassedChecks bool) {
 }
 
 func highlightRender(renderText string, attributeOfInterest string) {
+	fmt.Printf("attribute of interest is %s", attributeOfInterest)
+
 	if attributeOfInterest == "" {
 		tml.Println(renderText)
 	} else {
+
+		searchRegex, err := regexp.Compile(fmt.Sprintf("%s[\"|:]", attributeOfInterest))
+		if err != nil {
+			tml.Println(renderText)
+		}
 		var newLines []string
 
 		lines := strings.Split(renderText, "\n")
 		for _, line := range lines {
-			if strings.Contains(line, attributeOfInterest) {
+			if searchRegex.MatchString(line) {
 				newLines = append(newLines, fmt.Sprintf("  <red>%s</red>", line))
 			} else {
 				newLines = append(newLines, fmt.Sprintf("  %s", line))

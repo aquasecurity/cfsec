@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/aquasecurity/defsec/types"
 	"github.com/awslabs/goformation/v5/cloudformation"
 	"github.com/awslabs/goformation/v5/intrinsics"
 	"github.com/sanathkr/yaml"
@@ -25,15 +26,17 @@ type CFResource struct {
 	resourceName string
 	sourceFormat SourceFormat
 	filepath     string
+	rng          types.Range
 }
 
-func NewCFResource(resource *cloudformation.Resource, resourceType string, resourceName string, sourceFormat SourceFormat, filepath string) Resource {
+func NewCFResource(resource *cloudformation.Resource, resourceType string, resourceName string, sourceFormat SourceFormat, filepath string, rng types.Range) Resource {
 	return &CFResource{
 		resource:     resource,
 		resourceType: resourceType,
 		resourceName: resourceName,
 		filepath:     filepath,
 		sourceFormat: sourceFormat,
+		rng:          rng,
 	}
 }
 

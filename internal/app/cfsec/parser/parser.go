@@ -16,6 +16,11 @@ func New(filepaths ...string) (resource.Resources, error) {
 
 	var resources resource.Resources
 	for _, filepath := range filepaths {
+		resourceRanges, err := GetResourceRangesForFile(filepath)
+		if err != nil {
+			return nil, err
+		}
+
 		template, err := goformation.Open(filepath)
 		if err != nil {
 			fmt.Printf("error occurred processing %s. %s", filepath, err.Error())
@@ -27,8 +32,9 @@ func New(filepaths ...string) (resource.Resources, error) {
 		}
 
 		for name, r := range template.Resources {
+			rng := resourceRanges[name]
 			formationType := r.AWSCloudFormationType()
-			resources = append(resources, resource.NewCFResource(&r, formationType, string(name), sourceFormat, filepath))
+			resources = append(resources, resource.NewCFResource(&r, formationType, string(name), sourceFormat, filepath, rng))
 		}
 	}
 

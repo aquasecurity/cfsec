@@ -28,7 +28,7 @@ func (r *Resource) setId(id string) {
 	r.id = id
 
 	for n, p := range r.Properties() {
-		p.SetName(n)
+		p.setName(n)
 	}
 
 }
@@ -37,7 +37,7 @@ func (r *Resource) setFile(filepath string) {
 	r.rng = types.NewRange(filepath, r.rng.GetStartLine(), r.rng.GetEndLine())
 
 	for _, p := range r.inner.Properties {
-		p.SetFileAndParentRange(filepath, r.rng)
+		p.setFileAndParentRange(filepath, r.rng)
 	}
 }
 

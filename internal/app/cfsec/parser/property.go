@@ -19,28 +19,28 @@ type propertyInner struct {
 	Value interface{} `yaml:"Value"`
 }
 
-func (p *Property) SetName(name string) {
+func (p *Property) setName(name string) {
 	p.name = name
 	if p.Type() == cftypes.Map {
 		for n, p := range p.AsMap() {
-			p.SetName(n)
+			p.setName(n)
 		}
 	}
 }
 
-// SetFileAndParentRange updates the Property and all nested properties with the resource range and filepath
-func (p *Property) SetFileAndParentRange(filepath string, parentRange types.Range) {
+// setFileAndParentRange updates the Property and all nested properties with the resource range and filepath
+func (p *Property) setFileAndParentRange(filepath string, parentRange types.Range) {
 	p.rng = types.NewRange(filepath, p.rng.GetStartLine(), p.rng.GetEndLine())
 	p.parentRange = parentRange
 
 	switch p.Type() {
 	case cftypes.Map:
 		for _, p := range p.AsMap() {
-			p.SetFileAndParentRange(filepath, parentRange)
+			p.setFileAndParentRange(filepath, parentRange)
 		}
 	case cftypes.List:
 		for _, p := range p.AsList() {
-			p.SetFileAndParentRange(filepath, parentRange)
+			p.setFileAndParentRange(filepath, parentRange)
 		}
 	}
 }
@@ -139,6 +139,7 @@ func (p *Property) AsBool() bool {
 func (p *Property) AsMap() map[string]*Property {
 	return p.inner.Value.(map[string]*Property)
 }
+
 func (p *Property) AsList() []*Property {
 	return p.inner.Value.([]*Property)
 }

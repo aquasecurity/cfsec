@@ -11,8 +11,8 @@ import (
 
 var registeredRules []rules.RegisteredRule
 
-func RegisterCheckRule(rule rules.RegisteredRule) {
-	registeredRules = append(registeredRules, rule)
+func RegisterCheckRule(rules ...rules.RegisteredRule) {
+	registeredRules = append(registeredRules, rules...)
 }
 
 type Scanner struct {

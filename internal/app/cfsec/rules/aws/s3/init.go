@@ -6,6 +6,7 @@ import (
 )
 
 func init() {
-	scanner.RegisterCheckRule(s3.CheckEncryptionIsEnabled)
-
+	scanner.RegisterCheckRule(
+		s3.CheckEncryptionIsEnabled,
+	)
 }

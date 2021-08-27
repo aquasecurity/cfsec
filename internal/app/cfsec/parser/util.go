@@ -17,6 +17,7 @@ func setPropertyValue(node *yaml.Node, propertyData *propertyInner) error {
 		case "!!bool":
 			propertyData.Type = cftypes.Bool
 			propertyData.Value, _ = strconv.ParseBool(node.Value)
+		case "!!string":
 		default:
 			propertyData.Type = cftypes.String
 			propertyData.Value = node.Value

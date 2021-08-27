@@ -14,7 +14,7 @@ type Parser struct{}
 
 func ParseFiles(filepaths ...string) (FileContexts, error) {
 
-	var contexts []FileContext
+	var contexts FileContexts
 
 	for _, filepath := range filepaths {
 
@@ -30,6 +30,8 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 		context := newFileContext(filepath)
 
 		if strings.HasSuffix(strings.ToLower(filepath), ".json") {
+
+			// TODO handle json parsing
 
 		} else {
 			if err := yaml.Unmarshal(fileContent, &context); err != nil {

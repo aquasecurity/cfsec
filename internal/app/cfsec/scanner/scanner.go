@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/resource"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/rules"
 )
 
@@ -32,11 +33,20 @@ func New(options ...Option) *Scanner {
 	}
 	return s
 }
-func (scanner *Scanner) Scan(resources resource.Resources) []rules.Result {
+func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 
 	var results []rules.Result
 
-	// TODO add code here
+	for _, ctx := range contexts {
+
+		state := adapter.Adapt(ctx)
+
+		for _, rule := range GetRegisteredRules() {
+
+			results = append(results, rule.Evaluate(state)...)
+		}
+
+	}
 
 	return results
 }

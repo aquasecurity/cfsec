@@ -31,28 +31,27 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 		context := newFileContext(filepath)
 
 		if strings.HasSuffix(strings.ToLower(filepath), ".json") {
-
-			if err := jfather.Unmarshal(fileContent, context); err != nil {
+			if err := jfather.Unmarshal(fileContent, &context); err != nil {
 				return nil, err
 			}
-
 		} else {
 			if err := yaml.Unmarshal(fileContent, &context); err != nil {
 				return nil, err
 			}
-
-			for name, r := range context.Resources {
-				r.Fixup(name, filepath)
-			}
-
-			contexts = append(contexts, context)
 		}
+
+		for name, r := range context.Resources {
+			r.Fixup(name, filepath)
+		}
+
+		contexts = append(contexts, context)
 	}
 
 	return contexts, nil
 }
 
 func ParseDirectory(dirpath string) (FileContexts, error) {
+
 	if stat, err := os.Stat(dirpath); err != nil || !stat.IsDir() {
 		return nil, fmt.Errorf("cannot use the provided filepath: %s", dirpath)
 	}
@@ -74,10 +73,12 @@ func ParseDirectory(dirpath string) (FileContexts, error) {
 }
 
 func includeFile(filename string) bool {
+
 	for _, ext := range []string{".yml", ".yaml", ".json"} {
 		if strings.HasSuffix(strings.ToLower(filename), ext) {
 			return true
 		}
 	}
 	return false
+
 }

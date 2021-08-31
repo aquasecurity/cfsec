@@ -35,6 +35,9 @@ func (n *node) decodeObjectToMap(v reflect.Value) error {
 
 	for key, value := range properties {
 		target := reflect.New(valueType).Elem()
+		if target.Kind() == reflect.Ptr {
+			target.Set(reflect.New(valueType.Elem()))
+		}
 		if err := value.(*node).decodeToValue(target); err != nil {
 			return err
 		}
@@ -68,6 +71,9 @@ func (n *node) objectAsMap() (map[string]Node, error) {
 }
 
 func (n *node) decodeObjectToStruct(v reflect.Value) error {
+
+	temp := reflect.New(v.Type()).Elem()
+	v.Set(temp)
 
 	properties, err := n.objectAsMap()
 	if err != nil {

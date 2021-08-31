@@ -2,6 +2,7 @@ package parser
 
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
 
@@ -15,6 +16,10 @@ type parameterInner struct {
 }
 
 func (p *Parameter) UnmarshalYAML(node *yaml.Node) error {
+	return node.Decode(&p.inner)
+}
+
+func (p *Parameter) UnmarshalJSONWithMetadata(node jfather.Node) error {
 	return node.Decode(&p.inner)
 }
 

@@ -31,6 +31,9 @@ func (n *node) decodeArray(v reflect.Value) error {
 	for i, nodeElement := range n.content {
 		node := nodeElement.(*node)
 		targetElement := reflect.New(elementType).Elem()
+		if targetElement.Kind() == reflect.Ptr {
+			targetElement.Set(reflect.New(elementType.Elem()))
+		}
 		if err := node.decodeToValue(targetElement); err != nil {
 			return err
 		}

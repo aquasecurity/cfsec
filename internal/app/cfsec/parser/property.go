@@ -12,12 +12,12 @@ type Property struct {
 	comment     string
 	rng         types.Range
 	parentRange types.Range
-	inner       propertyInner
+	Inner       PropertyInner
 }
 
-type propertyInner struct {
+type PropertyInner struct {
 	Type  cftypes.CfType
-	Value interface{} `json: "Value" yaml:"Value"`
+	Value interface{} `json:"Value" yaml:"Value"`
 }
 
 func (p *Property) setName(name string) {
@@ -50,16 +50,16 @@ func (p *Property) UnmarshalYAML(node *yaml.Node) error {
 	p.rng = types.NewRange("", node.Line, calculateEndLine(node))
 
 	p.comment = node.LineComment
-	return setPropertyValue(node, &p.inner)
+	return setPropertyValueFromYaml(node, &p.Inner)
 }
 
 func (p *Property) UnmarshalJSONWithMetadata(node jfather.Node) error {
 	p.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
-	return node.Decode(&p.inner)
+	return setPropertyValueFromJson(node, &p.Inner)
 }
 
 func (p *Property) Type() cftypes.CfType {
-	return p.inner.Type
+	return p.Inner.Type
 }
 
 func (p *Property) Range() types.Range {
@@ -86,7 +86,7 @@ func (p *Property) IsReference() bool {
 
 // RawValue returns the value as an interface
 func (p *Property) RawValue() interface{} {
-	return p.inner.Value
+	return p.Inner.Value
 }
 
 // ResolveValue used to get the referenced value
@@ -112,7 +112,7 @@ func (p *Property) ResolveValue(ctx FileContext) Property {
 			comment:     p.comment,
 			rng:         p.rng,
 			parentRange: p.parentRange,
-			inner: propertyInner{
+			Inner: PropertyInner{
 				Type:  param.Type(),
 				Value: param.Default(),
 			},
@@ -121,13 +121,13 @@ func (p *Property) ResolveValue(ctx FileContext) Property {
 
 	empty := *p
 
-	empty.inner.Value = nil
+	empty.Inner.Value = nil
 	return empty
 
 }
 
 func (p *Property) IsNil() bool {
-	return p.inner.Value == nil
+	return p.Inner.Value == nil
 }
 
 func (p *Property) IsNotNil() bool {
@@ -135,19 +135,19 @@ func (p *Property) IsNotNil() bool {
 }
 
 func (p *Property) AsString() string {
-	return p.inner.Value.(string)
+	return p.Inner.Value.(string)
 }
 
 func (p *Property) AsBool() bool {
-	return p.inner.Value.(bool)
+	return p.Inner.Value.(bool)
 }
 
 func (p *Property) AsMap() map[string]*Property {
-	return p.inner.Value.(map[string]*Property)
+	return p.Inner.Value.(map[string]*Property)
 }
 
 func (p *Property) AsList() []*Property {
-	return p.inner.Value.([]*Property)
+	return p.Inner.Value.([]*Property)
 }
 
 func (r *Property) GetProperty(pathParts ...string) *Property {

@@ -12,12 +12,12 @@ type Resource struct {
 	rng     types.Range
 	id      string
 	comment string
-	inner   resourceInner
+	Inner   ResourceInner
 }
 
-type resourceInner struct {
+type ResourceInner struct {
 	Type       string               `json:"Type" yaml:"Type"`
-	Properties map[string]*Property `yaml:"Properties"`
+	Properties map[string]*Property `json:"Properties" yaml:"Properties"`
 }
 
 func (r *Resource) Fixup(id, filepath string) {
@@ -37,7 +37,7 @@ func (r *Resource) setId(id string) {
 func (r *Resource) setFile(filepath string) {
 	r.rng = types.NewRange(filepath, r.rng.GetStartLine(), r.rng.GetEndLine())
 
-	for _, p := range r.inner.Properties {
+	for _, p := range r.Inner.Properties {
 		p.setFileAndParentRange(filepath, r.rng)
 	}
 }
@@ -45,12 +45,12 @@ func (r *Resource) setFile(filepath string) {
 func (r *Resource) UnmarshalYAML(value *yaml.Node) error {
 	r.rng = types.NewRange("", value.Line-1, calculateEndLine(value))
 	r.comment = value.LineComment
-	return value.Decode(&r.inner)
+	return value.Decode(&r.Inner)
 }
 
 func (r *Resource) UnmarshalJSONWithMetadata(node jfather.Node) error {
 	r.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
-	return node.Decode(&r.inner)
+	return node.Decode(&r.Inner)
 }
 
 func (r *Resource) ID() string {
@@ -58,7 +58,7 @@ func (r *Resource) ID() string {
 }
 
 func (r *Resource) Type() string {
-	return r.inner.Type
+	return r.Inner.Type
 }
 
 func (r *Resource) Range() types.Range {
@@ -70,7 +70,7 @@ func (r *Resource) Metadata() *types.Metadata {
 }
 
 func (r *Resource) Properties() map[string]*Property {
-	return r.inner.Properties
+	return r.Inner.Properties
 }
 
 func (r *Resource) GetPropertyForPath(path string) *Property {

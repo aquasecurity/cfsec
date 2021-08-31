@@ -33,7 +33,9 @@ func getName(r *parser.Resource, ctx parser.FileContext) types.StringValue {
 
 	// add code for reference lookup
 
-	return types.String(p.AsString(), r.Metadata())
+	setValue := p.ResolveValue(ctx)
+
+	return types.String(setValue.AsString(), r.Metadata())
 }
 
 func getEncryption(r *parser.Resource, ctx parser.FileContext) s3.Encryption {

@@ -4,10 +4,47 @@ import (
 	"strconv"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
 
-func setPropertyValue(node *yaml.Node, propertyData *propertyInner) error {
+func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) error {
+
+	switch node.Kind() {
+
+	case jfather.KindNumber:
+		propertyData.Type = cftypes.Float64
+		node.Decode(&propertyData.Value)
+		return nil
+	case jfather.KindBoolean:
+		propertyData.Type = cftypes.Bool
+		node.Decode(&propertyData.Value)
+		return nil
+	case jfather.KindString:
+		propertyData.Type = cftypes.String
+		node.Decode(&propertyData.Value)
+		return nil
+	case jfather.KindObject:
+		var childData map[string]*Property
+		node.Decode(&childData)
+		propertyData.Type = cftypes.Map
+		propertyData.Value = childData
+		return nil
+	case jfather.KindArray:
+		var childData []*Property
+		node.Decode(&childData)
+		propertyData.Type = cftypes.List
+		propertyData.Value = childData
+		return nil
+	default:
+		propertyData.Type = cftypes.String
+		node.Decode(&propertyData.Value)
+		return nil
+	}
+
+}
+
+func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) error {
 	if node.Content == nil {
 		switch node.Tag {
 
@@ -22,7 +59,6 @@ func setPropertyValue(node *yaml.Node, propertyData *propertyInner) error {
 			propertyData.Type = cftypes.String
 			propertyData.Value = node.Value
 		}
-
 		return nil
 	}
 

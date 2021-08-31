@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
 
@@ -31,7 +32,9 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 
 		if strings.HasSuffix(strings.ToLower(filepath), ".json") {
 
-			// TODO handle json parsing
+			if err := jfather.Unmarshal(fileContent, context); err != nil {
+				return nil, err
+			}
 
 		} else {
 			if err := yaml.Unmarshal(fileContent, &context); err != nil {

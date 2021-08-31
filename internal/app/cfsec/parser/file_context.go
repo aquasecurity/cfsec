@@ -4,8 +4,8 @@ type FileContexts []FileContext
 
 type FileContext struct {
 	filepath   string
-	Parameters map[string]*Parameter `yaml:"Parameters"`
-	Resources  map[string]*Resource  `yaml:"Resources"`
+	Parameters map[string]*Parameter `json:"Parameters" yaml:"Parameters"`
+	Resources  map[string]*Resource  `json:"Resources" yaml:"Resources"`
 }
 
 func newFileContext(filepath string) FileContext {

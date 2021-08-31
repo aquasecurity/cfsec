@@ -3,6 +3,7 @@ package parser
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
+	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
 
@@ -16,7 +17,7 @@ type Property struct {
 
 type propertyInner struct {
 	Type  cftypes.CfType
-	Value interface{} `yaml:"Value"`
+	Value interface{} `json: "Value" yaml:"Value"`
 }
 
 func (p *Property) setName(name string) {
@@ -50,6 +51,11 @@ func (p *Property) UnmarshalYAML(node *yaml.Node) error {
 
 	p.comment = node.LineComment
 	return setPropertyValue(node, &p.inner)
+}
+
+func (p *Property) UnmarshalJSONWithMetadata(node jfather.Node) error {
+	p.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
+	return node.Decode(&p.inner)
 }
 
 func (p *Property) Type() cftypes.CfType {

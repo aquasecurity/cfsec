@@ -6,7 +6,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/cmd/cfsec",
         "args": [
-          "example/bucket.yaml"
+          "example/bucket.json"
         ],
         "dlvToolPath": "$HOME/go/bin/dlv"
       }

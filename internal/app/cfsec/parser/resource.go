@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/aquasecurity/defsec/types"
+	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
 
@@ -15,7 +16,7 @@ type Resource struct {
 }
 
 type resourceInner struct {
-	Type       string               `yaml:"Type"`
+	Type       string               `json:"Type" yaml:"Type"`
 	Properties map[string]*Property `yaml:"Properties"`
 }
 
@@ -45,6 +46,11 @@ func (r *Resource) UnmarshalYAML(value *yaml.Node) error {
 	r.rng = types.NewRange("", value.Line-1, calculateEndLine(value))
 	r.comment = value.LineComment
 	return value.Decode(&r.inner)
+}
+
+func (r *Resource) UnmarshalJSONWithMetadata(node jfather.Node) error {
+	r.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
+	return node.Decode(&r.inner)
 }
 
 func (r *Resource) ID() string {

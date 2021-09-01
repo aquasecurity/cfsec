@@ -1,0 +1,16 @@
+{
+  "configurations": {
+    "Main": {
+      "adapter": "vscode-go",
+      "configuration": {
+        "request": "launch",
+        "program": "${workspaceFolder}/cmd/cfsec",
+        "args": [
+          "example/bucket.json"
+        ],
+        "dlvToolPath": "$HOME/go/bin/dlv"
+      }
+    }
+
+  }
+}

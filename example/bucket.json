@@ -20,7 +20,7 @@
           "ServerSideEncryptionConfiguration": [
             {
               "BucketKeyEnabled": {
-                "Ref": "BucketKeyEnabled"
+                  "Ref": "BucketKeyEnabled"
               }
             }
           ]

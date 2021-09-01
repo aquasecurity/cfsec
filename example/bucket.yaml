@@ -2,17 +2,16 @@ Parameters:
   BucketName: 
     Type: String
     Default: naughty
-  BucketKeyEnabled:
+  EncryptBucket:
     Type: Boolean
     Default: false
-
 Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: 
-        Ref: BucketName
+      BucketName: naughty
       BucketEncryption:
         ServerSideEncryptionConfiguration:
         - BucketKeyEnabled: 
-            Ref: BucketKeyEnabled
+            Ref: EncryptBucket
+

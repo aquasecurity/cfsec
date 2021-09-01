@@ -3,12 +3,14 @@ package formatters
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
-	"regexp"
 	"strings"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/result"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/severity"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
+	"github.com/aquasecurity/defsec/rules"
+	"github.com/aquasecurity/defsec/severity"
+	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/clinch/terminal"
 	"github.com/liamg/tml"
 )
@@ -20,7 +22,7 @@ var severityFormat = map[severity.Severity]string{
 	severity.Critical: tml.Sprintf("<bold><red>%s</red></bold>", severity.Critical),
 }
 
-func FormatDefault(_ io.Writer, results []result.Result, _ string) error {
+func FormatDefault(_ io.Writer, results []rules.Result, _ string) error {
 
 	fmt.Println("")
 	for i, res := range results {
@@ -33,70 +35,67 @@ func FormatDefault(_ io.Writer, results []result.Result, _ string) error {
 
 }
 
-func printResult(res result.Result, i int, includePassedChecks bool) {
+func printResult(res rules.Result, i int, includePassedChecks bool) {
 	resultHeader := fmt.Sprintf("  <underline>Result %d</underline>\n", i+1)
 	var severity string
-	if includePassedChecks && res.Status == result.Passed {
-		terminal.PrintSuccessf(resultHeader)
-		severity = tml.Sprintf("<green>PASSED</green>")
-	} else {
-		terminal.PrintErrorf(resultHeader)
-		severity = severityFormat[res.Severity]
-	}
+	//if includePassedChecks && res.Status == result.Passed {
+	//terminal.PrintSuccessf(resultHeader)
+	//severity = tml.Sprintf("<green>PASSED</green>")
+	//} else {
+	terminal.PrintErrorf(resultHeader)
+	severity = severityFormat[res.Rule().Severity]
+	//}
 
 	_ = tml.Printf(`
   <blue>[</blue>%s<blue>]</blue><blue>[</blue>%s<blue>]</blue> %s
   <blue>%s</blue>
   
-`, res.RuleID, severity, res.Description, res.Location)
+`, res.Rule().LongID(), severity, res.Description(), res.Metadata().Range())
 
-	render, err := res.Resource().Render()
+	cfRef := res.Reference().(*parser.CFReference)
+	render, err := getFileContent(*cfRef, res.Metadata().Range())
 	if err != nil {
 		fmt.Fprint(os.Stderr, err.Error())
 	}
 
-	highlightRender(render, res.Attribute)
-
-	if res.LegacyRuleID != "" {
-		_ = tml.Printf("  <white>Legacy ID:  </white><blue>%s</blue>\n", res.LegacyRuleID)
+	tml.Println(render)
+	fmt.Printf("\n\n")
+	if res.Rule().Impact != "" {
+		_ = tml.Printf("  <white>Impact:     </white><blue>%s</blue>\n", res.Rule().Impact)
 	}
-	if res.Impact != "" {
-		_ = tml.Printf("  <white>Impact:     </white><blue>%s</blue>\n", res.Impact)
+	if res.Rule().Resolution != "" {
+		_ = tml.Printf("  <white>Resolution: </white><blue>%s</blue>\n", res.Rule().Resolution)
 	}
-	if res.Resolution != "" {
-		_ = tml.Printf("  <white>Resolution: </white><blue>%s</blue>\n", res.Resolution)
-	}
-	if len(res.Links) > 0 {
+	if len(res.Rule().Links) > 0 {
 		_ = tml.Printf("\n  <white>More Info:</white>")
 	}
-	for _, link := range res.Links {
+	for _, link := range res.Rule().Links {
 		_ = tml.Printf("\n  <blue>- %s </blue>", link)
 	}
 
 	fmt.Printf("\n\n")
 }
 
-func highlightRender(renderText string, attributeOfInterest string) {
+func getFileContent(ref parser.CFReference, issueRange types.Range) (string, error) {
+	rng := ref.ResourceRange()
 
-	if attributeOfInterest == "" {
-		tml.Println(renderText)
-	} else {
+	resolvedValue := ""
 
-		searchRegex, err := regexp.Compile(fmt.Sprintf("%s[\"|:]", attributeOfInterest))
-		if err != nil {
-			tml.Println(renderText)
-		}
-		var newLines []string
-
-		lines := strings.Split(renderText, "\n")
-		for _, line := range lines {
-			if searchRegex.MatchString(line) {
-				newLines = append(newLines, fmt.Sprintf("  <red>%s</red>", line))
-			} else {
-				newLines = append(newLines, fmt.Sprintf("  %s", line))
-			}
-		}
-
-		tml.Printf(strings.Join(newLines, "\n"))
+	content, err := ioutil.ReadFile(rng.GetFilename())
+	if err != nil {
+		return "", err
 	}
+
+	bodyStrings := strings.Split(string(content), "\n")
+
+	for i := issueRange.GetStartLine() - 1; i < issueRange.GetEndLine(); i++ {
+		if i == issueRange.GetEndLine()-1 && ref.ResolvedAttributeValue() != nil {
+			prop := ref.ResolvedAttributeValue().(parser.Property)
+			resolvedValue = fmt.Sprintf("[%v]", prop.RawValue())
+		}
+		bodyStrings[i] = fmt.Sprintf("<red>%s %s</red>", bodyStrings[i], resolvedValue)
+	}
+
+	return strings.Join(bodyStrings[rng.GetStartLine()-1:rng.GetEndLine()], "\n"), nil
+
 }

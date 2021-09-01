@@ -2,40 +2,56 @@ package parser
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/resource"
-	"github.com/awslabs/goformation/v5"
+	"github.com/liamg/jfather"
+	"gopkg.in/yaml.v3"
 )
 
 type Parser struct{}
 
-func New(filepaths ...string) (resource.Resources, error) {
+func ParseFiles(filepaths ...string) (FileContexts, error) {
 
-	var resources resource.Resources
+	var contexts FileContexts
+
 	for _, filepath := range filepaths {
-		template, err := goformation.Open(filepath)
+
+		if _, err := os.Stat(filepath); err != nil {
+			return nil, err
+		}
+
+		fileContent, err := ioutil.ReadFile(filepath)
 		if err != nil {
-			fmt.Printf("error occurred processing %s. %s", filepath, err.Error())
+			return nil, err
 		}
 
-		sourceFormat := resource.DefaultFormat
+		context := newFileContext(filepath)
+
 		if strings.HasSuffix(strings.ToLower(filepath), ".json") {
-			sourceFormat = resource.JsonFormat
+			if err := jfather.Unmarshal(fileContent, &context); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := yaml.Unmarshal(fileContent, &context); err != nil {
+				return nil, err
+			}
 		}
 
-		for name, r := range template.Resources {
-			formationType := r.AWSCloudFormationType()
-			resources = append(resources, resource.NewCFResource(&r, formationType, string(name), sourceFormat, filepath))
+		for name, r := range context.Resources {
+			r.Fixup(name, filepath)
 		}
+
+		contexts = append(contexts, context)
 	}
 
-	return resources, nil
+	return contexts, nil
 }
 
-func NewForDirectory(dirpath string) (resource.Resources, error) {
+func ParseDirectory(dirpath string) (FileContexts, error) {
+
 	if stat, err := os.Stat(dirpath); err != nil || !stat.IsDir() {
 		return nil, fmt.Errorf("cannot use the provided filepath: %s", dirpath)
 	}
@@ -53,14 +69,16 @@ func NewForDirectory(dirpath string) (resource.Resources, error) {
 		return nil, err
 	}
 
-	return New(files...)
+	return ParseFiles(files...)
 }
 
 func includeFile(filename string) bool {
+
 	for _, ext := range []string{".yml", ".yaml", ".json"} {
 		if strings.HasSuffix(strings.ToLower(filename), ext) {
 			return true
 		}
 	}
 	return false
+
 }

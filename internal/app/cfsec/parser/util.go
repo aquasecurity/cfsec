@@ -14,32 +14,32 @@ func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) er
 
 	case jfather.KindNumber:
 		propertyData.Type = cftypes.Float64
-		node.Decode(&propertyData.Value)
-		return nil
+		return node.Decode(&propertyData.Value)
 	case jfather.KindBoolean:
 		propertyData.Type = cftypes.Bool
-		node.Decode(&propertyData.Value)
-		return nil
+		return node.Decode(&propertyData.Value)
 	case jfather.KindString:
 		propertyData.Type = cftypes.String
-		node.Decode(&propertyData.Value)
-		return nil
+		return node.Decode(&propertyData.Value)
 	case jfather.KindObject:
 		var childData map[string]*Property
-		node.Decode(&childData)
+		if err := node.Decode(&childData); err != nil {
+			return err
+		}
 		propertyData.Type = cftypes.Map
 		propertyData.Value = childData
 		return nil
 	case jfather.KindArray:
 		var childData []*Property
-		node.Decode(&childData)
+		if err := node.Decode(&childData); err != nil {
+			return err
+		}
 		propertyData.Type = cftypes.List
 		propertyData.Value = childData
 		return nil
 	default:
 		propertyData.Type = cftypes.String
-		node.Decode(&propertyData.Value)
-		return nil
+		return node.Decode(&propertyData.Value)
 	}
 
 }

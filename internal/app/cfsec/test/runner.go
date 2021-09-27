@@ -1,13 +1,14 @@
 package test
 
 import (
+	"strings"
+	"testing"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil/filesystem"
 	"github.com/aquasecurity/defsec/rules"
-	"strings"
-	"testing"
 )
 
 func RunPassingExamplesTest(t *testing.T, expectedCode string) {
@@ -18,9 +19,9 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 		t.Fatalf("Rule not found: %s", expectedCode)
 	}
 	for i, goodExample := range rule.GoodExample {
-		t.Logf("Running bad example for '%s' #%d", expectedCode, i+1)
+		t.Logf("Running good example for '%s' #%d", expectedCode, i+1)
 		if strings.TrimSpace(goodExample) == "" {
-			t.Fatalf("bad example code not provided for %s", rule.ID())
+			t.Fatalf("Good example code not provided for %s", rule.ID())
 		}
 		results := scanTestSource(goodExample, t)
 		testutil.AssertCheckCode(t, "", rule.ID(), results)

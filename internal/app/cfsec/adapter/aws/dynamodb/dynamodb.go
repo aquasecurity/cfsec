@@ -1,0 +1,14 @@
+package dynamodb
+
+import (
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
+	"github.com/aquasecurity/defsec/provider/aws/dynamodb"
+)
+
+func Adapt(cfFile parser.FileContext) dynamodb.DynamoDB {
+
+	return dynamodb.DynamoDB{
+		getClusters(cfFile),
+	}
+}
+

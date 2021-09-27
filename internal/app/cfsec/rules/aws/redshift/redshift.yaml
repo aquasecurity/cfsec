@@ -1,0 +1,62 @@
+Resources:
+  SecurityGroup:
+    Type: AWS::Redshift::ClusterSecurityGroup
+    Properties:
+      Description: "String" # Required
+      Tags: Tags
+
+  Cluster:
+    Type: AWS::Redshift::Cluster
+    Properties:
+      AllowVersionUpgrade: false
+      AquaConfigurationStatus: "String"
+      AutomatedSnapshotRetentionPeriod: Number
+      AvailabilityZone: "String"
+      AvailabilityZoneRelocation: false
+      AvailabilityZoneRelocationStatus: "String"
+      Classic: false
+      ClusterIdentifier: "String"
+      ClusterParameterGroupName: "String"
+      ClusterSecurityGroups: ClusterSecurityGroups
+      ClusterSubnetGroupName: "String"
+      ClusterType: "String" # Required
+      ClusterVersion: "String"
+      DBName: "String" # Required
+      DeferMaintenance: false
+      DeferMaintenanceDuration: Number
+      DeferMaintenanceEndTime: "String"
+      DeferMaintenanceStartTime: "String"
+      DestinationRegion: "String"
+      ElasticIp: "String"
+      Encrypted: false
+      Endpoint:
+        Address: "String"
+        Port: "String"
+      EnhancedVpcRouting: String
+      HsmClientCertificateIdentifier: "String"
+      HsmConfigurationIdentifier: "String"
+      IamRoles: IamRoles
+      KmsKeyId: "String"
+      LoggingProperties:
+        BucketName: "String"
+        S3KeyPrefix: "String"
+      MaintenanceTrackName: "String"
+      ManualSnapshotRetentionPeriod: Number
+      MasterUserPassword: "String" # Required
+      MasterUsername: "String" # Required
+      NodeType: "String" # Required
+      NumberOfNodes: Number
+      OwnerAccount: "String"
+      Port: Number
+      PreferredMaintenanceWindow: "String"
+      PubliclyAccessible: false
+      ResourceAction: "String"
+      RevisionTarget: "String"
+      RotateEncryptionKey: false
+      SnapshotClusterIdentifier: "String"
+      SnapshotCopyGrantName: "String"
+      SnapshotCopyManual: false
+      SnapshotCopyRetentionPeriod: Number
+      SnapshotIdentifier: "String"
+      Tags: Tags
+      VpcSecurityGroupIds: VpcSecurityGroupIds

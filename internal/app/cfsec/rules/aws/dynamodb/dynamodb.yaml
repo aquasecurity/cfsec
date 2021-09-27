@@ -1,0 +1,19 @@
+Resources:
+  GoodExample:
+    Type: AWS::DAX::Cluster
+    Properties:
+      AvailabilityZones: AvailabilityZones
+      ClusterEndpointEncryptionType: "String"
+      ClusterName: "String"
+      Description: "String"
+      IAMRoleARN: "String" # Required
+      NodeType: "String" # Required
+      NotificationTopicARN: "String"
+      ParameterGroupName: "String"
+      PreferredMaintenanceWindow: "String"
+      ReplicationFactor: Number # Required
+      SSESpecification:
+        SSEEnabled: false
+      SecurityGroupIds: SecurityGroupIds
+      SubnetGroupName: "String"
+      Tags: JSON

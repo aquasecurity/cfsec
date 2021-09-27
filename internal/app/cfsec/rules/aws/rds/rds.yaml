@@ -1,0 +1,106 @@
+Resources:
+  GlobalCluster:
+    Type: AWS::RDS::GlobalCluster
+    Properties:
+      DeletionProtection: false
+      Engine: "String"
+      EngineVersion: "String"
+      GlobalClusterIdentifier: "String"
+      SourceDBClusterIdentifier: "String"
+      StorageEncrypted: false
+
+  Instance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: "String"
+      AllowMajorVersionUpgrade: false
+      AssociatedRoles: AssociatedRoles
+      AutoMinorVersionUpgrade: false
+      AvailabilityZone: "String"
+      BackupRetentionPeriod: Number
+      CACertificateIdentifier: "String"
+      CharacterSetName: "String"
+      CopyTagsToSnapshot: false
+      DBClusterIdentifier: "String"
+      DBInstanceClass: "String" # Required
+      DBInstanceIdentifier: "String"
+      DBName: "String"
+      DBParameterGroupName: "String"
+      DBSecurityGroups: DBSecurityGroups
+      DBSnapshotIdentifier: "String"
+      DBSubnetGroupName: "String"
+      DeleteAutomatedBackups: false
+      DeletionProtection: false
+      Domain: "String"
+      DomainIAMRoleName: "String"
+      EnableCloudwatchLogsExports: EnableCloudwatchLogsExports
+      EnableIAMDatabaseAuthentication: false
+      EnablePerformanceInsights: false
+      Engine: "String"
+      EngineVersion: "String"
+      Iops: Number
+      KmsKeyId: "String"
+      LicenseModel: "String"
+      MasterUserPassword: "String"
+      MasterUsername: "String"
+      MaxAllocatedStorage: Number
+      MonitoringInterval: Number
+      MonitoringRoleArn: "String"
+      MultiAZ: false
+      OptionGroupName: "String"
+      PerformanceInsightsKMSKeyId: "String"
+      PerformanceInsightsRetentionPeriod: Number
+      Port: "String"
+      PreferredBackupWindow: "String"
+      PreferredMaintenanceWindow: "String"
+      ProcessorFeatures: ProcessorFeatures
+      PromotionTier: Number
+      PubliclyAccessible: false
+      SourceDBInstanceIdentifier: "String"
+      SourceRegion: "String"
+      StorageEncrypted: false
+      StorageType: "String"
+      Tags: Tags
+      Timezone: "String"
+      UseDefaultProcessorFeatures: false
+      VPCSecurityGroups: VPCSecurityGroups
+  Cluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      AssociatedRoles: AssociatedRoles
+      AvailabilityZones: AvailabilityZones
+      BacktrackWindow: Number
+      BackupRetentionPeriod: Number
+      CopyTagsToSnapshot: false
+      DBClusterIdentifier: "String"
+      DBClusterParameterGroupName: "String"
+      DBSubnetGroupName: "String"
+      DatabaseName: "String"
+      DeletionProtection: false
+      EnableCloudwatchLogsExports: EnableCloudwatchLogsExports
+      EnableHttpEndpoint: false
+      EnableIAMDatabaseAuthentication: false
+      Engine: "String" # Required
+      EngineMode: "String"
+      EngineVersion: "String"
+      GlobalClusterIdentifier: "String"
+      KmsKeyId: "String"
+      MasterUserPassword: "String"
+      MasterUsername: "String"
+      Port: Number
+      PreferredBackupWindow: "String"
+      PreferredMaintenanceWindow: "String"
+      ReplicationSourceIdentifier: "String"
+      RestoreType: "String"
+      ScalingConfiguration:
+        AutoPause: false
+        MaxCapacity: Number
+        MinCapacity: Number
+        SecondsUntilAutoPause: Number
+      SnapshotIdentifier: "Number"
+      SourceDBClusterIdentifier: "Number"
+      SourceRegion: "Number"
+      StorageEncrypted: false
+      Tags: Tags
+      UseLatestRestorableTime: false
+      VpcSecurityGroupIds: VpcSecurityGroupIds

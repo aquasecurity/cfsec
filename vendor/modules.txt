@@ -17,15 +17,64 @@ github.com/ProtonMail/go-crypto/openpgp/packet
 github.com/ProtonMail/go-crypto/openpgp/s2k
 # github.com/acomagu/bufpipe v1.0.3
 github.com/acomagu/bufpipe
-# github.com/aquasecurity/defsec v0.0.2-0.20210827104427-98f3cc8715ba
+# github.com/aquasecurity/defsec v0.0.3-0.20210924154209-d91df1dcd1f4
 ## explicit
 github.com/aquasecurity/defsec/provider
 github.com/aquasecurity/defsec/provider/aws
+github.com/aquasecurity/defsec/provider/aws/apigateway
+github.com/aquasecurity/defsec/provider/aws/athena
+github.com/aquasecurity/defsec/provider/aws/autoscaling
+github.com/aquasecurity/defsec/provider/aws/cloudfront
+github.com/aquasecurity/defsec/provider/aws/cloudtrail
+github.com/aquasecurity/defsec/provider/aws/cloudwatch
+github.com/aquasecurity/defsec/provider/aws/codebuild
+github.com/aquasecurity/defsec/provider/aws/config
+github.com/aquasecurity/defsec/provider/aws/documentdb
+github.com/aquasecurity/defsec/provider/aws/dynamodb
+github.com/aquasecurity/defsec/provider/aws/ebs
 github.com/aquasecurity/defsec/provider/aws/ec2
+github.com/aquasecurity/defsec/provider/aws/ecr
+github.com/aquasecurity/defsec/provider/aws/ecs
+github.com/aquasecurity/defsec/provider/aws/efs
+github.com/aquasecurity/defsec/provider/aws/eks
+github.com/aquasecurity/defsec/provider/aws/elasticache
+github.com/aquasecurity/defsec/provider/aws/elasticsearch
+github.com/aquasecurity/defsec/provider/aws/elb
+github.com/aquasecurity/defsec/provider/aws/iam
+github.com/aquasecurity/defsec/provider/aws/kinesis
+github.com/aquasecurity/defsec/provider/aws/kms
+github.com/aquasecurity/defsec/provider/aws/lambda
+github.com/aquasecurity/defsec/provider/aws/mq
+github.com/aquasecurity/defsec/provider/aws/msk
+github.com/aquasecurity/defsec/provider/aws/neptune
+github.com/aquasecurity/defsec/provider/aws/rds
+github.com/aquasecurity/defsec/provider/aws/redshift
 github.com/aquasecurity/defsec/provider/aws/s3
+github.com/aquasecurity/defsec/provider/aws/sns
+github.com/aquasecurity/defsec/provider/aws/sqs
+github.com/aquasecurity/defsec/provider/aws/ssm
+github.com/aquasecurity/defsec/provider/aws/vpc
+github.com/aquasecurity/defsec/provider/aws/workspaces
 github.com/aquasecurity/defsec/provider/google
+github.com/aquasecurity/defsec/provider/google/bigquery
 github.com/aquasecurity/defsec/provider/google/compute
+github.com/aquasecurity/defsec/provider/google/dns
+github.com/aquasecurity/defsec/provider/google/gke
+github.com/aquasecurity/defsec/provider/google/iam
+github.com/aquasecurity/defsec/provider/google/kms
+github.com/aquasecurity/defsec/provider/google/platform
+github.com/aquasecurity/defsec/provider/google/sql
+github.com/aquasecurity/defsec/provider/google/storage
 github.com/aquasecurity/defsec/rules
+github.com/aquasecurity/defsec/rules/aws/apigateway
+github.com/aquasecurity/defsec/rules/aws/athena
+github.com/aquasecurity/defsec/rules/aws/autoscaling
+github.com/aquasecurity/defsec/rules/aws/cloudfront
+github.com/aquasecurity/defsec/rules/aws/cloudtrail
+github.com/aquasecurity/defsec/rules/aws/cloudwatch
+github.com/aquasecurity/defsec/rules/aws/codebuild
+github.com/aquasecurity/defsec/rules/aws/config
+github.com/aquasecurity/defsec/rules/aws/documentdb
 github.com/aquasecurity/defsec/rules/aws/s3
 github.com/aquasecurity/defsec/severity
 github.com/aquasecurity/defsec/state
@@ -85,6 +134,7 @@ github.com/liamg/tml
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
 # github.com/owenrumney/squealer v0.2.28
+## explicit
 github.com/owenrumney/squealer/internal/app/squealer/match
 github.com/owenrumney/squealer/internal/app/squealer/mertics
 github.com/owenrumney/squealer/pkg/config
@@ -99,6 +149,9 @@ github.com/sirupsen/logrus
 # github.com/stretchr/testify v1.7.0
 ## explicit
 github.com/stretchr/testify/assert
+github.com/stretchr/testify/require
+# github.com/zclconf/go-cty v1.9.1
+## explicit
 # golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b
 golang.org/x/crypto/cast5
 golang.org/x/crypto/curve25519

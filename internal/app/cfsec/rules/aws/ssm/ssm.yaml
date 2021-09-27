@@ -1,0 +1,21 @@
+Resources:
+  Secret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "String"
+      GenerateSecretString:
+        ExcludeCharacters: "String"
+        ExcludeLowercase: false
+        ExcludeNumbers: false
+        ExcludePunctuation: false
+        ExcludeUppercase: false
+        GenerateStringKey: "String"
+        IncludeSpace: false
+        PasswordLength: Number
+        RequireEachIncludedType: false
+        SecretStringTemplate: "String"
+      KmsKeyId: "false"
+      Name: "false"
+      ReplicaRegions: ReplicaRegions
+      SecretString: "false"
+      Tags: Tags

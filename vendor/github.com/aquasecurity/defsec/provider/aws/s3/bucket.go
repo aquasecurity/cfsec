@@ -3,7 +3,7 @@ package s3
 import "github.com/aquasecurity/defsec/types"
 
 type Bucket struct {
-	*types.Metadata
+	types.Metadata
 	Name              types.StringValue
 	PublicAccessBlock *PublicAccessBlock
 	BucketPolicy      BucketPolicy
@@ -38,4 +38,12 @@ type Encryption struct {
 	Enabled   types.BoolValue
 	Algorithm types.StringValue
 	KMSKeyId  types.StringValue
+}
+
+func (b *Bucket) GetMetadata() *types.Metadata {
+	return &b.Metadata
+}
+
+func (b *Bucket) GetRawValue() interface{} {
+	return nil
 }

@@ -9,7 +9,8 @@ Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: naughty
+      BucketName:
+        Ref: BucketName
       BucketEncryption:
         ServerSideEncryptionConfiguration:
         - BucketKeyEnabled: 

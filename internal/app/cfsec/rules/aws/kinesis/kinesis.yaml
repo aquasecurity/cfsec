@@ -1,0 +1,11 @@
+Resources:
+  LogicalID:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: "String"
+      RetentionPeriodHours: Number
+      ShardCount: Number # Required
+      StreamEncryption:
+        EncryptionType: "String"
+        KeyId: "String"
+      Tags: Tags

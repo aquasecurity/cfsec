@@ -6,10 +6,8 @@ import (
 )
 
 func Adapt(cfFile parser.FileContext) s3.S3 {
-	buckets := getBuckets(cfFile)
-	//publicAccessBlocks := getPublicAccessBlocks(resources, buckets)
 
 	return s3.S3{
-		Buckets: buckets,
+		Buckets: getBuckets(cfFile),
 	}
 }

@@ -1,18 +1,20 @@
 package ec2
 
 import (
+	"github.com/aquasecurity/defsec/provider/aws/vpc"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/owenrumney/squealer/pkg/squealer"
 )
 
 type Instance struct {
-	*types.Metadata
+	types.Metadata
 	MetadataOptions MetadataOptions
 	UserData        types.StringValue
+	SecurityGroups  []vpc.SecurityGroup
 }
 
 type MetadataOptions struct {
-	*types.Metadata
+	types.Metadata
 	HttpTokens   types.StringValue
 	HttpEndpoint types.StringValue
 }

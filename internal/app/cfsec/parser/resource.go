@@ -9,6 +9,7 @@ import (
 )
 
 type Resource struct {
+	ctx FileContext
 	rng     types.Range
 	id      string
 	comment string
@@ -20,15 +21,16 @@ type ResourceInner struct {
 	Properties map[string]*Property `json:"Properties" yaml:"Properties"`
 }
 
-func (r *Resource) Fixup(id, filepath string) {
+func (r *Resource) ConfigureResource(id, filepath string, ctx FileContext) {
 	r.setId(id)
 	r.setFile(filepath)
+	r.setContext(ctx)
 }
 
 func (r *Resource) setId(id string) {
 	r.id = id
 
-	for n, p := range r.Properties() {
+	for n, p := range r.properties() {
 		p.setName(n)
 	}
 
@@ -39,6 +41,15 @@ func (r *Resource) setFile(filepath string) {
 
 	for _, p := range r.Inner.Properties {
 		p.setFileAndParentRange(filepath, r.rng)
+	}
+}
+
+func (r *Resource) setContext(ctx FileContext) {
+	r.ctx = ctx
+
+
+	for _, p := range r.Inner.Properties {
+		p.setContext(ctx)
 	}
 }
 
@@ -65,37 +76,37 @@ func (r *Resource) Range() types.Range {
 	return r.rng
 }
 
-func (r *Resource) Metadata() *types.Metadata {
+func (r *Resource) Metadata() types.Metadata {
 	return types.NewMetadata(r.Range(), NewCFReference(r.rng))
 }
 
-func (r *Resource) Properties() map[string]*Property {
+func (r *Resource) properties() map[string]*Property {
 	return r.Inner.Properties
 }
 
-func (r *Resource) GetPropertyForPath(path string) *Property {
-	return r.GetProperty(strings.Split(path, ".")...)
-}
+// GetProperty takes a path to the property separated by '.' and returns
+// the resolved value
+func (r *Resource) GetProperty(path string) *Property {
 
-func (r *Resource) GetProperty(pathParts ...string) *Property {
+	pathParts := strings.Split(path, ".")
 
 	first := pathParts[0]
-	var property *Property
+	property := &Property{}
 
-	for n, p := range r.Properties() {
+	for n, p := range r.properties() {
 		if n == first {
 			property = p
 			break
 		}
 	}
 
-	if len(pathParts) == 1 {
-		return property
+	if len(pathParts) == 1 || property.IsNil() {
+		return property.resolveValue()
 	}
 
-	if nestedProperty := property.GetProperty(pathParts[1:]...); nestedProperty != nil {
+	if nestedProperty := property.GetProperty(strings.Join(pathParts[1:], ".")); nestedProperty != nil {
 		return nestedProperty
 	}
 
-	return nil
+	return &Property{}
 }

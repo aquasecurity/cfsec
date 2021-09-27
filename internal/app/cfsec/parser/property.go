@@ -5,9 +5,11 @@ import (
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
+	"strings"
 )
 
 type Property struct {
+	ctx FileContext
 	name        string
 	comment     string
 	rng         types.Range
@@ -23,8 +25,24 @@ type PropertyInner struct {
 func (p *Property) setName(name string) {
 	p.name = name
 	if p.Type() == cftypes.Map {
-		for n, p := range p.AsMap() {
-			p.setName(n)
+		for n, subProp := range p.AsMap() {
+			if subProp == nil {
+				continue
+			}
+			subProp.setName(n)
+		}
+	}
+}
+
+func (p *Property) setContext(ctx FileContext) {
+	p.ctx = ctx
+
+	if p.Type() == cftypes.Map {
+		for _, subProp := range p.AsMap() {
+			if subProp == nil {
+				continue
+			}
+			subProp.setContext(ctx)
 		}
 	}
 }
@@ -36,12 +54,18 @@ func (p *Property) setFileAndParentRange(filepath string, parentRange types.Rang
 
 	switch p.Type() {
 	case cftypes.Map:
-		for _, p := range p.AsMap() {
-			p.setFileAndParentRange(filepath, parentRange)
+		for _, subProp := range p.AsMap() {
+			if subProp == nil {
+				continue
+			}
+			subProp.setFileAndParentRange(filepath, parentRange)
 		}
 	case cftypes.List:
-		for _, p := range p.AsList() {
-			p.setFileAndParentRange(filepath, parentRange)
+		for _, subProp := range p.AsList() {
+			if subProp == nil {
+				continue
+			}
+			subProp.setFileAndParentRange(filepath, parentRange)
 		}
 	}
 }
@@ -65,20 +89,20 @@ func (p *Property) Type() cftypes.CfType {
 func (p *Property) Range() types.Range {
 	return p.rng
 }
-func (p *Property) Metadata() *types.Metadata {
+func (p *Property) Metadata() types.Metadata {
 	ref := NewCFReference(p.parentRange)
 	return types.NewMetadata(p.Range(), ref)
 }
 
-func (p *Property) MetadataWithValue(resolvedValue Property) *types.Metadata {
-	ref := NewCFReferenceWithValue(p.parentRange, resolvedValue)
+func (p *Property) MetadataWithValue(resolvedValue *Property) types.Metadata {
+	ref := NewCFReferenceWithValue(p.parentRange, *resolvedValue)
 	return types.NewMetadata(p.Range(), ref)
 }
 
-func (p *Property) IsReference() bool {
+func (p *Property) isFunction() bool {
 	if p.Type() == cftypes.Map {
 		for n := range p.AsMap() {
-			return n == "Ref"
+			return IsIntrinsic(n)
 		}
 	}
 	return false
@@ -89,41 +113,12 @@ func (p *Property) RawValue() interface{} {
 	return p.Inner.Value
 }
 
-// ResolveValue used to get the referenced value
-func (p *Property) ResolveValue(ctx FileContext) Property {
-	if !p.IsReference() {
-		return *p
+func (p *Property) resolveValue() *Property {
+	if !p.isFunction() {
+		return p
 	}
 
-	refValue := p.AsMap()["Ref"].AsString()
-
-	var param *Parameter
-	for k := range ctx.Parameters {
-		if k == refValue {
-			param = ctx.Parameters[k]
-			break
-		}
-	}
-
-	if param != nil {
-
-		return Property{
-			name:        p.name,
-			comment:     p.comment,
-			rng:         p.rng,
-			parentRange: p.parentRange,
-			Inner: PropertyInner{
-				Type:  param.Type(),
-				Value: param.Default(),
-			},
-		}
-	}
-
-	empty := *p
-
-	empty.Inner.Value = nil
-	return empty
-
+	return ResolveIntrinsicFunc(p)
 }
 
 func (p *Property) IsNil() bool {
@@ -134,12 +129,48 @@ func (p *Property) IsNotNil() bool {
 	return !p.IsNil()
 }
 
+func (p *Property) IsString() bool {
+	if p.IsNil() {
+		return false
+	}
+	return p.Inner.Type == cftypes.String
+}
+
+func (p *Property) IsMap() bool {
+	if p.IsNil() {
+		return false
+	}
+	return p.Inner.Type == cftypes.Map
+}
+
+func (p *Property) IsList() bool {
+	if p.IsNil() {
+		return false
+	}
+	return p.Inner.Type == cftypes.List
+}
+
+func (p *Property) IsBool() bool {
+	if p.IsNil() {
+		return false
+	}
+	return p.Inner.Type == cftypes.Bool
+}
+
 func (p *Property) AsString() string {
 	return p.Inner.Value.(string)
 }
 
+func (p *Property) AsStringValue() types.StringValue {
+	return types.String(p.AsString(), p.Metadata())
+}
+
 func (p *Property) AsBool() bool {
 	return p.Inner.Value.(bool)
+}
+
+func (p *Property) AsBoolValue() types.BoolValue {
+	return types.Bool(p.AsBool(), p.Metadata())
 }
 
 func (p *Property) AsMap() map[string]*Property {
@@ -150,25 +181,72 @@ func (p *Property) AsList() []*Property {
 	return p.Inner.Value.([]*Property)
 }
 
-func (r *Property) GetProperty(pathParts ...string) *Property {
+func (p *Property) EqualTo(checkValue interface{}) bool {
+	if p.IsNil() {
+		return checkValue == nil
+	}
+
+	if p.RawValue() == checkValue {
+		return true
+	}
+
+	switch p.Inner.Type {
+	case cftypes.String:
+		return p.AsString() == checkValue.(string)
+	default:
+		return false
+	}
+}
+
+func (p *Property) IsTrue() bool {
+	if p.IsNil() || !p.IsBool() {
+		return false
+	}
+
+	return p.AsBool()
+}
+
+func (p *Property) IsEmpty() bool {
+
+	if p.IsNil() {
+		return true
+	}
+
+	switch p.Inner.Type {
+	case cftypes.String:
+		return p.AsString() == ""
+	case cftypes.List, cftypes.Map:
+		return len(p.AsList()) == 0
+	default:
+		return false
+	}
+}
+
+// GetProperty takes a path to the property separated by '.' and returns
+// the resolved value
+func (p *Property) GetProperty(path string) *Property {
+
+	pathParts := strings.Split(path, ".")
 
 	first := pathParts[0]
 	var property *Property
 
-	for n, p := range r.AsMap() {
+	for n, p := range p.AsMap() {
 		if n == first {
 			property = p
 			break
 		}
 	}
 
-	if len(pathParts) == 1 {
+	if len(pathParts) == 1 || property == nil{
 		return property
 	}
 
-	if nestedProperty := property.GetProperty(pathParts[1:]...); nestedProperty != nil {
-		return nestedProperty
+	if nestedProperty := property.GetProperty(strings.Join(pathParts[1:], ".")); nestedProperty != nil {
+		return nestedProperty.resolveValue()
 	}
 
 	return nil
 }
+
+

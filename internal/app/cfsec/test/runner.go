@@ -54,6 +54,8 @@ func scanTestSource(source string, t *testing.T) []rules.Result {
 	}
 	defer fs.Close()
 
+	source = strings.ReplaceAll(source, "\t", "  ")
+
 	if err := fs.WriteTextFile("test.yaml", source); err != nil {
 		t.Fatal(err)
 	}

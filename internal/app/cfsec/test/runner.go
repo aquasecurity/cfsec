@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -54,13 +55,20 @@ func scanTestSource(source string, t *testing.T) []rules.Result {
 	}
 	defer fs.Close()
 
-	source = strings.ReplaceAll(source, "\t", "  ")
+	source = strings.TrimSpace(strings.ReplaceAll(source, "\t", "  "))
 
-	if err := fs.WriteTextFile("test.yaml", source); err != nil {
+	ext := "yaml"
+	if source[0] == '{' {
+		ext = "json"
+	}
+
+	filename := fmt.Sprintf("test.%s", ext)
+
+	if err := fs.WriteTextFile(filename, source); err != nil {
 		t.Fatal(err)
 	}
 
-	path := fs.RealPath("test.yaml")
+	path := fs.RealPath(filename)
 
 	fileCtx, err := parser.ParseFiles(path)
 	if err != nil {

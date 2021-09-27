@@ -1,6 +1,8 @@
 package workspaces
 
 import (
+	"fmt"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws/workspaces"
 	"github.com/aquasecurity/defsec/types"
@@ -27,6 +29,8 @@ func getWorkSpaces(ctx parser.FileContext) (workSpaces []workspaces.WorkSpace) {
 		} else {
 			workspace.UserVolume.Encryption.Enabled = userEncrypted.AsBoolValue()
 		}
+
+		fmt.Printf("WORKSPACE: ROOT: %#v USER: %#v\n\n", workspace.RootVolume.Encryption.Enabled.Value(), workspace.UserVolume.Encryption.Enabled.Value())
 
 		workSpaces = append(workSpaces, workspace)
 	}

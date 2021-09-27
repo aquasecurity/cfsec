@@ -1,0 +1,11 @@
+Resources:
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      ContentBasedDeduplication: false
+      DisplayName: "String"
+      FifoTopic: false
+      KmsMasterKeyId: "String"
+      Subscription: Subscription
+      Tags: Tags
+      TopicName: "String"

@@ -1,0 +1,22 @@
+Resources:
+  Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Groups: Groups
+      PolicyDocument: JSON # Required
+      PolicyName: "String" # Required
+      Roles: Roles
+      Users: Users
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: JSON # Required
+      Description: "String"
+      ManagedPolicyArns: ManagedPolicyArns
+      MaxSessionDuration: Number
+      Path: "String"
+      PermissionsBoundary: "String"
+      Policies: Policies
+      RoleName: "String"
+      Tags: Tags

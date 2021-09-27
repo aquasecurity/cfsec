@@ -1,0 +1,25 @@
+Resources:
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: "String"
+      LoadBalancerAttributes: LoadBalancerAttributes
+      Name: "String"
+      Scheme: "String"
+      SecurityGroups: SecurityGroups
+      SubnetMappings: SubnetMappings
+      Subnets: Subnets
+      Tags: Tags
+      Type: "String"
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      AlpnPolicy: AlpnPolicy
+      Certificates: Certificates
+      DefaultActions: # Required
+        DefaultActions
+      LoadBalancerArn: "String" # Required
+      Port: Number
+      Protocol: "String"
+      SslPolicy: "String"

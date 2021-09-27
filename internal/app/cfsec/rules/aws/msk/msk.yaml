@@ -1,0 +1,23 @@
+Resources:
+  Cluster:
+    Type: AWS::MSK::Cluster
+    Properties:
+      BrokerNodeGroupInfo:
+        BrokerAZDistribution: "String"
+        ClientSubnets:
+          -
+        InstanceType: "String"
+        SecurityGroups:
+          -
+      ClientAuthentication:
+      ClusterName: "String" # Required
+      ConfigurationInfo:
+        Arn: "String"
+        Revision: Number
+      EncryptionInfo:
+      EnhancedMonitoring: "String"
+      KafkaVersion: "String" # Required
+      LoggingInfo:
+      NumberOfBrokerNodes: Number # Required
+      OpenMonitoring:
+      Tags: JSON

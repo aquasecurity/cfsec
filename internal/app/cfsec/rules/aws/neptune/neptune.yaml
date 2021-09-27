@@ -1,0 +1,26 @@
+Resources:
+  Cluster:
+    Type: AWS::Neptune::DBCluster
+    Properties:
+      AssociatedRoles: AssociatedRoles
+      AvailabilityZones: AvailabilityZones
+      BackupRetentionPeriod: Number
+      DBClusterIdentifier: "String"
+      DBClusterParameterGroupName: "String"
+      DBSubnetGroupName: "String"
+      DeletionProtection: false
+      EnableCloudwatchLogsExports: EnableCloudwatchLogsExports
+      EngineVersion: "String"
+      IamAuthEnabled: false
+      KmsKeyId: "String"
+      Port: Number
+      PreferredBackupWindow: "String"
+      PreferredMaintenanceWindow: "String"
+      RestoreToTime: "String"
+      RestoreType: "String"
+      SnapshotIdentifier: "String"
+      SourceDBClusterIdentifier: "String"
+      StorageEncrypted: false
+      Tags: Tags
+      UseLatestRestorableTime: false
+      VpcSecurityGroupIds: VpcSecurityGroupIds

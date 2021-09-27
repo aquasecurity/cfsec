@@ -1,0 +1,25 @@
+Resources:
+  Queue:
+    Type: AWS::SQS::Queue
+    Properties:
+      ContentBasedDeduplication: false
+      DeduplicationScope: "String"
+      DelaySeconds: Number
+      FifoQueue: false
+      FifoThroughputLimit: "String"
+      KmsDataKeyReusePeriodSeconds: Number
+      KmsMasterKeyId: "String"
+      MaximumMessageSize: Number
+      MessageRetentionPeriod: Number
+      QueueName: "String"
+      ReceiveMessageWaitTimeSeconds: Number
+      RedrivePolicy: JSON
+      Tags: Tags
+      VisibilityTimeout: Number
+
+  Policy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument: JSON # Required
+      Queues: # Required
+        Queues

@@ -2,25 +2,24 @@ package testutil
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 	"testing"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil/filesystem"
 	"github.com/aquasecurity/defsec/rules"
 	"github.com/stretchr/testify/assert"
 )
 
-func ScanHCL(source string, t *testing.T, additionalOptions ...scanner.Option) []rules.Result {
+type TestFileExt string
+const (
+	YamlTestFileExt TestFileExt = "yaml"
+	JsonTestFileExt TestFileExt = "json"
+)
 
-	var results []rules.Result
 
-	return results
 
-}
 
-func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, results []rules.Result, messages ...string) {
+
+func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, results []rules.Result) {
 
 	var foundInclude bool
 	var foundExclude bool
@@ -28,11 +27,11 @@ func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, resul
 	var excludeText string
 
 	for _, res := range results {
-		if res.Rule().ID == excludeCode {
+		if res.Rule().LongID() == excludeCode {
 			foundExclude = true
 			excludeText = res.Description()
 		}
-		if res.Rule().ID == includeCode {
+		if res.Rule().LongID() == includeCode {
 			foundInclude = true
 		}
 	}
@@ -43,30 +42,16 @@ func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, resul
 	}
 }
 
-func CreateTestFileWithModule(contents string, moduleContents string) string {
-	dir, err := ioutil.TempDir(os.TempDir(), "tfsec")
-	if err != nil {
+func CreateTestFile(source string, ext TestFileExt) string {
+	testFiles, err := filesystem.New()
+	if err != nil  {
 		panic(err)
 	}
 
-	rootPath := filepath.Join(dir, "main")
-	modulePath := filepath.Join(dir, "module")
-
-	if err := os.Mkdir(rootPath, 0755); err != nil {
+	testFile := fmt.Sprintf("testfile.%s", ext)
+	if err := testFiles.WriteFile(testFile, []byte(source)); err != nil {
 		panic(err)
 	}
 
-	if err := os.Mkdir(modulePath, 0755); err != nil {
-		panic(err)
-	}
-
-	if err := ioutil.WriteFile(filepath.Join(rootPath, "main.tf"), []byte(contents), 0755); err != nil {
-		panic(err)
-	}
-
-	if err := ioutil.WriteFile(filepath.Join(modulePath, "main.tf"), []byte(moduleContents), 0755); err != nil {
-		panic(err)
-	}
-
-	return rootPath
+	return testFiles.RealPath(testFile)
 }

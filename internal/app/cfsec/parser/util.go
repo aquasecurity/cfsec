@@ -1,11 +1,10 @@
 package parser
 
 import (
-	"strconv"
-
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
+	"strconv"
 )
 
 func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) error {
@@ -45,7 +44,26 @@ func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) er
 }
 
 func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) error {
+	if  node.Tag == "!Ref" {
+		node.Content = []*yaml.Node{}
+		node.Tag = "!!map"
+		node.Kind = yaml.MappingNode
+
+		node.Content = append(node.Content, &yaml.Node{
+			Tag:         "!!str",
+			Value:       "Ref",
+			Kind: yaml.ScalarNode,
+		})
+
+		node.Content = append(node.Content, &yaml.Node{
+			Tag:         "!!str",
+			Value:       node.Value,
+			Kind: yaml.ScalarNode,
+		})
+	}
+
 	if node.Content == nil {
+
 		switch node.Tag {
 
 		case "!!int":
@@ -54,8 +72,7 @@ func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) erro
 		case "!!bool":
 			propertyData.Type = cftypes.Bool
 			propertyData.Value, _ = strconv.ParseBool(node.Value)
-		case "!!string":
-		default:
+		case "!!str", "!!string":
 			propertyData.Type = cftypes.String
 			propertyData.Value = node.Value
 		}
@@ -65,13 +82,17 @@ func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) erro
 	switch node.Tag {
 	case "!!map":
 		var childData map[string]*Property
-		node.Decode(&childData)
+		if err := node.Decode(&childData); err != nil {
+			return err
+		}
 		propertyData.Type = cftypes.Map
 		propertyData.Value = childData
 		return nil
 	case "!!seq":
 		var childData []*Property
-		node.Decode(&childData)
+		if err := node.Decode(&childData); err != nil {
+			return err
+		}
 		propertyData.Type = cftypes.List
 		propertyData.Value = childData
 		return nil

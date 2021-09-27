@@ -17,20 +17,20 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 
 	var contexts FileContexts
 
-	for _, filepath := range filepaths {
+	for _, path := range filepaths {
 
-		if _, err := os.Stat(filepath); err != nil {
+		if _, err := os.Stat(path); err != nil {
 			return nil, err
 		}
 
-		fileContent, err := ioutil.ReadFile(filepath)
+		fileContent, err := ioutil.ReadFile(path)
 		if err != nil {
 			return nil, err
 		}
 
-		context := newFileContext(filepath)
+		context := newFileContext(path)
 
-		if strings.HasSuffix(strings.ToLower(filepath), ".json") {
+		if strings.HasSuffix(strings.ToLower(path), ".json") {
 			if err := jfather.Unmarshal(fileContent, &context); err != nil {
 				return nil, err
 			}
@@ -41,7 +41,7 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 		}
 
 		for name, r := range context.Resources {
-			r.Fixup(name, filepath)
+			r.ConfigureResource(name, path, context)
 		}
 
 		contexts = append(contexts, context)
@@ -50,15 +50,15 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 	return contexts, nil
 }
 
-func ParseDirectory(dirpath string) (FileContexts, error) {
+func ParseDirectory(dir string) (FileContexts, error) {
 
-	if stat, err := os.Stat(dirpath); err != nil || !stat.IsDir() {
-		return nil, fmt.Errorf("cannot use the provided filepath: %s", dirpath)
+	if stat, err := os.Stat(dir); err != nil || !stat.IsDir() {
+		return nil, fmt.Errorf("cannot use the provided filepath: %s", dir)
 	}
 
 	var files []string
 
-	err := filepath.Walk(dirpath, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() || !includeFile(info.Name()) {
 			return nil
 		}

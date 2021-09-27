@@ -1,0 +1,68 @@
+Resources:
+  GoodReplicationGroup:
+    Type: AWS::ElastiCache::ReplicationGroup
+    Properties:
+      AtRestEncryptionEnabled: false
+      AuthToken: "String"
+      AutoMinorVersionUpgrade: false
+      AutomaticFailoverEnabled: false
+      CacheNodeType: "String"
+      CacheParameterGroupName: "String"
+      CacheSecurityGroupNames: CacheSecurityGroupNames
+      CacheSubnetGroupName: "String"
+      Engine: "String"
+      EngineVersion: "String"
+      GlobalReplicationGroupId: "String"
+      KmsKeyId: "String"
+      LogDeliveryConfigurations: LogDeliveryConfigurations
+      MultiAZEnabled: false
+      NodeGroupConfiguration: NodeGroupConfiguration
+      NotificationTopicArn: "String"
+      NumCacheClusters: Number
+      NumNodeGroups: Number
+      Port: Number
+      PreferredCacheClusterAZs: PreferredCacheClusterAZs
+      PreferredMaintenanceWindow: "String"
+      PrimaryClusterId: "String"
+      ReplicasPerNodeGroup: Number
+      ReplicationGroupDescription: "String" # Required
+      ReplicationGroupId: "String"
+      SecurityGroupIds: SecurityGroupIds
+      SnapshotArns: SnapshotArns
+      SnapshotName: "String"
+      SnapshotRetentionLimit: Number
+      SnapshotWindow: "String"
+      SnapshottingClusterId: "String"
+      Tags: Tags
+      TransitEncryptionEnabled: false
+      UserGroupIds: UserGroupIds
+  GoodSecurityGroup:
+    Type: AWS::ElastiCache::SecurityGroup
+    Properties:
+      Description: "String" # Required
+      Tags: Tags
+  LogicalID:
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      AZMode: "String"
+      AutoMinorVersionUpgrade: false
+      CacheNodeType: "String" # Required
+      CacheParameterGroupName: "String"
+      CacheSecurityGroupNames: CacheSecurityGroupNames
+      CacheSubnetGroupName: "String"
+      ClusterName: "String"
+      Engine: "String" # Required
+      EngineVersion: "String"
+      LogDeliveryConfigurations: LogDeliveryConfigurations
+      NotificationTopicArn: "String"
+      NumCacheNodes: Number # Required
+      Port: Number
+      PreferredAvailabilityZone: "String"
+      PreferredAvailabilityZones: PreferredAvailabilityZones
+      PreferredMaintenanceWindow: "String"
+      SnapshotArns: SnapshotArns
+      SnapshotName: "String"
+      SnapshotRetentionLimit: Number
+      SnapshotWindow: "String"
+      Tags: Tags
+      VpcSecurityGroupIds: VpcSecurityGroupIds

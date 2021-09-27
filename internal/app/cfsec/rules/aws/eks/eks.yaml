@@ -1,0 +1,15 @@
+Resources:
+  GoodExample:
+    Type: AWS::EKS::Cluster
+    Properties:
+      EncryptionConfig: EncryptionConfig
+      KubernetesNetworkConfig:
+        ServiceIpv4Cidr: "String"
+      Name: "String"
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+          -
+        SubnetIds:
+          -
+      RoleArn: "String" # Required
+      Version: "String"

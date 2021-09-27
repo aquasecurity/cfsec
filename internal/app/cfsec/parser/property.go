@@ -1,11 +1,12 @@
 package parser
 
 import (
+	"strings"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
-	"strings"
 )
 
 type Property struct {
@@ -136,11 +137,19 @@ func (p *Property) IsString() bool {
 	return p.Inner.Type == cftypes.String
 }
 
+func (p *Property) IsNotString() bool {
+	return !p.IsString()
+}
+
 func (p *Property) IsMap() bool {
 	if p.IsNil() {
 		return false
 	}
 	return p.Inner.Type == cftypes.Map
+}
+
+func (p *Property) IsNotMap() bool {
+	return !p.IsMap()
 }
 
 func (p *Property) IsList() bool {
@@ -150,11 +159,19 @@ func (p *Property) IsList() bool {
 	return p.Inner.Type == cftypes.List
 }
 
+func (p *Property) IsNotList() bool {
+	return !p.IsList()
+}
+
 func (p *Property) IsBool() bool {
 	if p.IsNil() {
 		return false
 	}
 	return p.Inner.Type == cftypes.Bool
+}
+
+func (p *Property) IsNotBool() bool {
+	return !p.IsBool()
 }
 
 func (p *Property) AsString() string {

@@ -8,5 +8,8 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/cloudtrail"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/cloudwatch"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/config"
-	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/s3"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/documentdb"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ebs"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ec2"
+		_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/s3"
 )

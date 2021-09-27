@@ -49,6 +49,6 @@ Resources:
       DBInstanceIdentifier: "sample-cluster-instance-0"
       PreferredMaintenanceWindow: "sat:06:54-sat:07:24"
 `},
-		Base: documentdb.CheckEnableLogExport,
+	Base: documentdb.CheckEncryptionCustomerKey,
 	})
 }

@@ -33,8 +33,6 @@ var CheckEnableLogExport = rules.Register(
 					hasProfiler = true
 				}
 			}
-
-
 			if !hasAudit {
 				results.Add(
 					"CloudWatch audit log exports are not enabled.",

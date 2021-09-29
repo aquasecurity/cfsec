@@ -3,21 +3,26 @@ package vpc
 import "github.com/aquasecurity/defsec/types"
 
 type VPC struct {
-	DefaultVPCs     []DefaultVPC
-	SecurityGroups  []SecurityGroup
-	NetworkACLRules []NetworkACLRule
+	DefaultVPCs    []DefaultVPC
+	SecurityGroups []SecurityGroup
+	NetworkACLs    []NetworkACL
+}
+
+type NetworkACL struct {
+	types.Metadata
+	Rules []NetworkACLRule
 }
 
 type SecurityGroup struct {
 	types.Metadata
-	Description types.StringValue
-	Rules       []SecurityGroupRule
+	Description  types.StringValue
+	IngressRules []SecurityGroupRule
+	EgressRules  []SecurityGroupRule
 }
 
 type SecurityGroupRule struct {
 	Description types.StringValue
 	CIDRs       []types.StringValue
-	Type        types.StringValue
 }
 
 type DefaultVPC struct {

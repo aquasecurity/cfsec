@@ -13,6 +13,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/dynamodb"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ebs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/s3"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/vpc"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/workspaces"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws"
@@ -32,6 +33,7 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		DynamoDB:    dynamodb.Adapt(cfFile),
 		EBS:         ebs.Adapt(cfFile),
 		S3:          s3.Adapt(cfFile),
+		VPC:         vpc.Adapt(cfFile),
 		WorkSpaces:  workspaces.Adapt(cfFile),
 	}
 }

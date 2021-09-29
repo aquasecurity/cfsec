@@ -10,7 +10,7 @@ import (
 )
 
 type Property struct {
-	ctx FileContext
+	ctx         FileContext
 	name        string
 	comment     string
 	rng         types.Range
@@ -123,7 +123,7 @@ func (p *Property) resolveValue() *Property {
 }
 
 func (p *Property) IsNil() bool {
-	return p.Inner.Value == nil
+	return p == nil || p.Inner.Value == nil
 }
 
 func (p *Property) IsNotNil() bool {
@@ -179,7 +179,7 @@ func (p *Property) AsString() string {
 }
 
 func (p *Property) AsStringValue() types.StringValue {
-	return types.String(p.AsString(), p.Metadata())
+	return types.StringExplicit(p.AsString(), p.Metadata())
 }
 
 func (p *Property) AsBool() bool {
@@ -255,7 +255,7 @@ func (p *Property) GetProperty(path string) *Property {
 		}
 	}
 
-	if len(pathParts) == 1 || property == nil{
+	if len(pathParts) == 1 || property == nil {
 		return property
 	}
 
@@ -265,5 +265,3 @@ func (p *Property) GetProperty(path string) *Property {
 
 	return nil
 }
-
-

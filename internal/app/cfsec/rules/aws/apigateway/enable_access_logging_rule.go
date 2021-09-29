@@ -21,7 +21,7 @@ Resources:
     Properties:
       AccessLogSettings:
         Format: json
-      ApiId: BadApi
+      ApiId: !Ref BadApi
       StageName: BadApiStage
 `,
 		},
@@ -39,7 +39,7 @@ Resources:
       AccessLogSettings:
         DestinationArn: gateway-logging
         Format: json
-      ApiId: GoodApi
+      ApiId: !Ref GoodApi
       StageName: GoodApiStage
 `,
 		},

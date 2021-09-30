@@ -76,6 +76,10 @@ func (r *Resource) Range() types.Range {
 	return r.rng
 }
 
+func (r *Resource) SourceFormat() SourceFormat {
+	return r.ctx.SourceFormat
+}
+
 func (r *Resource) Metadata() types.Metadata {
 	return types.NewMetadata(r.Range(), NewCFReference(r.rng))
 }

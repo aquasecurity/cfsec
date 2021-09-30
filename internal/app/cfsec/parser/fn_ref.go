@@ -23,6 +23,7 @@ func ResolveReference(property *Property) (resolved *Property) {
 			}
 		}
 	}
+
 	for k := range property.ctx.Resources {
 		if k == refValue {
 			res := property.ctx.Resources[k]
@@ -40,3 +41,4 @@ func ResolveReference(property *Property) (resolved *Property) {
 	}
 	return nil
 }
+

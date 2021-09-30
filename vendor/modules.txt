@@ -102,6 +102,9 @@ github.com/aquasecurity/defsec/rules/aws/documentdb
 github.com/aquasecurity/defsec/rules/aws/dynamodb
 github.com/aquasecurity/defsec/rules/aws/ebs
 github.com/aquasecurity/defsec/rules/aws/ec2
+github.com/aquasecurity/defsec/rules/aws/ecr
+github.com/aquasecurity/defsec/rules/aws/ecs
+github.com/aquasecurity/defsec/rules/aws/efs
 github.com/aquasecurity/defsec/rules/aws/s3
 github.com/aquasecurity/defsec/rules/aws/vpc
 github.com/aquasecurity/defsec/rules/aws/workspaces
@@ -149,6 +152,8 @@ github.com/go-git/go-git/v5/utils/merkletrie/internal/frame
 github.com/go-git/go-git/v5/utils/merkletrie/noder
 # github.com/google/go-cmp v0.5.5
 ## explicit
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
 # github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99
 github.com/jbenet/go-context/io
 # github.com/liamg/clinch v1.5.6
@@ -163,6 +168,7 @@ github.com/liamg/tml
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
 # github.com/owenrumney/squealer v0.2.28
+## explicit
 github.com/owenrumney/squealer/internal/app/squealer/match
 github.com/owenrumney/squealer/internal/app/squealer/mertics
 github.com/owenrumney/squealer/pkg/config
@@ -174,6 +180,11 @@ github.com/pmezard/go-difflib/difflib
 github.com/sergi/go-diff/diffmatchpatch
 # github.com/sirupsen/logrus v1.8.1
 github.com/sirupsen/logrus
+# github.com/spf13/cobra v1.2.1
+## explicit
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.5
+github.com/spf13/pflag
 # github.com/stretchr/testify v1.7.0
 ## explicit
 github.com/stretchr/testify/assert
@@ -187,7 +198,7 @@ golang.org/x/crypto/ssh/terminal
 # golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 ## explicit
 golang.org/x/net/context
-# golang.org/x/sys v0.0.0-20210502180810-71e4cd670f79
+# golang.org/x/sys v0.0.0-20210510120138-977fb7262007
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
@@ -197,7 +208,8 @@ golang.org/x/term
 # gopkg.in/warnings.v0 v0.1.2
 gopkg.in/warnings.v0
 # gopkg.in/yaml.v2 v2.4.0
+## explicit
 gopkg.in/yaml.v2
-# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+# gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 ## explicit
 gopkg.in/yaml.v3

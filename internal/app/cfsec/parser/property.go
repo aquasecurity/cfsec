@@ -1,12 +1,19 @@
 package parser
 
 import (
+	"os"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
+)
+
+type EqualityOptions = int
+
+const (
+	IgnoreCase EqualityOptions = iota
 )
 
 type Property struct {
@@ -114,6 +121,15 @@ func (p *Property) RawValue() interface{} {
 	return p.Inner.Value
 }
 
+func (p *Property) AsRawStrings() ([]string, error) {
+	content, err := os.ReadFile(p.rng.GetFilename())
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(string(content), "\n")
+	return lines[p.rng.GetStartLine()-1:p.rng.GetEndLine()], nil
+}
+
 func (p *Property) resolveValue() *Property {
 	if !p.isFunction() {
 		return p
@@ -198,7 +214,15 @@ func (p *Property) AsList() []*Property {
 	return p.Inner.Value.([]*Property)
 }
 
-func (p *Property) EqualTo(checkValue interface{}) bool {
+func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOptions) bool {
+	var ignoreCase bool
+	for _, option := range equalityOptions {
+		if option == IgnoreCase {
+			ignoreCase = true
+		}
+	}
+
+
 	if p.IsNil() {
 		return checkValue == nil
 	}
@@ -209,6 +233,9 @@ func (p *Property) EqualTo(checkValue interface{}) bool {
 
 	switch p.Inner.Type {
 	case cftypes.String:
+		if ignoreCase {
+			return strings.EqualFold(p.AsString(), checkValue.(string))
+		}
 		return p.AsString() == checkValue.(string)
 	default:
 		return false

@@ -11,6 +11,9 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/documentdb"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ebs"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ec2"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ecr"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ecs"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/efs"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/s3"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/workspaces"
 )

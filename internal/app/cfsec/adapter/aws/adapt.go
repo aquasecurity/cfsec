@@ -12,6 +12,10 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/documentdb"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/dynamodb"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ebs"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ec2"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ecr"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ecs"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/efs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/s3"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/vpc"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/workspaces"
@@ -32,6 +36,10 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		DocumentDB:  documentdb.Adapt(cfFile),
 		DynamoDB:    dynamodb.Adapt(cfFile),
 		EBS:         ebs.Adapt(cfFile),
+		EC2:         ec2.Adapt(cfFile),
+		ECR:         ecr.Adapt(cfFile),
+		ECS:         ecs.Adapt(cfFile),
+		EFS: efs.Adapt(cfFile),
 		S3:          s3.Adapt(cfFile),
 		VPC:         vpc.Adapt(cfFile),
 		WorkSpaces:  workspaces.Adapt(cfFile),

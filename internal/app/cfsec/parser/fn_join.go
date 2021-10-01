@@ -2,9 +2,10 @@ package parser
 
 import (
 	"fmt"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"os"
 	"strings"
+
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 func ResolveJoin(property *Property) (resolved *Property) {
@@ -32,14 +33,6 @@ func ResolveJoin(property *Property) (resolved *Property) {
 
 	joined := strings.Join(itemValues, joiner)
 
-	return &Property{
-		name:        property.name,
-		comment:     property.comment,
-		rng:         property.rng,
-		parentRange: property.parentRange,
-		Inner: PropertyInner{
-			Type:  cftypes.String,
-			Value: joined,
-		},
-	}
+
+	return property.deriveResolved(cftypes.String, joined)
 }

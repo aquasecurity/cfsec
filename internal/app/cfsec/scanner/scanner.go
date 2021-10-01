@@ -41,7 +41,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 
 	for _, ctx := range contexts {
 
-		state := adapter.Adapt(ctx)
+		state := adapter.Adapt(*ctx)
 
 		for _, rule := range GetRegisteredRules() {
 

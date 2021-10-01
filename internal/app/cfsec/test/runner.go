@@ -10,6 +10,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil/filesystem"
 	"github.com/aquasecurity/defsec/rules"
+	"github.com/stretchr/testify/require"
 )
 
 func RunPassingExamplesTest(t *testing.T, expectedCode string) {
@@ -24,10 +25,8 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 		if strings.TrimSpace(goodExample) == "" {
 			t.Fatalf("Good example code not provided for %s", rule.ID())
 		}
-		results, err := scanTestSource(goodExample, t)
-		if err != nil {
-			t.Fatal(err)
-		}
+
+		results := scanTestSource(t, goodExample)
 		testutil.AssertCheckCode(t, "", rule.ID(), results)
 	}
 
@@ -45,16 +44,21 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 		if strings.TrimSpace(badExample) == "" {
 			t.Fatalf("bad example code not provided for %s", rule.ID())
 		}
-		results, err := scanTestSource(badExample, t)
-		if err != nil {
-			t.Fatal(err)
-		}
+		results := scanTestSource(t, badExample)
+
 		testutil.AssertCheckCode(t, rule.ID(), "", results)
 	}
 }
 
-func scanTestSource(source string, t *testing.T) ([]rules.Result, error) {
 
+func scanTestSource(t *testing.T, source string) []rules.Result {
+	fileCtx, err := CreateFileContexts(t, source)
+	require.NoError(t, err)
+	s := scanner.New()
+	return s.Scan(fileCtx)
+}
+
+func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error) {
 	fs, err := filesystem.New()
 	if err != nil {
 		return nil, err
@@ -80,8 +84,6 @@ func scanTestSource(source string, t *testing.T) ([]rules.Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	s := scanner.New()
-	return s.Scan(fileCtx), nil
+	return fileCtx, nil
 
 }

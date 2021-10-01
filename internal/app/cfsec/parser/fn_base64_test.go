@@ -10,7 +10,7 @@ import (
 func Test_resolve_base64_value(t *testing.T) {
 
 	property := &Property{
-		ctx: FileContext{},
+		ctx: &FileContext{},
 		name:        "BucketName",
 		rng:         types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{

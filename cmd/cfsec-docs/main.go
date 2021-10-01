@@ -18,10 +18,6 @@ var (
 	webPath        string
 )
 
-type FileContent struct {
-	Checks   []rule.Rule
-}
-
 func init() {
 	defaultWebDocsPath := fmt.Sprintf("%s/checkdocs", projectRoot)
 	rootCmd.Flags().StringVar(&webPath, "web-path", defaultWebDocsPath, "The path to generate web into, defaults to ./checkdocs")
@@ -40,23 +36,22 @@ var rootCmd = &cobra.Command{
 	Long:  `cfsec-docs generates the content for the root README and also can generate the missing base pages for the wiki`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		fileContents := getSortedFileContents()
-
-		return generateWebPages(fileContents)
+		checks := getSortedChecks()
+		return generateWebPages(checks)
 	},
 }
 
-func getSortedFileContents() []rule.Rule {
-	rules := scanner.GetRegisteredRules()
-	sortChecks(rules)
-	if err := generateNavIndexFile(rules); err != nil {
-		panic(err)
-	}
-	return rules
-}
-
-func sortChecks(checks []rule.Rule) {
+func getSortedChecks() []rule.Rule {
+	checks := scanner.GetRegisteredRules()
+	
+	// sort the checks alpha
 	sort.Slice(checks, func(i, j int) bool {
 		return checks[i].ID() < checks[j].ID()
 	})
+	
+	if err := generateNavIndexFile(checks); err != nil {
+		panic(err)
+	}
+
+	return checks
 }

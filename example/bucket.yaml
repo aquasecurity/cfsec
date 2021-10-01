@@ -15,4 +15,3 @@ Resources:
         ServerSideEncryptionConfiguration:
         - BucketKeyEnabled: 
             Ref: EncryptBucket
-

@@ -2,9 +2,10 @@ package parser
 
 import (
 	"fmt"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"os"
 	"strings"
+
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 func ResolveSplit(property *Property) (resolved *Property) {
@@ -29,16 +30,7 @@ func ResolveSplit(property *Property) (resolved *Property) {
 
 	propertyList := createPropertyList(splitProp, delimiterProp, property)
 
-	return &Property{
-		name:        property.name,
-		comment:     property.comment,
-		rng:         property.rng,
-		parentRange: property.parentRange,
-		Inner: PropertyInner{
-			Type:  cftypes.List,
-			Value: propertyList,
-		},
-	}
+	return property.deriveResolved(cftypes.List, propertyList)
 }
 
 func createPropertyList(splitProp *Property, delimiterProp *Property, parent *Property) []*Property {
@@ -49,17 +41,7 @@ func createPropertyList(splitProp *Property, delimiterProp *Property, parent *Pr
 	splits := strings.Split(splitString, delimiter)
 	var props []*Property
 	for _, split := range splits {
-		props = append(props, &Property{
-			ctx:         parent.ctx,
-			name:        parent.name,
-			comment:     parent.comment,
-			rng:         parent.rng,
-			parentRange: parent.parentRange,
-			Inner:       PropertyInner{
-				Type:  cftypes.String,
-				Value: split,
-			},
-		})
+		props = append(props, parent.deriveResolved(cftypes.String, split))
 	}
 	return props
 }

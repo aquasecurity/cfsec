@@ -2,8 +2,9 @@ package parser
 
 import (
 	"fmt"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"os"
+
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 func ResolveEquals(property *Property) (resolved *Property) {
@@ -20,16 +21,6 @@ func ResolveEquals(property *Property) (resolved *Property) {
 
 	propA := refValue[0]
 	propB := refValue[1]
+	return property.deriveResolved(cftypes.Bool, propA.resolveValue().EqualTo(propB.resolveValue().RawValue()))
 
-
-	return &Property{
-		name:        property.name,
-		comment:     property.comment,
-		rng:         property.rng,
-		parentRange: property.parentRange,
-		Inner: PropertyInner{
-			Type:  cftypes.Bool,
-			Value: propA.resolveValue().EqualTo(propB.resolveValue().RawValue()),
-		},
-	}
 }

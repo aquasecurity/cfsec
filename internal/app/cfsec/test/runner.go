@@ -24,7 +24,10 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 		if strings.TrimSpace(goodExample) == "" {
 			t.Fatalf("Good example code not provided for %s", rule.ID())
 		}
-		results := scanTestSource(goodExample, t)
+		results, err := scanTestSource(goodExample, t)
+		if err != nil {
+			t.Fatal(err)
+		}
 		testutil.AssertCheckCode(t, "", rule.ID(), results)
 	}
 
@@ -42,40 +45,43 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 		if strings.TrimSpace(badExample) == "" {
 			t.Fatalf("bad example code not provided for %s", rule.ID())
 		}
-		results := scanTestSource(badExample, t)
+		results, err := scanTestSource(badExample, t)
+		if err != nil {
+			t.Fatal(err)
+		}
 		testutil.AssertCheckCode(t, rule.ID(), "", results)
 	}
 }
 
-func scanTestSource(source string, t *testing.T) []rules.Result {
+func scanTestSource(source string, t *testing.T) ([]rules.Result, error) {
 
 	fs, err := filesystem.New()
 	if err != nil {
-		t.Fatal(err)
+		return nil, err
 	}
 	defer fs.Close()
-
-	source = strings.TrimSpace(strings.ReplaceAll(source, "\t", "  "))
 
 	ext := "yaml"
 	if source[0] == '{' {
 		ext = "json"
+	} else if strings.Contains(source, "\t") {
+		return nil, fmt.Errorf("source yaml contains tab characters - please replace them:\n%q\n\n", source)
 	}
 
 	filename := fmt.Sprintf("test.%s", ext)
 
 	if err := fs.WriteTextFile(filename, source); err != nil {
-		t.Fatal(err)
+		return nil, err
 	}
 
 	path := fs.RealPath(filename)
 
 	fileCtx, err := parser.ParseFiles(path)
 	if err != nil {
-		t.Fatal(err)
+		return nil, err
 	}
 
 	s := scanner.New()
-	return s.Scan(fileCtx)
+	return s.Scan(fileCtx), nil
 
 }

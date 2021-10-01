@@ -3,7 +3,7 @@ module github.com/aquasecurity/cfsec
 go 1.16
 
 require (
-	github.com/aquasecurity/defsec v0.0.10
+	github.com/aquasecurity/defsec v0.0.12
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/liamg/clinch v1.5.6
 	github.com/liamg/jfather v0.0.2

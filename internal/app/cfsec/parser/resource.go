@@ -9,7 +9,7 @@ import (
 )
 
 type Resource struct {
-	ctx FileContext
+	ctx     FileContext
 	rng     types.Range
 	id      string
 	comment string
@@ -46,7 +46,6 @@ func (r *Resource) setFile(filepath string) {
 
 func (r *Resource) setContext(ctx FileContext) {
 	r.ctx = ctx
-
 
 	for _, p := range r.Inner.Properties {
 		p.setContext(ctx)

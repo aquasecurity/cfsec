@@ -146,6 +146,17 @@ func (p *Property) IsNotNil() bool {
 	return !p.IsNil()
 }
 
+func (p *Property) IsInt() bool {
+	if p.IsNil() {
+		return false
+	}
+	return p.Inner.Type == cftypes.Int
+}
+
+func (p *Property) IsNotInt() bool {
+	return !p.IsInt()
+}
+
 func (p *Property) IsString() bool {
 	if p.IsNil() {
 		return false
@@ -198,12 +209,20 @@ func (p *Property) AsStringValue() types.StringValue {
 	return types.StringExplicit(p.AsString(), p.Metadata())
 }
 
+func (p *Property) AsInt() int {
+	return p.Inner.Value.(int)
+}
+
+func (p *Property) AsIntValue() types.IntValue {
+	return types.IntExplicit(p.AsInt(), p.Metadata())
+}
+
 func (p *Property) AsBool() bool {
 	return p.Inner.Value.(bool)
 }
 
 func (p *Property) AsBoolValue() types.BoolValue {
-	return types.Bool(p.AsBool(), p.Metadata())
+	return types.BoolExplicit(p.AsBool(), p.Metadata())
 }
 
 func (p *Property) AsMap() map[string]*Property {

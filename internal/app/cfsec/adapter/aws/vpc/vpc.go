@@ -86,6 +86,12 @@ func getRules(id string, ctx parser.FileContext) (rules []vpc.NetworkACLRule) {
 			} else {
 				rule.Action = types.StringDefault(vpc.ActionDeny, ruleResource.Metadata())
 			}
+			protocolProperty := ruleResource.GetProperty("Protocol")
+			if protocolProperty.IsInt() {
+				rule.Protocol = protocolProperty.AsIntValue()
+			} else {
+				rule.Protocol = types.IntDefault(-1, ruleResource.Metadata())
+			}
 			rules = append(rules, rule)
 		}
 	}

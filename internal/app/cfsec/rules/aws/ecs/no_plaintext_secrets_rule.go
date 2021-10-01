@@ -47,7 +47,8 @@ Resources:
         - Name: jenkins-home
           EFSVolumeConfiguration:
             FilesystemId: "fs1"
-            TransitEncryption: DISABLED`},
+            TransitEncryption: DISABLED
+`},
 		GoodExample: []string{`---
 Resources:
   GoodExample:

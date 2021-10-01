@@ -1,8 +1,10 @@
 package parser
 
 import (
-	"gopkg.in/yaml.v3"
+	"fmt"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 var intrinsicTags = []string{
@@ -22,6 +24,7 @@ func init() {
 		"Fn::Split":  ResolveSplit,
 		"Fn::Sub":    PassthroughResolution,
 		"Fn::Select": PassthroughResolution,
+		"Fn::GetAtt": ResolveGetAtt,
 	}
 }
 
@@ -62,4 +65,15 @@ func ResolveIntrinsicFunc(property *Property) *Property {
 	}
 
 	return property
+}
+
+
+func getIntrinsicTag(tag string) string {
+	tag = strings.TrimPrefix(tag, "!")
+	switch tag {
+	case "Ref", "Contains":
+		return tag
+	default:
+		return fmt.Sprintf("Fn::%s", tag)
+	}
 }

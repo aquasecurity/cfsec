@@ -1,16 +1,17 @@
 package parser
 
 import (
+	"testing"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_resolve_join_value(t *testing.T) {
 
 	property := &Property{
-		ctx:  FileContext{},
+		ctx:  &FileContext{},
 		name: "BucketName",
 		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
@@ -65,7 +66,7 @@ func Test_resolve_join_value(t *testing.T) {
 func Test_resolve_join_value_with_reference(t *testing.T) {
 
 	property := &Property{
-		ctx: FileContext{
+		ctx: &FileContext{
 			filepath: "",
 			Parameters: map[string]*Parameter{
 				"Environment": {
@@ -108,7 +109,7 @@ func Test_resolve_join_value_with_reference(t *testing.T) {
 											},
 										},
 										{
-											ctx: FileContext{
+											ctx: &FileContext{
 												filepath: "",
 												Parameters: map[string]*Parameter{
 													"Environment": {

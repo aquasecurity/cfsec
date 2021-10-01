@@ -1,11 +1,15 @@
 package parser
 
 import (
+	"fmt"
+	"os"
+	"strings"
+	"testing"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil/filesystem"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"os"
-	"testing"
 )
 
 func Test_parse_yaml(t *testing.T) {
@@ -163,4 +167,31 @@ Resources:
 	refProp := res.GetProperty("BucketName")
 	assert.False(t, refProp.IsNil())
 	assert.Equal(t, "somebucket", refProp.AsString() )
+}
+
+
+func createTestFileContexts(t *testing.T, source string) FileContexts {
+
+	fs, err := filesystem.New()
+	require.NoError(t, err)
+	defer fs.Close()
+
+
+	source = strings.TrimSpace(strings.ReplaceAll(source, "\t", "  "))
+
+	ext := "yaml"
+	if source[0] == '{' {
+		ext = "json"
+	}
+
+	filename := fmt.Sprintf("test.%s", ext)
+
+	if err := fs.WriteTextFile(filename, source); err != nil {
+		t.Fatal(err)
+	}
+
+
+	fileContext, err := ParseFiles(fs.RealPath(filename))
+	require.NoError(t, err)
+	return fileContext
 }

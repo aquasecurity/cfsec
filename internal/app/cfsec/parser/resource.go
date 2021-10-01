@@ -9,7 +9,7 @@ import (
 )
 
 type Resource struct {
-	ctx     FileContext
+	ctx *FileContext
 	rng     types.Range
 	id      string
 	comment string
@@ -21,7 +21,7 @@ type ResourceInner struct {
 	Properties map[string]*Property `json:"Properties" yaml:"Properties"`
 }
 
-func (r *Resource) ConfigureResource(id, filepath string, ctx FileContext) {
+func (r *Resource) ConfigureResource(id, filepath string, ctx *FileContext) {
 	r.setId(id)
 	r.setFile(filepath)
 	r.setContext(ctx)
@@ -44,7 +44,7 @@ func (r *Resource) setFile(filepath string) {
 	}
 }
 
-func (r *Resource) setContext(ctx FileContext) {
+func (r *Resource) setContext(ctx *FileContext) {
 	r.ctx = ctx
 
 	for _, p := range r.Inner.Properties {
@@ -85,6 +85,10 @@ func (r *Resource) Metadata() types.Metadata {
 
 func (r *Resource) properties() map[string]*Property {
 	return r.Inner.Properties
+}
+
+func (r *Resource) IsNil() bool {
+	return r.id == ""
 }
 
 // GetProperty takes a path to the property separated by '.' and returns

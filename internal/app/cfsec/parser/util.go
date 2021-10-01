@@ -1,10 +1,11 @@
 package parser
 
 import (
+	"strconv"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
-	"strconv"
 )
 
 func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) error {
@@ -44,22 +45,21 @@ func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) er
 }
 
 func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) error {
-	if  node.Tag == "!Ref" {
-		node.Content = []*yaml.Node{}
+	if  IsIntrinsicFunc(node) {
+		newContent := []*yaml.Node{}
+
+
+		newContent = append(newContent, &yaml.Node{
+			Tag:         "!!str",
+			Value:       getIntrinsicTag(node.Tag),
+			Kind: yaml.ScalarNode,
+		})
+
+		newContent = createNode(node, newContent)
+
 		node.Tag = "!!map"
 		node.Kind = yaml.MappingNode
-
-		node.Content = append(node.Content, &yaml.Node{
-			Tag:         "!!str",
-			Value:       "Ref",
-			Kind: yaml.ScalarNode,
-		})
-
-		node.Content = append(node.Content, &yaml.Node{
-			Tag:         "!!str",
-			Value:       node.Value,
-			Kind: yaml.ScalarNode,
-		})
+		node.Content = newContent
 	}
 
 	if node.Content == nil {
@@ -99,6 +99,34 @@ func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) erro
 	}
 
 	return nil
+}
+
+func createNode(node *yaml.Node, newContent []*yaml.Node) []*yaml.Node {
+	if node.Content == nil {
+		newContent = append(newContent, &yaml.Node{
+			Tag:   "!!str",
+			Value: node.Value,
+			Kind:  yaml.ScalarNode,
+		})
+	} else {
+
+		newNode := &yaml.Node{
+			Content: node.Content,
+			Kind: node.Kind,
+		}
+
+		switch node.Kind {
+		case yaml.SequenceNode:
+			newNode.Tag = "!!seq"
+		case yaml.MappingNode:
+			newNode.Tag = "!!map"
+		case yaml.ScalarNode:
+		default:
+			newNode.Tag = node.Tag
+		}
+		newContent = append(newContent, newNode)
+	}
+	return newContent
 }
 
 func calculateEndLine(node *yaml.Node) int {

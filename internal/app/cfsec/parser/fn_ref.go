@@ -11,34 +11,18 @@ func ResolveReference(property *Property) (resolved *Property) {
 	for k := range property.ctx.Parameters {
 		if k == refValue {
 			param = property.ctx.Parameters[k]
-			return &Property{
-				name:        property.name,
-				comment:     property.comment,
-				rng:         property.rng,
-				parentRange: property.parentRange,
-				Inner: PropertyInner{
-					Type:  param.Type(),
-					Value: param.Default(),
-				},
-			}
+			resolved = property.deriveResolved(param.Type(), param.Default())
+			return resolved
 		}
 	}
 
 	for k := range property.ctx.Resources {
 		if k == refValue {
 			res := property.ctx.Resources[k]
-			return &Property{
-				name:        property.name,
-				comment:     property.comment,
-				rng:         property.rng,
-				parentRange: property.parentRange,
-				Inner: PropertyInner{
-					Type:  cftypes.String,
-					Value: res.ID(),
-				},
-			}
+			resolved = property.deriveResolved(cftypes.String, res.ID())
+			break
 		}
 	}
-	return nil
+	return resolved
 }
 

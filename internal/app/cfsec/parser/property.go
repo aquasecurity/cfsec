@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"os"
+
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -17,7 +17,7 @@ const (
 )
 
 type Property struct {
-	ctx         FileContext
+	ctx         *FileContext
 	name        string
 	comment     string
 	rng         types.Range
@@ -42,14 +42,20 @@ func (p *Property) setName(name string) {
 	}
 }
 
-func (p *Property) setContext(ctx FileContext) {
+func (p *Property) setContext(ctx *FileContext) {
 	p.ctx = ctx
 
-	if p.Type() == cftypes.Map {
+	if p.IsMap(){
 		for _, subProp := range p.AsMap() {
 			if subProp == nil {
 				continue
 			}
+			subProp.setContext(ctx)
+		}
+	}
+
+	if p.IsList() {
+		for _, subProp := range p.AsList() {
 			subProp.setContext(ctx)
 		}
 	}
@@ -122,12 +128,7 @@ func (p *Property) RawValue() interface{} {
 }
 
 func (p *Property) AsRawStrings() ([]string, error) {
-	content, err := os.ReadFile(p.rng.GetFilename())
-	if err != nil {
-		return nil, err
-	}
-	lines := strings.Split(string(content), "\n")
-	return lines[p.rng.GetStartLine()-1:p.rng.GetEndLine()], nil
+	return p.ctx.lines[p.rng.GetStartLine()-1:p.rng.GetEndLine()], nil
 }
 
 func (p *Property) resolveValue() *Property {
@@ -136,153 +137,6 @@ func (p *Property) resolveValue() *Property {
 	}
 
 	return ResolveIntrinsicFunc(p)
-}
-
-func (p *Property) IsNil() bool {
-	return p == nil || p.Inner.Value == nil
-}
-
-func (p *Property) IsNotNil() bool {
-	return !p.IsNil()
-}
-
-func (p *Property) IsInt() bool {
-	if p.IsNil() {
-		return false
-	}
-	return p.Inner.Type == cftypes.Int
-}
-
-func (p *Property) IsNotInt() bool {
-	return !p.IsInt()
-}
-
-func (p *Property) IsString() bool {
-	if p.IsNil() {
-		return false
-	}
-	return p.Inner.Type == cftypes.String
-}
-
-func (p *Property) IsNotString() bool {
-	return !p.IsString()
-}
-
-func (p *Property) IsMap() bool {
-	if p.IsNil() {
-		return false
-	}
-	return p.Inner.Type == cftypes.Map
-}
-
-func (p *Property) IsNotMap() bool {
-	return !p.IsMap()
-}
-
-func (p *Property) IsList() bool {
-	if p.IsNil() {
-		return false
-	}
-	return p.Inner.Type == cftypes.List
-}
-
-func (p *Property) IsNotList() bool {
-	return !p.IsList()
-}
-
-func (p *Property) IsBool() bool {
-	if p.IsNil() {
-		return false
-	}
-	return p.Inner.Type == cftypes.Bool
-}
-
-func (p *Property) IsNotBool() bool {
-	return !p.IsBool()
-}
-
-func (p *Property) AsString() string {
-	return p.Inner.Value.(string)
-}
-
-func (p *Property) AsStringValue() types.StringValue {
-	return types.StringExplicit(p.AsString(), p.Metadata())
-}
-
-func (p *Property) AsInt() int {
-	return p.Inner.Value.(int)
-}
-
-func (p *Property) AsIntValue() types.IntValue {
-	return types.IntExplicit(p.AsInt(), p.Metadata())
-}
-
-func (p *Property) AsBool() bool {
-	return p.Inner.Value.(bool)
-}
-
-func (p *Property) AsBoolValue() types.BoolValue {
-	return types.BoolExplicit(p.AsBool(), p.Metadata())
-}
-
-func (p *Property) AsMap() map[string]*Property {
-	return p.Inner.Value.(map[string]*Property)
-}
-
-func (p *Property) AsList() []*Property {
-	return p.Inner.Value.([]*Property)
-}
-
-func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOptions) bool {
-	var ignoreCase bool
-	for _, option := range equalityOptions {
-		if option == IgnoreCase {
-			ignoreCase = true
-		}
-	}
-
-
-	if p.IsNil() {
-		return checkValue == nil
-	}
-
-	if p.RawValue() == checkValue {
-		return true
-	}
-
-	switch p.Inner.Type {
-	case cftypes.String:
-		if ignoreCase {
-			return strings.EqualFold(p.AsString(), checkValue.(string))
-		}
-		return p.AsString() == checkValue.(string)
-	default:
-		return false
-	}
-}
-
-func (p *Property) IsTrue() bool {
-	if p.IsNil() || !p.IsBool() {
-		return false
-	}
-
-	return p.AsBool()
-}
-
-func (p *Property) IsEmpty() bool {
-
-	if p.IsNil() {
-		return true
-	}
-
-	switch p.Inner.Type {
-	case cftypes.String:
-		return p.AsString() == ""
-	case cftypes.List, cftypes.Map:
-		return len(p.AsList()) == 0
-	default:
-		return false
-	}
 }
 
 // GetProperty takes a path to the property separated by '.' and returns
@@ -310,4 +164,18 @@ func (p *Property) GetProperty(path string) *Property {
 	}
 
 	return nil
+}
+
+func (p *Property) deriveResolved( propType cftypes.CfType, propValue interface{}) *Property {
+	return &Property{
+		ctx:         p.ctx,
+		name:        p.name,
+		comment:     p.comment,
+		rng:         p.rng,
+		parentRange: p.parentRange,
+		Inner: PropertyInner{
+			Type:  propType,
+			Value: propValue,
+		},
+	}
 }

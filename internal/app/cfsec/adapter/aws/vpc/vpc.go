@@ -29,23 +29,46 @@ func getSecurityGroups(ctx parser.FileContext) (groups []vpc.SecurityGroup) {
 		} else {
 			group.Description = types.StringExplicit(description.AsString(), description.Metadata())
 		}
-		for _, egress := range groupResource.GetProperty("SecurityGroupEgress").AsList() {
-			var rule vpc.SecurityGroupRule
-			description := egress.GetProperty("Description")
-			if description.IsNil() || description.IsNotString() {
-				rule.Description = types.StringDefault("", groupResource.Metadata())
-			} else {
-				rule.Description = types.StringExplicit(description.AsString(), description.Metadata())
+		if ingressProp := groupResource.GetProperty("SecurityGroupIngress"); ingressProp.IsList() {
+			for _, ingress := range ingressProp.AsList() {
+				var rule vpc.SecurityGroupRule
+				description := ingress.GetProperty("Description")
+				if description.IsNil() || description.IsNotString() {
+					rule.Description = types.StringDefault("", groupResource.Metadata())
+				} else {
+					rule.Description = types.StringExplicit(description.AsString(), description.Metadata())
+				}
+				v4Cidr := ingress.GetProperty("CidrIp")
+				if v4Cidr.IsString() && v4Cidr.AsStringValue().IsNotEmpty() {
+					rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v4Cidr.AsString(), v4Cidr.Metadata()))
+				}
+				v6Cidr := ingress.GetProperty("CidrIpv6")
+				if v6Cidr.IsString() && v6Cidr.AsStringValue().IsNotEmpty() {
+					rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v6Cidr.AsString(), v6Cidr.Metadata()))
+				}
+				group.IngressRules = append(group.IngressRules, rule)
 			}
-			v4Cidr := egress.GetProperty("CidrIp")
-			if v4Cidr.IsString() && v4Cidr.AsStringValue().IsNotEmpty() {
-				rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v4Cidr.AsString(), v4Cidr.Metadata()))
+		}
+
+		if egressProp := groupResource.GetProperty("SecurityGroupEgress"); egressProp.IsList() {
+			for _, egress := range egressProp.AsList() {
+				var rule vpc.SecurityGroupRule
+				description := egress.GetProperty("Description")
+				if description.IsNil() || description.IsNotString() {
+					rule.Description = types.StringDefault("", groupResource.Metadata())
+				} else {
+					rule.Description = types.StringExplicit(description.AsString(), description.Metadata())
+				}
+				v4Cidr := egress.GetProperty("CidrIp")
+				if v4Cidr.IsString() && v4Cidr.AsStringValue().IsNotEmpty() {
+					rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v4Cidr.AsString(), v4Cidr.Metadata()))
+				}
+				v6Cidr := egress.GetProperty("CidrIpv6")
+				if v6Cidr.IsString() && v6Cidr.AsStringValue().IsNotEmpty() {
+					rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v6Cidr.AsString(), v6Cidr.Metadata()))
+				}
+				group.EgressRules = append(group.EgressRules, rule)
 			}
-			v6Cidr := egress.GetProperty("CidrIpv6")
-			if v6Cidr.IsString() && v6Cidr.AsStringValue().IsNotEmpty() {
-				rule.CIDRs = append(rule.CIDRs, types.StringExplicit(v6Cidr.AsString(), v6Cidr.Metadata()))
-			}
-			group.EgressRules = append(group.EgressRules, rule)
 		}
 		groups = append(groups, group)
 	}
@@ -84,13 +107,19 @@ func getRules(id string, ctx parser.FileContext) (rules []vpc.NetworkACLRule) {
 					rule.Action = types.String(vpc.ActionDeny, actionProperty.Metadata())
 				}
 			} else {
-				rule.Action = types.StringDefault(vpc.ActionDeny, ruleResource.Metadata())
+				rule.Action = types.StringDefault(vpc.ActionAllow, ruleResource.Metadata())
 			}
 			protocolProperty := ruleResource.GetProperty("Protocol")
 			if protocolProperty.IsInt() {
 				rule.Protocol = protocolProperty.AsIntValue()
 			} else {
 				rule.Protocol = types.IntDefault(-1, ruleResource.Metadata())
+			}
+			if ipv4Cidr := ruleResource.GetProperty("CidrBlock"); ipv4Cidr.IsString() {
+				rule.CIDRs = append(rule.CIDRs, ipv4Cidr.AsStringValue())
+			}
+			if ipv6Cidr := ruleResource.GetProperty("Ipv6CidrBlock"); ipv6Cidr.IsString() {
+				rule.CIDRs = append(rule.CIDRs, ipv6Cidr.AsStringValue())
 			}
 			rules = append(rules, rule)
 		}

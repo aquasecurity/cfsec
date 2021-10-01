@@ -12,7 +12,7 @@ func init() {
 		BadExample: []string{
 			`---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bad Example of ApiGateway
+Description: Bad example of group description
 Resources:
   BadSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -26,7 +26,7 @@ Resources:
 		GoodExample: []string{
 			`---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bad Example of ApiGateway
+Description: Good example of group description
 Resources:
   GoodSecurityGroup:
     Type: AWS::EC2::SecurityGroup

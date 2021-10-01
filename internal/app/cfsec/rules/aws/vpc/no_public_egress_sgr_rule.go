@@ -12,7 +12,22 @@ func init() {
 		BadExample: []string{
 			`---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bad example of SGR description
+Description: Bad example of egress rule
+Resources:
+  BadSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Limits security group egress traffic
+      SecurityGroupEgress:
+      - CidrIp: 80.1.2.3/32
+        IpProtocol: "6"
+`,
+		},
+
+		GoodExample: []string{
+			`---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Good example of egress rule
 Resources:
   BadSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -20,25 +35,9 @@ Resources:
       GroupDescription: Limits security group egress traffic
       SecurityGroupEgress:
       - CidrIp: 127.0.0.1/32
-        IpProtocol: "-1"
+        IpProtocol: "6"
 `,
 		},
-
-		GoodExample: []string{
-			`---
-AWSTemplateFormatVersion: 2010-09-09
-Description: Good example of SGR description
-Resources:
-  GoodSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Limits security group egress traffic
-      SecurityGroupEgress:
-      - CidrIp: 127.0.0.1/32
-        Description: "Can connect to loopback"
-        IpProtocol: "-1"
-`,
-		},
-		Base: vpc.CheckAddDescriptionToSecurityGroupRule,
+		Base: vpc.CheckNoPublicEgressSgr,
 	})
 }

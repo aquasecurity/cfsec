@@ -23,7 +23,9 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: NetworkACL
-      Protocol: -1
+      Protocol: 6
+      CidrBlock: 0.0.0.0/0
+      RuleAction: allow
 `,
 		},
 
@@ -42,8 +44,10 @@ Resources:
       NetworkAclId:
         Ref: NetworkACL
       Protocol: 6
+      CidrBlock: 10.0.0.0/8
+      RuleAction: allow
 `,
 		},
-		Base: vpc.CheckNoExcessivePortAccess,
+		Base: vpc.CheckNoPublicIngress,
 	})
 }

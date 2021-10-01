@@ -17,7 +17,7 @@ github.com/ProtonMail/go-crypto/openpgp/packet
 github.com/ProtonMail/go-crypto/openpgp/s2k
 # github.com/acomagu/bufpipe v1.0.3
 github.com/acomagu/bufpipe
-# github.com/aquasecurity/defsec v0.0.10
+# github.com/aquasecurity/defsec v0.0.12
 ## explicit
 github.com/aquasecurity/defsec/cidr
 github.com/aquasecurity/defsec/provider

@@ -107,6 +107,7 @@ github.com/aquasecurity/defsec/rules/aws/ecs
 github.com/aquasecurity/defsec/rules/aws/efs
 github.com/aquasecurity/defsec/rules/aws/iam
 github.com/aquasecurity/defsec/rules/aws/s3
+github.com/aquasecurity/defsec/rules/aws/ssm
 github.com/aquasecurity/defsec/rules/aws/vpc
 github.com/aquasecurity/defsec/rules/aws/workspaces
 github.com/aquasecurity/defsec/severity

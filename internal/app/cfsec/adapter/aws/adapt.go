@@ -16,16 +16,16 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ecr"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ecs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/efs"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/iam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/eks"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elasticache"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/iam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/s3"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/sqs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ssm"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/vpc"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/workspaces"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws"
-
 )
 
 func Adapt(cfFile parser.FileContext) aws.AWS {
@@ -45,11 +45,11 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		ECR:         ecr.Adapt(cfFile),
 		ECS:         ecs.Adapt(cfFile),
 		EFS:         efs.Adapt(cfFile),
-
 		IAM:         iam.Adapt(cfFile),
 		EKS:         eks.Adapt(cfFile),
 		ElastiCache: elasticache.Adapt(cfFile),
 		S3:          s3.Adapt(cfFile),
+		SQS:         sqs.Adapt(cfFile),
 		SSM:         ssm.Adapt(cfFile),
 		VPC:         vpc.Adapt(cfFile),
 		WorkSpaces:  workspaces.Adapt(cfFile),

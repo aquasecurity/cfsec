@@ -19,14 +19,15 @@ func (p *Property) IsString() bool {
 	if p.IsNil() {
 		return false
 	}
+	if p.isFunction() {
+		return p.resolveValue().IsString()
+	}
 	return p.Inner.Type == cftypes.String
 }
-
 
 func (p *Property) IsNotString() bool {
 	return !p.IsString()
 }
-
 
 func (p *Property) IsInt() bool {
 	if p.IsNil() {
@@ -73,6 +74,9 @@ func (p *Property) IsNotBool() bool {
 }
 
 func (p *Property) AsString() string {
+	if p.isFunction() {
+		return p.resolveValue().AsString()
+	}
 	return p.Inner.Value.(string)
 }
 
@@ -111,7 +115,6 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 			ignoreCase = true
 		}
 	}
-
 
 	if p.IsNil() {
 		return checkValue == nil

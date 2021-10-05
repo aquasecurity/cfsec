@@ -1,8 +1,6 @@
 package iam
 
 import (
-	"fmt"
-
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/util"
 	"github.com/aquasecurity/defsec/provider/aws/iam"
@@ -19,7 +17,6 @@ func Adapt(cfFile parser.FileContext) iam.IAM {
 
 func retrieveDocument(prop *parser.Property, resource *parser.Resource) (*iam.PolicyDocument, error) {
 	policyDoc := util.GetJsonBytes(prop, resource.SourceFormat())
-	fmt.Printf("%s\n\n", string(policyDoc))
 	return iam.ParsePolicyDocument(policyDoc, prop.Metadata())
 }
 

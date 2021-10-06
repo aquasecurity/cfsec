@@ -67,7 +67,6 @@ func ResolveIntrinsicFunc(property *Property) *Property {
 	return property
 }
 
-
 func getIntrinsicTag(tag string) string {
 	tag = strings.TrimPrefix(tag, "!")
 	switch tag {

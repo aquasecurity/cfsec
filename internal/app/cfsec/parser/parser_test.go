@@ -33,7 +33,7 @@ Resources:
             Ref: EncryptBucket`
 
 	testFile := testutil.CreateTestFile(source, testutil.YamlTestFileExt)
-	defer func(){_ = os.RemoveAll(testFile)}()
+	defer func() { _ = os.RemoveAll(testFile) }()
 
 	files, err := ParseFiles(testFile)
 	require.NoError(t, err)
@@ -79,7 +79,7 @@ func Test_parse_json(t *testing.T) {
 `
 
 	testFile := testutil.CreateTestFile(source, testutil.JsonTestFileExt)
-	defer func(){_ = os.RemoveAll(testFile)}()
+	defer func() { _ = os.RemoveAll(testFile) }()
 
 	files, err := ParseFiles(testFile)
 	require.NoError(t, err)
@@ -112,7 +112,7 @@ Resources:
             Ref: EncryptBucket`
 
 	testFile := testutil.CreateTestFile(source, testutil.YamlTestFileExt)
-	defer func(){_ = os.RemoveAll(testFile)}()
+	defer func() { _ = os.RemoveAll(testFile) }()
 
 	files, err := ParseFiles(testFile)
 	require.NoError(t, err)
@@ -127,7 +127,7 @@ Resources:
 
 	refProp := res.GetProperty("BucketName")
 	assert.False(t, refProp.IsNil())
-	assert.Equal(t, "referencedBucket", refProp.AsString() )
+	assert.Equal(t, "referencedBucket", refProp.AsString())
 }
 
 func Test_parse_yaml_with_intrinsic_functions(t *testing.T) {
@@ -151,7 +151,7 @@ Resources:
 `
 
 	testFile := testutil.CreateTestFile(source, testutil.YamlTestFileExt)
-	defer func(){_ = os.RemoveAll(testFile)}()
+	defer func() { _ = os.RemoveAll(testFile) }()
 
 	files, err := ParseFiles(testFile)
 	require.NoError(t, err)
@@ -166,16 +166,14 @@ Resources:
 
 	refProp := res.GetProperty("BucketName")
 	assert.False(t, refProp.IsNil())
-	assert.Equal(t, "somebucket", refProp.AsString() )
+	assert.Equal(t, "somebucket", refProp.AsString())
 }
-
 
 func createTestFileContexts(t *testing.T, source string) FileContexts {
 
 	fs, err := filesystem.New()
 	require.NoError(t, err)
 	defer fs.Close()
-
 
 	source = strings.TrimSpace(strings.ReplaceAll(source, "\t", "  "))
 
@@ -189,7 +187,6 @@ func createTestFileContexts(t *testing.T, source string) FileContexts {
 	if err := fs.WriteTextFile(filename, source); err != nil {
 		t.Fatal(err)
 	}
-
 
 	fileContext, err := ParseFiles(fs.RealPath(filename))
 	require.NoError(t, err)

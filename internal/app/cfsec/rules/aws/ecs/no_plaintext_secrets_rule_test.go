@@ -16,4 +16,3 @@ func Test_CheckNoPlaintextSecrets_PassedExamples(t *testing.T) {
 	expectedCode := ecs.CheckNoPlaintextSecrets.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

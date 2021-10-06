@@ -1,6 +1,5 @@
 package cloudfront
 
-
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws/cloudfront"
@@ -12,4 +11,3 @@ func Adapt(cfFile parser.FileContext) cloudfront.Cloudfront {
 		Distributions: getDistributions(cfFile),
 	}
 }
-

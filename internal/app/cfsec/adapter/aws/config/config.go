@@ -10,4 +10,3 @@ func Adapt(cfFile parser.FileContext) config.Config {
 		ConfigurationAggregrator: getConfiguraionAggregator(cfFile),
 	}
 }
-

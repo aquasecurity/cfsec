@@ -6,7 +6,6 @@ import (
 	"github.com/aquasecurity/defsec/rules/aws/elb"
 )
 
-
 func init() {
 
 	scanner.RegisterCheckRule(rule.Rule{

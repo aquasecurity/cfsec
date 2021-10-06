@@ -16,4 +16,3 @@ func Test_CheckEnableStorageEncryption_PassedExamples(t *testing.T) {
 	expectedCode := documentdb.CheckEnableStorageEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

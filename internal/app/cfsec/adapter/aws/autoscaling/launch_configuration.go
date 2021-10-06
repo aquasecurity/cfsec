@@ -7,18 +7,18 @@ import (
 )
 
 func getLaunchConfigurations(file parser.FileContext) (launchConfigurations []autoscaling.LaunchConfiguration) {
-		launchConfigResources := file.GetResourceByType("AWS::AutoScaling::LaunchConfiguration")
+	launchConfigResources := file.GetResourceByType("AWS::AutoScaling::LaunchConfiguration")
 
 	for _, r := range launchConfigResources {
 
 		launchConfig := autoscaling.LaunchConfiguration{
 			Name:              getName(r),
 			AssociatePublicIP: hasPublicIPAssociated(r),
-			EBSBlockDevices: []autoscaling.BlockDevice{},
+			EBSBlockDevices:   []autoscaling.BlockDevice{},
 		}
 
 		blockDevices := getBlockDevices(r)
-		for i	, device := range blockDevices {
+		for i, device := range blockDevices {
 			if i == 0 {
 				launchConfig.RootBlockDevice = &device
 				continue
@@ -50,7 +50,6 @@ func getBlockDevices(r *parser.Resource) []autoscaling.BlockDevice {
 			result = encrypted.AsBoolValue()
 		}
 
-
 		device := autoscaling.BlockDevice{
 			Encrypted: result,
 		}
@@ -60,7 +59,6 @@ func getBlockDevices(r *parser.Resource) []autoscaling.BlockDevice {
 
 	return blockDevices
 }
-
 
 func hasPublicIPAssociated(r *parser.Resource) types.BoolValue {
 	publicIpProp := r.GetProperty("AssociatePublicIpAddress")
@@ -86,4 +84,3 @@ func getName(r *parser.Resource) types.StringValue {
 
 	return nameProp.AsStringValue()
 }
-

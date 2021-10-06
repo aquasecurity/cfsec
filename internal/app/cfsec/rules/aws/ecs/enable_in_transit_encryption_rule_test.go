@@ -16,4 +16,3 @@ func Test_CheckEnableInTransitEncryption_PassedExamples(t *testing.T) {
 	expectedCode := ecs.CheckEnableInTransitEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

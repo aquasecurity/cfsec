@@ -11,4 +11,3 @@ func Adapt(cfFile parser.FileContext) elb.ELB {
 		LoadBalancers: getLoadBalancers(cfFile),
 	}
 }
-

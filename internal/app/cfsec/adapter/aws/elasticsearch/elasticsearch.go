@@ -6,10 +6,9 @@ import (
 )
 
 func Adapt(cfFile parser.FileContext) elasticsearch.Elasticsearch {
-	
-	return elasticsearch.Elasticsearch{
-		Domains:           getDomains(cfFile),
-	}
-	
-}
 
+	return elasticsearch.Elasticsearch{
+		Domains: getDomains(cfFile),
+	}
+
+}

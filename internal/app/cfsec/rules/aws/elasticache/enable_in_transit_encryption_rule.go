@@ -51,15 +51,8 @@ Resources:
       TransitEncryptionEnabled: true
 `},
 		Base: elasticache.CheckEnableInTransitEncryption,
-
 	})
 }
-
-
-
-
-
-
 
 var b = `---
 Resources:

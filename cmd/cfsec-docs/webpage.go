@@ -59,19 +59,16 @@ The following example will pass the {{$.ID}} check.
 )
 
 type docEntry struct {
-	Summary string
-	ID string
-	ShortCode string
-	Service string
+	Summary     string
+	ID          string
+	ShortCode   string
+	Service     string
 	Explanation string
-	Impact string
-	Resolution string
-	BadExample []string
+	Impact      string
+	Resolution  string
+	BadExample  []string
 	GoodExample []string
-	Links []string
-
-
-
+	Links       []string
 }
 
 func newEntry(check rule.Rule) docEntry {
@@ -84,26 +81,25 @@ func newEntry(check rule.Rule) docEntry {
 		Resolution:  check.Base.Rule().Resolution,
 		BadExample:  check.BadExample,
 		GoodExample: check.GoodExample,
-		Service: check.Base.Rule().Service,
+		Service:     check.Base.Rule().Service,
 		Links:       append(check.Base.Rule().Links, check.Links...),
 	}
 }
 
-
 func generateWebPages(fileContents []rule.Rule) error {
 	for _, check := range fileContents {
-			webProviderPath := fmt.Sprintf("%s/docs/%s", webPath, strings.ToLower(check.Base.Rule().Service))
-			entry := newEntry(check)
-			if err := generateWebPage(webProviderPath, entry); err != nil {
-				return err
-			}
+		webProviderPath := fmt.Sprintf("%s/docs/%s", webPath, strings.ToLower(check.Base.Rule().Service))
+		entry := newEntry(check)
+		if err := generateWebPage(webProviderPath, entry); err != nil {
+			return err
 		}
+	}
 	return nil
 }
 
 var funcMap = template.FuncMap{
-	"ToUpper":            strings.ToUpper,
-	"Join":               join,
+	"ToUpper": strings.ToUpper,
+	"Join":    join,
 }
 
 func join(s []string) string {

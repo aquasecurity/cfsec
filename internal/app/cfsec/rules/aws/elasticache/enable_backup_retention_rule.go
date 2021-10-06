@@ -39,7 +39,5 @@ Resources:
         - us-west-2b 
 `},
 		Base: elasticache.CheckEnableBackupRetention,
-
 	})
 }
-

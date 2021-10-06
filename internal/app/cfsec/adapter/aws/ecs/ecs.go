@@ -12,6 +12,3 @@ func Adapt(cfFile parser.FileContext) ecs.ECS {
 		TaskDefinitions: getTaskDefinitions(cfFile),
 	}
 }
-
-
-

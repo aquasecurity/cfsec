@@ -16,4 +16,3 @@ func Test_CheckEncryptionCustomerKey_PassedExamples(t *testing.T) {
 	expectedCode := documentdb.CheckEncryptionCustomerKey.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

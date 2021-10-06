@@ -16,4 +16,3 @@ func Test_CheckEnableLogExport_PassedExamples(t *testing.T) {
 	expectedCode := documentdb.CheckEnableLogExport.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

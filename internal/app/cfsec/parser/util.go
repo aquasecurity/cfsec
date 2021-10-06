@@ -45,14 +45,13 @@ func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) er
 }
 
 func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) error {
-	if  IsIntrinsicFunc(node) {
+	if IsIntrinsicFunc(node) {
 		newContent := []*yaml.Node{}
 
-
 		newContent = append(newContent, &yaml.Node{
-			Tag:         "!!str",
-			Value:       getIntrinsicTag(node.Tag),
-			Kind: yaml.ScalarNode,
+			Tag:   "!!str",
+			Value: getIntrinsicTag(node.Tag),
+			Kind:  yaml.ScalarNode,
 		})
 
 		newContent = createNode(node, newContent)
@@ -112,7 +111,7 @@ func createNode(node *yaml.Node, newContent []*yaml.Node) []*yaml.Node {
 
 		newNode := &yaml.Node{
 			Content: node.Content,
-			Kind: node.Kind,
+			Kind:    node.Kind,
 		}
 
 		switch node.Kind {

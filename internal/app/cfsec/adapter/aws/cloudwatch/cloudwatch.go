@@ -11,4 +11,3 @@ func Adapt(cfFile parser.FileContext) cloudwatch.CloudWatch {
 		LogGroups: getLogGroups(cfFile),
 	}
 }
-

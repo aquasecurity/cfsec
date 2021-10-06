@@ -50,7 +50,6 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 	}
 }
 
-
 func scanTestSource(t *testing.T, source string) []rules.Result {
 	fileCtx, err := CreateFileContexts(t, source)
 	require.NoError(t, err)

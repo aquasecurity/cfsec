@@ -36,7 +36,7 @@ func getKmsId(r *parser.Resource) types.StringValue {
 func isMultiRegion(r *parser.Resource) types.BoolValue {
 	prop := r.GetProperty("IsMultiRegionTrail")
 
-	if prop.IsNil() || !prop.IsBool(){
+	if prop.IsNil() || !prop.IsBool() {
 		return types.BoolDefault(false, r.Metadata())
 	}
 	return prop.AsBoolValue()
@@ -45,7 +45,7 @@ func isMultiRegion(r *parser.Resource) types.BoolValue {
 func hasLogValidation(r *parser.Resource) types.BoolValue {
 	prop := r.GetProperty("EnableLogFileValidation")
 
-	if prop.IsNil() || !prop.IsBool(){
+	if prop.IsNil() || !prop.IsBool() {
 		return types.BoolDefault(false, r.Metadata())
 	}
 	return prop.AsBoolValue()

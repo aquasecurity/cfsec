@@ -33,6 +33,5 @@ func ResolveJoin(property *Property) (resolved *Property) {
 
 	joined := strings.Join(itemValues, joiner)
 
-
 	return property.deriveResolved(cftypes.String, joined)
 }

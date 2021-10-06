@@ -16,4 +16,3 @@ func Test_CheckAggregateAllRegions_PassedExamples(t *testing.T) {
 	expectedCode := config.CheckAggregateAllRegions.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

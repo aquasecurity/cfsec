@@ -16,4 +16,3 @@ func Test_CheckRepositoryCustomerKey_PassedExamples(t *testing.T) {
 	expectedCode := ecr.CheckRepositoryCustomerKey.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

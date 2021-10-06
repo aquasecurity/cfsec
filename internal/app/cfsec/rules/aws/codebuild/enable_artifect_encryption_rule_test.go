@@ -16,4 +16,3 @@ func Test_CheckEnableEncryption_PassedExamples(t *testing.T) {
 	expectedCode := codebuild.CheckEnableEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

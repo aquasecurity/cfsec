@@ -11,4 +11,3 @@ func Adapt(cfFile parser.FileContext) dynamodb.DynamoDB {
 		getClusters(cfFile),
 	}
 }
-

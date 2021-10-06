@@ -42,7 +42,6 @@ Resources:
 `,
 		},
 
-		 Base: autoscaling.CheckEnableAtRestEncryption,
-
+		Base: autoscaling.CheckEnableAtRestEncryption,
 	})
 }

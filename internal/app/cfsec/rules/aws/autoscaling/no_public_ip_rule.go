@@ -32,6 +32,6 @@ Resources:
 `,
 		},
 
-		 Base: autoscaling.CheckNoPublicIp,
+		Base: autoscaling.CheckNoPublicIp,
 	})
 }

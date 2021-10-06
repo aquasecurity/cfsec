@@ -26,14 +26,14 @@ func generateExtensionCodeFile(registeredChecks []rule.Rule) error {
 	var blocks []checkBlock
 
 	for _, check := range registeredChecks {
-			blocks = append(blocks, checkBlock{
-				Code:        check.ID(),
-				Service:     check.Base.Rule().Service,
-				Description: check.Base.Rule().Summary,
-				Impact:      check.Base.Rule().Impact,
-				Resolution:  check.Base.Rule().Resolution,
-				DocUrl:      fmt.Sprintf("https://cfsec.dev/docs/%s/%s/", check.Base.Rule().Service, check.Base.Rule().ShortCode),
-			})
+		blocks = append(blocks, checkBlock{
+			Code:        check.ID(),
+			Service:     check.Base.Rule().Service,
+			Description: check.Base.Rule().Summary,
+			Impact:      check.Base.Rule().Impact,
+			Resolution:  check.Base.Rule().Resolution,
+			DocUrl:      fmt.Sprintf("https://cfsec.dev/docs/%s/%s/", check.Base.Rule().Service, check.Base.Rule().ShortCode),
+		})
 	}
 
 	file, err := os.Create("checkdocs/codes.json")

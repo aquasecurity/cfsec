@@ -16,4 +16,3 @@ func Test_CheckEnableAtRestEncryption_PassedExamples(t *testing.T) {
 	expectedCode := dynamodb.CheckEnableAtRestEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

@@ -16,4 +16,3 @@ func Test_CheckNoSecretsInUserData_PassedExamples(t *testing.T) {
 	expectedCode := ec2.CheckNoSecretsInUserData.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

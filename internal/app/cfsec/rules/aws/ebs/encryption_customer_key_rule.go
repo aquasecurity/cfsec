@@ -1,9 +1,9 @@
 package ebs
 
 import (
-"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
-"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
-"github.com/aquasecurity/defsec/rules/aws/ebs"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
+	"github.com/aquasecurity/defsec/rules/aws/ebs"
 )
 
 func init() {

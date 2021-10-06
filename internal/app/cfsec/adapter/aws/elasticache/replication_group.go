@@ -12,10 +12,10 @@ func getReplicationGroups(ctx parser.FileContext) (replicationGroups []elasticac
 
 	for _, r := range replicationGroupResources {
 		replicationGroup := elasticache.ReplicationGroup{
-			 TransitEncryptionEnabled: isEncryptionEnabled(r),
+			TransitEncryptionEnabled: isEncryptionEnabled(r),
 		}
 
-		replicationGroups =  append(replicationGroups, replicationGroup)
+		replicationGroups = append(replicationGroups, replicationGroup)
 	}
 
 	return replicationGroups

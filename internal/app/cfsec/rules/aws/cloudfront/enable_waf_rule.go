@@ -48,6 +48,6 @@ Resources:
 `,
 		},
 
-		 Base: cloudfront.CheckEnableWaf,
+		Base: cloudfront.CheckEnableWaf,
 	})
 }

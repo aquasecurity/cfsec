@@ -8,12 +8,11 @@ import (
 
 func getApis(cfFile parser.FileContext) (apis []apigateway.API) {
 
-
 	apiResources := cfFile.GetResourceByType(apiGatewayType)
 	for _, apiRes := range apiResources {
 		api := apigateway.API{
 			Metadata: apiRes.Metadata(),
-			Stages: getStages(apiRes.ID(), cfFile),
+			Stages:   getStages(apiRes.ID(), cfFile),
 		}
 		apis = append(apis, api)
 	}
@@ -32,7 +31,7 @@ func getStages(apiId string, cfFile parser.FileContext) []apigateway.Stage {
 		}
 
 		s := apigateway.Stage{
-			Metadata:  stageRes.Metadata(),
+			Metadata:      stageRes.Metadata(),
 			Name:          getStageName(stageRes),
 			AccessLogging: getAccessLogging(stageRes),
 		}
@@ -71,7 +70,7 @@ func getAccessLogging(r *parser.Resource) apigateway.AccessLogging {
 
 	if destinationProp.IsNil() {
 		return apigateway.AccessLogging{
-			Metadata: loggingProp.Metadata(),
+			Metadata:              loggingProp.Metadata(),
 			CloudwatchLogGroupARN: types.StringDefault("", r.Metadata()),
 		}
 	}

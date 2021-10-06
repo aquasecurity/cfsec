@@ -25,7 +25,7 @@ func GetJsonBytes(policyProp *parser.Property, format parser.SourceFormat) []byt
 		return nil
 	}
 	jsonBody := convert(body)
-	policyJson, err := json.Marshal(jsonBody )
+	policyJson, err := json.Marshal(jsonBody)
 	if err != nil {
 		return nil
 	}
@@ -60,4 +60,3 @@ func convert(input interface{}) interface{} {
 	}
 	return input
 }
-

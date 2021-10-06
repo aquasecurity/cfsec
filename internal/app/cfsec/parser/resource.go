@@ -9,7 +9,7 @@ import (
 )
 
 type Resource struct {
-	ctx *FileContext
+	ctx     *FileContext
 	rng     types.Range
 	id      string
 	comment string

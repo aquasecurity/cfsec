@@ -20,7 +20,7 @@ func getTaskDefinitions(ctx parser.FileContext) (taskDefinitions []ecs.TaskDefin
 
 		taskDefinitions = append(taskDefinitions, taskDef)
 	}
-	
+
 	return taskDefinitions
 }
 
@@ -44,7 +44,7 @@ func getVolumes(r *parser.Resource) (volumes []ecs.Volume) {
 	for _, v := range volumesList.AsList() {
 		volume := ecs.Volume{
 			EFSVolumeConfiguration: ecs.EFSVolumeConfiguration{
-				TransitEncryptionEnabled: types.BoolDefault(false,r.Metadata()),
+				TransitEncryptionEnabled: types.BoolDefault(false, r.Metadata()),
 			},
 		}
 		transitProp := v.GetProperty("EFSVolumeConfiguration.TransitEncryption")

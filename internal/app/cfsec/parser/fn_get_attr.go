@@ -37,9 +37,8 @@ func ResolveGetAtt(property *Property) (resolved *Property) {
 	referencedProperty := referencedResource.GetProperty(attribute.AsString())
 	if referencedProperty.IsNil() {
 		// if the attribute value can't be found, just return the ID for the resource
-		return property.deriveResolved(cftypes.String, referencedResource.ID() )
+		return property.deriveResolved(cftypes.String, referencedResource.ID())
 	}
 
-
-	return property.deriveResolved(referencedProperty.Type(), referencedProperty )
+	return property.deriveResolved(referencedProperty.Type(), referencedProperty)
 }

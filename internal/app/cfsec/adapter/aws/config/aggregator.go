@@ -23,7 +23,7 @@ func isSourcingAllRegions(r *parser.Resource) types.BoolValue {
 	accountProp := r.GetProperty("AccountAggregationSources")
 	orgProp := r.GetProperty("OrganizationAggregationSource")
 
-	if accountProp.IsNotNil() && accountProp.IsList(){
+	if accountProp.IsNotNil() && accountProp.IsList() {
 		for _, a := range accountProp.AsList() {
 			regionsProp := a.GetProperty("AllAwsRegions")
 			if regionsProp.IsNil() || regionsProp.IsBool() {
@@ -32,7 +32,7 @@ func isSourcingAllRegions(r *parser.Resource) types.BoolValue {
 		}
 	}
 
-	if orgProp.IsNotNil(){
+	if orgProp.IsNotNil() {
 		regionsProp := orgProp.GetProperty("AllAwsRegions")
 		if regionsProp.IsNotNil() || regionsProp.IsBool() {
 			return regionsProp.AsBoolValue()

@@ -45,7 +45,7 @@ Resources:
           EFSVolumeConfiguration:
             FilesystemId: "fs1"
             TransitEncryption: DISABLED`},
-			GoodExample: []string{`---
+		GoodExample: []string{`---
 Resources:
   GoodExample:
     Type: 'AWS::ECS::Cluster'
@@ -82,7 +82,7 @@ Resources:
             FilesystemId: "fs1"
             TransitEncryption: ENABLED
 `},
-Base: ecs.CheckEnableInTransitEncryption,
+		Base: ecs.CheckEnableInTransitEncryption,
 	})
 
 }

@@ -12,7 +12,7 @@ func getInstances(ctx parser.FileContext) (instances []ec2.Instance) {
 
 	for _, r := range instanceResources {
 		instance := ec2.Instance{
-			Metadata:        r.Metadata(),
+			Metadata: r.Metadata(),
 			// metadata not supported by CloudFormation at the moment -
 			// https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/655
 			MetadataOptions: ec2.MetadataOptions{},
@@ -21,7 +21,7 @@ func getInstances(ctx parser.FileContext) (instances []ec2.Instance) {
 		}
 		instances = append(instances, instance)
 	}
-	
+
 	return instances
 }
 

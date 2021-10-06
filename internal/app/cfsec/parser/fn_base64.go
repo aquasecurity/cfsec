@@ -12,7 +12,7 @@ func ResolveBase64(property *Property) *Property {
 	}
 
 	refValue := property.AsMap()["Fn::Base64"].AsString()
-	retVal :=  base64.StdEncoding.EncodeToString([]byte(refValue))
+	retVal := base64.StdEncoding.EncodeToString([]byte(refValue))
 
 	return property.deriveResolved(cftypes.String, retVal)
 }

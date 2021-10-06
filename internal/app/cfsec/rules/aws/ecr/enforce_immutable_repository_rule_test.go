@@ -16,4 +16,3 @@ func Test_CheckEnforceImmutableRepository_PassedExamples(t *testing.T) {
 	expectedCode := ecr.CheckEnforceImmutableRepository.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

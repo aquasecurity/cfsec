@@ -6,7 +6,7 @@ import (
 )
 
 func Adapt(cfFile parser.FileContext) ecr.ECR {
-	
+
 	return ecr.ECR{
 		Repositories: getRepositories(cfFile),
 	}

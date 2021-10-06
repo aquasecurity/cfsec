@@ -141,7 +141,7 @@ func Test_resolve_join_value_with_reference(t *testing.T) {
 			},
 		},
 	}
-		resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty := ResolveIntrinsicFunc(property)
 
-		assert.Equal(t, "s3::part1::staging", resolvedProperty.AsString())
-	}
+	assert.Equal(t, "s3::part1::staging", resolvedProperty.AsString())
+}

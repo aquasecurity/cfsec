@@ -16,7 +16,7 @@ type FileContexts []*FileContext
 
 type FileContext struct {
 	filepath     string
-	lines []string
+	lines        []string
 	SourceFormat SourceFormat
 	Parameters   map[string]*Parameter  `json:"Parameters" yaml:"Parameters"`
 	Resources    map[string]*Resource   `json:"Resources" yaml:"Resources"`
@@ -37,7 +37,7 @@ func newFileContext(filepath string) *FileContext {
 
 	return &FileContext{
 		filepath:     filepath,
-		lines: lines ,
+		lines:        lines,
 		SourceFormat: sourceFmt,
 	}
 }

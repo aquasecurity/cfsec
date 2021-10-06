@@ -1,7 +1,6 @@
 package parser
 
 import (
-
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -45,7 +44,7 @@ func (p *Property) setName(name string) {
 func (p *Property) setContext(ctx *FileContext) {
 	p.ctx = ctx
 
-	if p.IsMap(){
+	if p.IsMap() {
 		for _, subProp := range p.AsMap() {
 			if subProp == nil {
 				continue
@@ -128,7 +127,7 @@ func (p *Property) RawValue() interface{} {
 }
 
 func (p *Property) AsRawStrings() ([]string, error) {
-	return p.ctx.lines[p.rng.GetStartLine()-1:p.rng.GetEndLine()], nil
+	return p.ctx.lines[p.rng.GetStartLine()-1 : p.rng.GetEndLine()], nil
 }
 
 func (p *Property) resolveValue() *Property {
@@ -166,7 +165,7 @@ func (p *Property) GetProperty(path string) *Property {
 	return nil
 }
 
-func (p *Property) deriveResolved( propType cftypes.CfType, propValue interface{}) *Property {
+func (p *Property) deriveResolved(propType cftypes.CfType, propValue interface{}) *Property {
 	return &Property{
 		ctx:         p.ctx,
 		name:        p.name,

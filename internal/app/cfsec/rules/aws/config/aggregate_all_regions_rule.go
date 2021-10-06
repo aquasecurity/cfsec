@@ -25,7 +25,7 @@ Resources:
         - AllAwsRegions: true
       ConfigurationAggregatorName: "GoodAccountLevelAggregation"
 `,
-`---
+			`---
 Resources:
   GoodExample:
     Type: AWS::Config::ConfigurationAggregator

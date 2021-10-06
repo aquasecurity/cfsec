@@ -44,11 +44,6 @@ Resources:
       CacheSecurityGroupName: GoodExampleCacheGroup
       EC2SecurityGroupName: GoodExampleEc2SecurityGroup
 `},
-Base: elasticache.CheckAddDescriptionForSecurityGroup,
-
+		Base: elasticache.CheckAddDescriptionForSecurityGroup,
 	})
 }
-
-
-
-

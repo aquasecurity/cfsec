@@ -7,6 +7,6 @@ import (
 
 func Adapt(cfFile parser.FileContext) ec2.EC2 {
 	return ec2.EC2{
-		 Instances: getInstances(cfFile),
+		Instances: getInstances(cfFile),
 	}
 }

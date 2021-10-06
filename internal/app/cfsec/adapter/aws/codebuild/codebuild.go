@@ -5,10 +5,8 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/codebuild"
 )
 
-func Adapt(cfFile parser.FileContext) codebuild.CodeBuild{
+func Adapt(cfFile parser.FileContext) codebuild.CodeBuild {
 	return codebuild.CodeBuild{
 		Projects: getProjects(cfFile),
-
 	}
 }
-

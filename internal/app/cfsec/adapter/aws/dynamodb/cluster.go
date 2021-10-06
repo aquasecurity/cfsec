@@ -12,11 +12,11 @@ func getClusters(file parser.FileContext) (clusters []dynamodb.DAXCluster) {
 
 	for _, r := range clusterResources {
 		cluster := dynamodb.DAXCluster{
-			Metadata:             r.Metadata(),
+			Metadata: r.Metadata(),
 			ServerSideEncryption: dynamodb.ServerSideEncryption{
 				Enabled: isEnabled(r),
 			},
-			PointInTimeRecovery:  nil,
+			PointInTimeRecovery: nil,
 		}
 
 		clusters = append(clusters, cluster)

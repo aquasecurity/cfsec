@@ -22,7 +22,6 @@ const navDocsTemplate = `---
 
 `
 
-
 type navBlock struct {
 	Title    string    `yaml:"title"`
 	Services []service `yaml:"services"`
@@ -38,7 +37,7 @@ func generateNavIndexFile(registeredChecks []rule.Rule) error {
 
 	topLevel := &[]navBlock{
 		{
-			Title: "Services",
+			Title:    "Services",
 			Services: getServices(registeredChecks),
 		},
 	}
@@ -69,7 +68,7 @@ func getServices(checks []rule.Rule) []service {
 
 	for _, check := range checks {
 		rulePath := fmt.Sprintf("%s/%s", check.Base.Rule().Service, check.Base.Rule().ShortCode)
-		serviceMap[check.Base.Rule().Service] = append(serviceMap[check.Base.Rule().Service], rulePath )
+		serviceMap[check.Base.Rule().Service] = append(serviceMap[check.Base.Rule().Service], rulePath)
 	}
 
 	var services []service
@@ -79,9 +78,9 @@ func getServices(checks []rule.Rule) []service {
 			return docs[i] < docs[j]
 		})
 		services = append(services, service{
-			Title: s,
+			Title:   s,
 			Service: s,
-			Docs: docs,
+			Docs:    docs,
 		})
 	}
 
@@ -92,4 +91,3 @@ func getServices(checks []rule.Rule) []service {
 	return services
 
 }
-

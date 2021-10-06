@@ -10,14 +10,11 @@ import (
 )
 
 type TestFileExt string
+
 const (
 	YamlTestFileExt TestFileExt = "yaml"
 	JsonTestFileExt TestFileExt = "json"
 )
-
-
-
-
 
 func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, results []rules.Result) {
 
@@ -44,7 +41,7 @@ func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, resul
 
 func CreateTestFile(source string, ext TestFileExt) string {
 	testFiles, err := filesystem.New()
-	if err != nil  {
+	if err != nil {
 		panic(err)
 	}
 

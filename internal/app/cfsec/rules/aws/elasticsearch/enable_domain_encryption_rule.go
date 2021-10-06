@@ -1,6 +1,5 @@
 package elasticsearch
 
-
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
@@ -10,7 +9,7 @@ import (
 func init() {
 
 	scanner.RegisterCheckRule(rule.Rule{
-		BadExample: []string {
+		BadExample: []string{
 			`---
 Resources:
   BadExample:
@@ -32,7 +31,7 @@ Resources:
         VolumeType: 'gp2'
 `,
 		},
-		GoodExample: []string {
+		GoodExample: []string{
 			`---
 Resources:
   GoodExample:

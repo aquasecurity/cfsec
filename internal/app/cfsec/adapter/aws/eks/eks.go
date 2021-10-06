@@ -12,4 +12,3 @@ func Adapt(cfFile parser.FileContext) eks.EKS {
 	}
 
 }
-

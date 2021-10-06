@@ -5,7 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/efs"
 )
 
-func Adapt(cfFile parser.FileContext) efs.EFS{
+func Adapt(cfFile parser.FileContext) efs.EFS {
 
 	return efs.EFS{
 		FileSystems: getFileSystems(cfFile),

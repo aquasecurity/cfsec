@@ -48,7 +48,4 @@ Resources:
 		assert.True(t, resolved.IsNotNil())
 	}
 
-
-
-
 }

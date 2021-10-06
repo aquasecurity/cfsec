@@ -36,6 +36,5 @@ Resources:
         SSEEnabled: true
 `},
 		Base: dynamodb.CheckEnableAtRestEncryption,
-
 	})
 }

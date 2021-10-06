@@ -16,4 +16,3 @@ func Test_CheckEnableContainerInsight_PassedExamples(t *testing.T) {
 	expectedCode := ecs.CheckEnableContainerInsight.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

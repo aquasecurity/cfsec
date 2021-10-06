@@ -40,7 +40,7 @@ func getListeners(lbr *parser.Resource, ctx parser.FileContext) (listeners []elb
 			listeners = append(listeners, listener)
 		}
 	}
-return listeners
+	return listeners
 }
 
 func getDefaultListenerAction(r *parser.Resource) (action elb.Action) {

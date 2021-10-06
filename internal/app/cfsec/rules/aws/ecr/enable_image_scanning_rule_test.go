@@ -16,4 +16,3 @@ func Test_CheckEnableImageScans_PassedExamples(t *testing.T) {
 	expectedCode := ecr.CheckEnableImageScans.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

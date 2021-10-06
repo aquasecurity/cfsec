@@ -12,7 +12,7 @@ func getVolumes(ctx parser.FileContext) (volumes []ebs.Volume) {
 	for _, r := range volumeResources {
 
 		volume := ebs.Volume{
-			Metadata:   r.Metadata(),
+			Metadata: r.Metadata(),
 			Encryption: ebs.Encryption{
 				Enabled:  isEncryptionEnabled(r),
 				KMSKeyID: getKmsKeyId(r),

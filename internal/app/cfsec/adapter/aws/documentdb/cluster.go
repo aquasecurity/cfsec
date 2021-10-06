@@ -12,8 +12,8 @@ func getClusters(ctx parser.FileContext) (clusters []documentdb.Cluster) {
 
 	for _, r := range clusterResources {
 		cluster := documentdb.Cluster{
-			Metadata: r.Metadata(),
-			Identifier: getIdentifier(r),
+			Metadata:          r.Metadata(),
+			Identifier:        getIdentifier(r),
 			EnabledLogExports: getLogExports(r),
 			StorageEncrypted:  isStorageEncrypted(r),
 			KMSKeyID:          getKmsKeyId(r),
@@ -31,13 +31,13 @@ func updateInstancesOnCluster(cluster *documentdb.Cluster, ctx parser.FileContex
 	instanceResources := ctx.GetResourceByType("AWS::DocDB::DBInstance")
 
 	for _, r := range instanceResources {
-		 clusterIdentifier := getIdentifier(r)
-		 if clusterIdentifier == cluster.Identifier {
-			 cluster.Instances = append(cluster.Instances, documentdb.Instance{
-				 Metadata: r.Metadata(),
-				 KMSKeyID: cluster.KMSKeyID,
-			 })
-		 }
+		clusterIdentifier := getIdentifier(r)
+		if clusterIdentifier == cluster.Identifier {
+			cluster.Instances = append(cluster.Instances, documentdb.Instance{
+				Metadata: r.Metadata(),
+				KMSKeyID: cluster.KMSKeyID,
+			})
+		}
 	}
 }
 

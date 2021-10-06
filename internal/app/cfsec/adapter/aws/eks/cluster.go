@@ -12,10 +12,10 @@ func getClusters(ctx parser.FileContext) (clusters []eks.Cluster) {
 
 	for _, r := range clusterResources {
 		cluster := eks.Cluster{
-			Metadata:            r.Metadata(),
+			Metadata: r.Metadata(),
 			// Logging not supported for cloudformation https://github.com/aws/containers-roadmap/issues/242
-			Logging:             eks.Logging{},
-			Encryption:          getEncryptionConfig(r),
+			Logging:    eks.Logging{},
+			Encryption: getEncryptionConfig(r),
 			// endpoint protection not supported - https://github.com/aws/containers-roadmap/issues/242
 			PublicAccessEnabled: nil,
 			PublicAccessCIDRs:   nil,
@@ -23,13 +23,13 @@ func getClusters(ctx parser.FileContext) (clusters []eks.Cluster) {
 
 		clusters = append(clusters, cluster)
 	}
-return clusters
+	return clusters
 }
 
 func getEncryptionConfig(r *parser.Resource) eks.Encryption {
 
 	encryption := eks.Encryption{
-		Secrets: types.BoolDefault(false, r.Metadata()),
+		Secrets:  types.BoolDefault(false, r.Metadata()),
 		KMSKeyID: types.StringDefault("", r.Metadata()),
 	}
 
@@ -45,8 +45,6 @@ func getEncryptionConfig(r *parser.Resource) eks.Encryption {
 		encryption.KMSKeyID = kmsKeyProp.AsStringValue()
 	}
 
-
 	return encryption
 
 }
-

@@ -17,7 +17,7 @@ func getClusterGroups(ctx parser.FileContext) (clusters []elasticache.Cluster) {
 			SnapshotRetentionLimit: getSnapshotRetentionLimit(r),
 		}
 
-		clusters =  append(clusters, cluster)
+		clusters = append(clusters, cluster)
 	}
 
 	return clusters

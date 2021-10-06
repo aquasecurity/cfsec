@@ -11,4 +11,3 @@ func Adapt(cfFile parser.FileContext) autoscaling.Autoscaling {
 		LaunchConfigurations: getLaunchConfigurations(cfFile),
 	}
 }
-

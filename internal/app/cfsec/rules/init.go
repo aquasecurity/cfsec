@@ -18,6 +18,7 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/elasticache"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/elasticsearch"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/elb"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/kinesis"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/s3"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/workspaces"
 )

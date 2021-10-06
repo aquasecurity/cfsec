@@ -16,4 +16,3 @@ func Test_CheckNoPublicAccess_PassedExamples(t *testing.T) {
 	expectedCode := ecr.CheckNoPublicAccess.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

@@ -25,4 +25,3 @@ func ResolveReference(property *Property) (resolved *Property) {
 	}
 	return resolved
 }
-

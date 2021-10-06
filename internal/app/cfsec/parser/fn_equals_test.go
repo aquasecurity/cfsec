@@ -11,24 +11,24 @@ import (
 func Test_resolve_equals_value(t *testing.T) {
 
 	property := &Property{
-		ctx: &FileContext{},
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		ctx:  &FileContext{},
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
 			Type: cftypes.Map,
 			Value: map[string]*Property{
 				"Fn::Equals": {
 					Inner: PropertyInner{
-						Type:  cftypes.List,
+						Type: cftypes.List,
 						Value: []*Property{
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.String,
 									Value: "foo",
 								},
 							},
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.String,
 									Value: "foo",
 								},
@@ -42,30 +42,30 @@ func Test_resolve_equals_value(t *testing.T) {
 
 	resolvedProperty := ResolveIntrinsicFunc(property)
 
-	assert.True(t,resolvedProperty.IsTrue())
+	assert.True(t, resolvedProperty.IsTrue())
 }
 
 func Test_resolve_equals_value_to_false(t *testing.T) {
 
 	property := &Property{
-		ctx: &FileContext{},
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		ctx:  &FileContext{},
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
 			Type: cftypes.Map,
 			Value: map[string]*Property{
 				"Fn::Equals": {
 					Inner: PropertyInner{
-						Type:  cftypes.List,
+						Type: cftypes.List,
 						Value: []*Property{
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.String,
 									Value: "foo",
 								},
 							},
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.String,
 									Value: "bar",
 								},
@@ -79,30 +79,30 @@ func Test_resolve_equals_value_to_false(t *testing.T) {
 
 	resolvedProperty := ResolveIntrinsicFunc(property)
 
-	assert.False(t,resolvedProperty.IsTrue())
+	assert.False(t, resolvedProperty.IsTrue())
 }
 
 func Test_resolve_equals_value_to_true_when_boolean(t *testing.T) {
 
 	property := &Property{
-		ctx: &FileContext{},
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		ctx:  &FileContext{},
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
 			Type: cftypes.Map,
 			Value: map[string]*Property{
 				"Fn::Equals": {
 					Inner: PropertyInner{
-						Type:  cftypes.List,
+						Type: cftypes.List,
 						Value: []*Property{
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.Bool,
 									Value: true,
 								},
 							},
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.Bool,
 									Value: true,
 								},
@@ -116,23 +116,23 @@ func Test_resolve_equals_value_to_true_when_boolean(t *testing.T) {
 
 	resolvedProperty := ResolveIntrinsicFunc(property)
 
-	assert.True(t,resolvedProperty.IsTrue())
+	assert.True(t, resolvedProperty.IsTrue())
 }
 
 func Test_resolve_equals_value_when_one_is_a_reference(t *testing.T) {
 
 	property := &Property{
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
 			Type: cftypes.Map,
 			Value: map[string]*Property{
 				"Fn::Equals": {
 					Inner: PropertyInner{
-						Type:  cftypes.List,
+						Type: cftypes.List,
 						Value: []*Property{
 							{
-								Inner:       PropertyInner{
+								Inner: PropertyInner{
 									Type:  cftypes.String,
 									Value: "staging",
 								},
@@ -170,5 +170,5 @@ func Test_resolve_equals_value_when_one_is_a_reference(t *testing.T) {
 
 	resolvedProperty := ResolveIntrinsicFunc(property)
 
-	assert.True(t,resolvedProperty.IsTrue())
+	assert.True(t, resolvedProperty.IsTrue())
 }

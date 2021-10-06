@@ -1,11 +1,14 @@
 Resources:
-  LogicalID:
+  BadExample:
     Type: AWS::Kinesis::Stream
     Properties:
-      Name: "String"
-      RetentionPeriodHours: Number
-      ShardCount: Number # Required
+      Name: BadExample
+      RetentionPeriodHours: 168
+      ShardCount: 3
       StreamEncryption:
-        EncryptionType: "String"
-        KeyId: "String"
-      Tags: Tags
+        EncryptionType: KMS
+        KeyId: alis/key
+      Tags:
+        -
+          Key: Environment
+          Value: Production

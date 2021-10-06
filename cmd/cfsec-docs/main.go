@@ -43,12 +43,12 @@ var rootCmd = &cobra.Command{
 
 func getSortedChecks() []rule.Rule {
 	checks := scanner.GetRegisteredRules()
-	
+
 	// sort the checks alpha
 	sort.Slice(checks, func(i, j int) bool {
 		return checks[i].ID() < checks[j].ID()
 	})
-	
+
 	if err := generateNavIndexFile(checks); err != nil {
 		panic(err)
 	}

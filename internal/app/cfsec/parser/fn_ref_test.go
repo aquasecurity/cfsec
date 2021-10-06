@@ -21,8 +21,8 @@ func Test_resolve_referenced_value(t *testing.T) {
 				},
 			},
 		},
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
 			Type: cftypes.Map,
 			Value: map[string]*Property{
@@ -47,10 +47,10 @@ func Test_property_value_correct_when_not_reference(t *testing.T) {
 		ctx: &FileContext{
 			filepath: "",
 		},
-		name:        "BucketName",
-		rng:         types.NewRange("testfile", 1, 1),
+		name: "BucketName",
+		rng:  types.NewRange("testfile", 1, 1),
 		Inner: PropertyInner{
-			Type: cftypes.String,
+			Type:  cftypes.String,
 			Value: "someBucketName",
 		},
 	}

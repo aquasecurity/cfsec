@@ -15,5 +15,3 @@ func Test_CheckEnableAtRestEncryption_PassedExamples(t *testing.T) {
 	expectedCode := cloudtrail.CheckEnableAtRestEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-
-

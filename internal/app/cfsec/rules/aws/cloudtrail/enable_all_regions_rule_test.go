@@ -15,4 +15,3 @@ func Test_CheckEnableAllRegions_PassedExamples(t *testing.T) {
 	expectedCode := cloudtrail.CheckEnableAllRegions.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }
-

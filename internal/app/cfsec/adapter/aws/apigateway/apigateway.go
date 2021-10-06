@@ -6,9 +6,8 @@ import (
 )
 
 const (
-	apiGatewayType = "AWS::ApiGatewayV2::Api"
+	apiGatewayType      = "AWS::ApiGatewayV2::Api"
 	apiGatewayStageType = "AWS::ApiGatewayV2::Stage"
-
 )
 
 func Adapt(cfFile parser.FileContext) apigateway.APIGateway {
@@ -16,4 +15,3 @@ func Adapt(cfFile parser.FileContext) apigateway.APIGateway {
 		APIs: getApis(cfFile),
 	}
 }
-

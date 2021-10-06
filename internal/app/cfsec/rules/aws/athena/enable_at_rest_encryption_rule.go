@@ -19,7 +19,6 @@ Resources:
         ResultConfiguration:
     Type: AWS::Athena::WorkGroup
 `,
-
 		},
 
 		GoodExample: []string{

@@ -22,6 +22,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elb"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/iam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/kinesis"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/lambda"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/mq"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/msk"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/neptune"
@@ -62,6 +63,7 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		MSK:           msk.Adapt(cfFile),
 		MQ:            mq.Adapt(cfFile),
 		Kinesis:       kinesis.Adapt(cfFile),
+		Lambda:        lambda.Adapt(cfFile),
 		Neptune:       neptune.Adapt(cfFile),
 		RDS:           rds.Adapt(cfFile),
 		Redshift:      redshift.Adapt(cfFile),

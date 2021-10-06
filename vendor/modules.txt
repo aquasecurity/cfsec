@@ -110,6 +110,7 @@ github.com/aquasecurity/defsec/rules/aws/elasticache
 github.com/aquasecurity/defsec/rules/aws/elasticsearch
 github.com/aquasecurity/defsec/rules/aws/elb
 github.com/aquasecurity/defsec/rules/aws/iam
+github.com/aquasecurity/defsec/rules/aws/mq
 github.com/aquasecurity/defsec/rules/aws/msk
 github.com/aquasecurity/defsec/rules/aws/neptune
 github.com/aquasecurity/defsec/rules/aws/rds

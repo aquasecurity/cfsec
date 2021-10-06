@@ -18,6 +18,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/efs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/eks"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elasticache"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elasticsearch"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/iam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/redshift"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/s3"
@@ -32,30 +33,31 @@ import (
 
 func Adapt(cfFile parser.FileContext) aws.AWS {
 	return aws.AWS{
-		APIGateway:  apigateway.Adapt(cfFile),
-		Athena:      athena.Adapt(cfFile),
-		Autoscaling: autoscaling.Adapt(cfFile),
-		Cloudfront:  cloudfront.Adapt(cfFile),
-		CloudTrail:  cloudtrail.Adapt(cfFile),
-		CloudWatch:  cloudwatch.Adapt(cfFile),
-		CodeBuild:   codebuild.Adapt(cfFile),
-		Config:      config.Adapt(cfFile),
-		DocumentDB:  documentdb.Adapt(cfFile),
-		DynamoDB:    dynamodb.Adapt(cfFile),
-		EBS:         ebs.Adapt(cfFile),
-		EC2:         ec2.Adapt(cfFile),
-		ECR:         ecr.Adapt(cfFile),
-		ECS:         ecs.Adapt(cfFile),
-		EFS:         efs.Adapt(cfFile),
-		IAM:         iam.Adapt(cfFile),
-		EKS:         eks.Adapt(cfFile),
-		ElastiCache: elasticache.Adapt(cfFile),
-		Redshift:    redshift.Adapt(cfFile),
-		S3:          s3.Adapt(cfFile),
-		SNS:         sns.Adapt(cfFile),
-		SQS:         sqs.Adapt(cfFile),
-		SSM:         ssm.Adapt(cfFile),
-		VPC:         vpc.Adapt(cfFile),
-		WorkSpaces:  workspaces.Adapt(cfFile),
+		APIGateway:    apigateway.Adapt(cfFile),
+		Athena:        athena.Adapt(cfFile),
+		Autoscaling:   autoscaling.Adapt(cfFile),
+		Cloudfront:    cloudfront.Adapt(cfFile),
+		CloudTrail:    cloudtrail.Adapt(cfFile),
+		CloudWatch:    cloudwatch.Adapt(cfFile),
+		CodeBuild:     codebuild.Adapt(cfFile),
+		Config:        config.Adapt(cfFile),
+		DocumentDB:    documentdb.Adapt(cfFile),
+		DynamoDB:      dynamodb.Adapt(cfFile),
+		EBS:           ebs.Adapt(cfFile),
+		EC2:           ec2.Adapt(cfFile),
+		ECR:           ecr.Adapt(cfFile),
+		ECS:           ecs.Adapt(cfFile),
+		EFS:           efs.Adapt(cfFile),
+		IAM:           iam.Adapt(cfFile),
+		EKS:           eks.Adapt(cfFile),
+		ElastiCache:   elasticache.Adapt(cfFile),
+		Elasticsearch: elasticsearch.Adapt(cfFile),
+		Redshift:      redshift.Adapt(cfFile),
+		S3:            s3.Adapt(cfFile),
+		SNS:           sns.Adapt(cfFile),
+		SQS:           sqs.Adapt(cfFile),
+		SSM:           ssm.Adapt(cfFile),
+		VPC:           vpc.Adapt(cfFile),
+		WorkSpaces:    workspaces.Adapt(cfFile),
 	}
 }

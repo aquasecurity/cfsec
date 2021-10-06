@@ -118,6 +118,33 @@ func (r *Resource) GetProperty(path string) *Property {
 	return &Property{}
 }
 
+func (r *Resource) GetStringProperty(path string, defaultValue string) types.StringValue {
+	prop := r.GetProperty(path)
+
+	if prop.IsNotString() {
+		return r.StringDefault(defaultValue)
+	}
+	return prop.AsStringValue()
+}
+
+func (r *Resource) GetBoolProperty(path string, defaultValue bool) types.BoolValue {
+	prop := r.GetProperty(path)
+
+	if prop.IsNotBool() {
+		return r.BoolDefault(defaultValue)
+	}
+	return prop.AsBoolValue()
+}
+
+func (r *Resource) GetIntProperty(path string, defaultValue int) types.IntValue {
+	prop := r.GetProperty(path)
+
+	if prop.IsNotInt() {
+		return r.IntDefault(defaultValue)
+	}
+	return prop.AsIntValue()
+}
+
 func (r *Resource) StringDefault(defaultValue string) types.StringValue {
 	return types.StringDefault(defaultValue, r.Metadata())
 }

@@ -117,3 +117,15 @@ func (r *Resource) GetProperty(path string) *Property {
 
 	return &Property{}
 }
+
+func (r *Resource) StringDefault(defaultValue string) types.StringValue {
+	return types.StringDefault(defaultValue, r.Metadata())
+}
+
+func (r *Resource) BoolDefault(defaultValue bool) types.BoolValue {
+	return types.BoolDefault(defaultValue, r.Metadata())
+}
+
+func (r *Resource) IntDefault(defaultValue int) types.IntValue {
+	return types.IntDefault(defaultValue, r.Metadata())
+}

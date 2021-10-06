@@ -16,7 +16,6 @@ func getSecurityGroups(ctx parser.FileContext) (securityGroups []elasticache.Sec
 			Metadata:    r.Metadata(),
 			Description: getDescription(r),
 		}
-
 		securityGroups = append(securityGroups, sg)
 	}
 

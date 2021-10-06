@@ -7,8 +7,8 @@ import (
 
 func Adapt(cfFile parser.FileContext) elasticache.ElastiCache {
 	return elasticache.ElastiCache{
-		Clusters:          nil,
-		ReplicationGroups: nil,
+		Clusters:          getClusterGroups(cfFile),
+		ReplicationGroups: getReplicationGroups(cfFile),
 		SecurityGroups:    getSecurityGroups(cfFile),
 	}
 }

@@ -59,11 +59,14 @@ func (t *FileContext) GetResourceByName(name string) *Resource {
 	return nil
 }
 
-func (t *FileContext) GetResourceByType(name string) []*Resource {
+func (t *FileContext) GetResourceByType(names ...string) []*Resource {
+
 	var resources []*Resource
 	for _, r := range t.Resources {
-		if name == r.Type() {
-			resources = append(resources, r)
+		for _, name := range names {
+			if name == r.Type() {
+				resources = append(resources, r)
+			}
 		}
 	}
 	return resources

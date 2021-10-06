@@ -36,7 +36,7 @@ func (p *Property) IsInt() bool {
 }
 
 func (p *Property) IsNotInt() bool {
-	return p.IsInt()
+	return !p.IsInt()
 }
 
 func (p *Property) IsMap() bool {

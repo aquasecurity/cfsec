@@ -19,6 +19,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/eks"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elasticache"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elasticsearch"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/elb"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/iam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/rds"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/redshift"
@@ -53,6 +54,7 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		EKS:           eks.Adapt(cfFile),
 		ElastiCache:   elasticache.Adapt(cfFile),
 		Elasticsearch: elasticsearch.Adapt(cfFile),
+		ELB:           elb.Adapt(cfFile),
 		RDS:           rds.Adapt(cfFile),
 		Redshift:      redshift.Adapt(cfFile),
 		S3:            s3.Adapt(cfFile),

@@ -15,6 +15,7 @@ func Adapt(cfFile parser.FileContext) ssm.SSM {
 func getSecrets(ctx parser.FileContext) (secrets []ssm.Secret) {
 	for _, secretResource := range ctx.GetResourceByType("AWS::SecretsManager::Secret") {
 		var secret ssm.Secret
+		secret.Metadata = secretResource.Metadata()
 		if prop := secretResource.GetProperty("KmsKeyId"); prop.IsString() {
 			secret.KMSKeyID = prop.AsStringValue()
 		} else {

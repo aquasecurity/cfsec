@@ -15,6 +15,7 @@ func Adapt(cfFile parser.FileContext) sns.SNS {
 func getTopics(ctx parser.FileContext) (topics []sns.Topic) {
 	for _, topicResource := range ctx.GetResourceByType("AWS::SNS::Topic") {
 		var topic sns.Topic
+		topic.Metadata = topicResource.Metadata()
 		if kmsProp := topicResource.GetProperty("KmsMasterKeyId"); kmsProp.IsString() {
 			topic.Encryption.KMSKeyID = kmsProp.AsStringValue()
 		} else {

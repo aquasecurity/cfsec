@@ -19,6 +19,7 @@ func Adapt(cfFile parser.FileContext) sqs.SQS {
 func getQueues(ctx parser.FileContext) (queues []sqs.Queue) {
 	for _, queueResource := range ctx.GetResourceByType("AWS::SQS::Queue") {
 		var queue sqs.Queue
+		queue.Metadata = queueResource.Metadata()
 		if kmsProp := queueResource.GetProperty("KmsMasterKeyId"); kmsProp.IsString() {
 			queue.Encryption.KMSKeyID = kmsProp.AsStringValue()
 		} else {

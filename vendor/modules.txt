@@ -107,6 +107,7 @@ github.com/aquasecurity/defsec/rules/aws/ecs
 github.com/aquasecurity/defsec/rules/aws/efs
 github.com/aquasecurity/defsec/rules/aws/eks
 github.com/aquasecurity/defsec/rules/aws/elasticache
+github.com/aquasecurity/defsec/rules/aws/elasticsearch
 github.com/aquasecurity/defsec/rules/aws/iam
 github.com/aquasecurity/defsec/rules/aws/redshift
 github.com/aquasecurity/defsec/rules/aws/s3

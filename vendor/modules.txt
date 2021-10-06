@@ -110,12 +110,10 @@ github.com/aquasecurity/defsec/rules/aws/elasticache
 github.com/aquasecurity/defsec/rules/aws/elasticsearch
 github.com/aquasecurity/defsec/rules/aws/elb
 github.com/aquasecurity/defsec/rules/aws/iam
-<<<<<<< HEAD
+github.com/aquasecurity/defsec/rules/aws/kinesis
+github.com/aquasecurity/defsec/rules/aws/lambda
 github.com/aquasecurity/defsec/rules/aws/mq
 github.com/aquasecurity/defsec/rules/aws/msk
-=======
-github.com/aquasecurity/defsec/rules/aws/kinesis
->>>>>>> 90918e4 (add kinesis)
 github.com/aquasecurity/defsec/rules/aws/neptune
 github.com/aquasecurity/defsec/rules/aws/rds
 github.com/aquasecurity/defsec/rules/aws/redshift

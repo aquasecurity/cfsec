@@ -33,6 +33,9 @@ func (p *Property) IsInt() bool {
 	if p.IsNil() {
 		return false
 	}
+	if p.isFunction() {
+		return p.resolveValue().IsInt()
+	}
 	return p.Inner.Type == cftypes.Int
 }
 
@@ -55,6 +58,9 @@ func (p *Property) IsList() bool {
 	if p.IsNil() {
 		return false
 	}
+	if p.isFunction() {
+		return p.resolveValue().IsList()
+	}
 	return p.Inner.Type == cftypes.List
 }
 
@@ -65,6 +71,9 @@ func (p *Property) IsNotList() bool {
 func (p *Property) IsBool() bool {
 	if p.IsNil() {
 		return false
+	}
+	if p.isFunction() {
+		return p.resolveValue().IsBool()
 	}
 	return p.Inner.Type == cftypes.Bool
 }
@@ -85,6 +94,9 @@ func (p *Property) AsStringValue() types.StringValue {
 }
 
 func (p *Property) AsInt() int {
+	if p.isFunction() {
+		return p.resolveValue().AsInt()
+	}
 	return p.Inner.Value.(int)
 }
 
@@ -93,6 +105,9 @@ func (p *Property) AsIntValue() types.IntValue {
 }
 
 func (p *Property) AsBool() bool {
+	if p.isFunction() {
+		return p.resolveValue().AsBool()
+	}
 	return p.Inner.Value.(bool)
 }
 

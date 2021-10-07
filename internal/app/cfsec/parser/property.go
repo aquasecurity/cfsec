@@ -103,7 +103,7 @@ func (p *Property) Range() types.Range {
 	return p.rng
 }
 func (p *Property) Metadata() types.Metadata {
-	ref := NewCFReference(p.parentRange)
+	ref := NewCFReferenceWithValue(p.parentRange, *p.resolveValue())
 	return types.NewMetadata(p.Range(), ref)
 }
 

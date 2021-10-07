@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/formatters"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
-	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
 )
 

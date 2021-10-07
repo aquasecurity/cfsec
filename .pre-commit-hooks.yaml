@@ -1,0 +1,20 @@
+- id: cfsec
+  name: cfsec
+  description: cfsec is a tool to statically analyze Cloudformation templates to spot potential security issues.
+  language: golang
+  entry: cfsec
+  types: [cloudformation]
+
+- id: cfsec-docker
+  name: cfsec Docker
+  description: cfsec is a tool to statically analyze Cloudformation templates to spot potential security issues, uses projects official docker image.
+  language: docker_image
+  entry: aquasec/cfsec-alpine
+  types: [cloudformation]
+
+- id: cfsec-system
+  name: cfsec system
+  description: cfsec is a tool to statically analyze Cloudformation templates to spot potential security issues, uses systems installed cfsec.
+  language: system
+  entry: cfsec
+  types: [cloudformation]

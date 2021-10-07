@@ -1,0 +1,119 @@
+before:
+  hooks:
+    - go mod tidy
+    - go mod vendor
+builds:
+  -
+    id: cfsec
+    main: ./cmd/cfsec
+    binary: cfsec
+    ldflags:
+    - "-X github.com/aquasecurity/tfsec/version.Version={{.Version}} -s -w -extldflags '-fno-PIC -static'"
+    env:
+      - CGO_ENABLED=0
+      - GOFLAGS=-mod=vendor
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+#signs:
+#  - artifacts: binary
+#    signature: "${artifact}.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig"
+
+archives:
+  -
+    format: binary
+    name_template: "{{ .Binary}}-{{ .Os }}-{{ .Arch }}"
+
+release:
+  prerelease: auto
+  github:
+    owner: aquasecurity
+    name: cfsec
+
+#dockers:
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile
+#    skip_push: auto
+#    image_templates:
+#    - "aquasec/cfsec:latest"
+#    - "aquasec/cfsec:{{ .Tag }}"
+#    - "aquasec/cfsec:v{{ .Major }}.{{ .Minor }}"
+#    - "aquasec/cfsec-alpine:latest"
+#    - "aquasec/cfsec-alpine:{{ .Tag }}"
+#    - "aquasec/cfsec-alpine:v{{ .Major }}.{{ .Minor }}"
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile.scratch
+#    skip_push: auto
+#    image_templates:
+#    - "aquasec/cfsec-scratch:latest"
+#    - "aquasec/cfsec-scratch:{{ .Tag }}"
+#    - "aquasec/cfsec-scratch:v{{ .Major }}.{{ .Minor }}"
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile.ci
+#    skip_push: auto
+#    image_templates:
+#    - "aquasec/cfsec-ci:latest"
+#    - "aquasec/cfsec-ci:{{ .Tag }}"
+#    - "aquasec/cfsec-ci:v{{ .Major }}.{{ .Minor }}"
+#
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile
+#    image_templates:
+#    - "aquasec/cfsec:{{ .Tag }}"
+#    - "aquasec/cfsec-alpine:{{ .Tag }}"
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile.scratch
+#    image_templates:
+#    - "aquasec/cfsec-scratch:{{ .Tag }}"
+#  -
+#    goos: linux
+#    goarch: amd64
+#    ids:
+#    - tfsec
+#
+#    dockerfile: Dockerfile.ci
+#    image_templates:
+#    - "aquasec/cfsec-ci:{{ .Tag }}"

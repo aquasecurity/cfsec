@@ -13,7 +13,6 @@ fmt:
 sanity: test
 	go run ./cmd/cfsec  ./example > /dev/null
 
-
 .PHONY: pr-ready
 pr-ready: quality sanity pr-lint typos
 
@@ -51,4 +50,4 @@ quality: cyclo vet
 .PHONY: fix-typos
 fix-typos:
 	which codespell || pip install codespell
-	codespell -S vendor,funcs,.terraform --ignore-words .codespellignore -f -w -i1
+	codespell -S vendor --ignore-words .codespellignore -f -w -i1

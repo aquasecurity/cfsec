@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
@@ -18,6 +19,7 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 	var contexts FileContexts
 
 	for _, path := range filepaths {
+		debug.Log("Starting to process file %s", path)
 
 		if _, err := os.Stat(path); err != nil {
 			return nil, err
@@ -32,13 +34,17 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 
 		if strings.HasSuffix(strings.ToLower(path), ".json") {
 			if err := jfather.Unmarshal(fileContent, &context); err != nil {
-				return nil, err
+				debug.Log("Tried to parse [%s] but it isn't valid cloudformation", path)
+				continue
 			}
 		} else {
 			if err := yaml.Unmarshal(fileContent, &context); err != nil {
-				return nil, err
+				debug.Log("Tried to parse [%s] but it isn't valid cloudformation", path)
+				continue
 			}
 		}
+
+		debug.Log("Context loaded from file %s", path)
 
 		for name, r := range context.Resources {
 			r.ConfigureResource(name, path, context)

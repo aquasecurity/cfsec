@@ -16,7 +16,7 @@ func getInstances(ctx parser.FileContext) (instances []ec2.Instance) {
 			// metadata not supported by CloudFormation at the moment -
 			// https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/655
 			MetadataOptions: ec2.MetadataOptions{},
-			UserData:        getUserData(r),
+			UserData:        r.GetStringProperty("UserData"),
 			SecurityGroups:  nil,
 		}
 		instances = append(instances, instance)

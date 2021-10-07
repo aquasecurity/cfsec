@@ -4,14 +4,15 @@ import (
 	"testing"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/test"
+	"github.com/aquasecurity/defsec/rules/aws/vpc"
 )
 
-func Test_VPCSGDescription_FailureExamples(t *testing.T) {
-	expectedCode := "aws-vpc-add-description-to-security-group"
+func Test_CheckAddDescriptionToSecurityGroup_FailureExamples(t *testing.T) {
+	expectedCode := vpc.CheckAddDescriptionToSecurityGroup.Rule().LongID()
 	test.RunFailureExamplesTest(t, expectedCode)
 }
 
-func Test_VPCSGDescription_SuccessExamples(t *testing.T) {
-	expectedCode := "aws-vpc-add-description-to-security-group"
+func Test_CheckAddDescriptionToSecurityGroup_SuccessExamples(t *testing.T) {
+	expectedCode := vpc.CheckAddDescriptionToSecurityGroup.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }

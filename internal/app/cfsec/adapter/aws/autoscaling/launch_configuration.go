@@ -12,8 +12,8 @@ func getLaunchConfigurations(file parser.FileContext) (launchConfigurations []au
 	for _, r := range launchConfigResources {
 
 		launchConfig := autoscaling.LaunchConfiguration{
-			Name:              getName(r),
-			AssociatePublicIP: hasPublicIPAssociated(r),
+			Name:              r.GetStringProperty("Name"),
+			AssociatePublicIP: r.GetBoolProperty("AssociatePublicIpAddress"),
 			EBSBlockDevices:   []autoscaling.BlockDevice{},
 		}
 
@@ -60,27 +60,3 @@ func getBlockDevices(r *parser.Resource) []autoscaling.BlockDevice {
 	return blockDevices
 }
 
-func hasPublicIPAssociated(r *parser.Resource) types.BoolValue {
-	publicIpProp := r.GetProperty("AssociatePublicIpAddress")
-	if publicIpProp.IsNil() {
-		return types.BoolDefault(false, r.Metadata())
-	}
-
-	if !publicIpProp.IsBool() {
-		return types.BoolDefault(false, publicIpProp.Metadata())
-	}
-	return publicIpProp.AsBoolValue()
-}
-
-func getName(r *parser.Resource) types.StringValue {
-	nameProp := r.GetProperty("Name")
-	if nameProp.IsNil() {
-		return types.StringDefault("", r.Metadata())
-	}
-
-	if !nameProp.IsString() {
-		return types.StringDefault("", nameProp.Metadata())
-	}
-
-	return nameProp.AsStringValue()
-}

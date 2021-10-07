@@ -14,7 +14,7 @@ func getFunctions(ctx parser.FileContext) (functions []lambda.Function) {
 		function := lambda.Function{
 			Metadata: r.Metadata(),
 			Tracing: lambda.Tracing{
-				Mode: r.GetStringProperty("TracingConfig.Mode", ""),
+				Mode: r.GetStringProperty("TracingConfig.Mode"),
 			},
 			Permissions: getPermissions(r, ctx),
 		}
@@ -30,10 +30,10 @@ func getPermissions(funcR *parser.Resource, ctx parser.FileContext) (perms []lam
 	permissionResources := ctx.GetResourceByType("AWS::Lambda::Permission")
 
 	for _, r := range permissionResources {
-		if r.GetStringProperty("FunctionName", "").EqualTo(funcR.ID()) {
+		if r.GetStringProperty("FunctionName").EqualTo(funcR.ID()) {
 			perm := lambda.Permission{
-				Principal: r.GetStringProperty("Principal", ""),
-				SourceARN: r.GetStringProperty("SourceArn", ""),
+				Principal: r.GetStringProperty("Principal"),
+				SourceARN: r.GetStringProperty("SourceArn"),
 			}
 
 			perms = append(perms, perm)

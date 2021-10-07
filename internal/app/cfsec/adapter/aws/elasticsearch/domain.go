@@ -13,19 +13,19 @@ func getDomains(ctx parser.FileContext) (domains []elasticsearch.Domain) {
 
 		domain := elasticsearch.Domain{
 			Metadata:   r.Metadata(),
-			DomainName: r.GetStringProperty("DomainName", ""),
+			DomainName: r.GetStringProperty("DomainName"),
 			LogPublishing: elasticsearch.LogPublishing{
-				AuditEnabled: r.GetBoolProperty("LogPublishingOptions.Enabled", false),
+				AuditEnabled: r.GetBoolProperty("LogPublishingOptions.Enabled"),
 			},
 			TransitEncryption: elasticsearch.TransitEncryption{
-				Enabled: r.GetBoolProperty("NodeToNodeEncryptionOptions.Enabled", false),
+				Enabled: r.GetBoolProperty("NodeToNodeEncryptionOptions.Enabled"),
 			},
 			AtRestEncryption: elasticsearch.AtRestEncryption{
-				Enabled: r.GetBoolProperty("EncryptionAtRestOptions.Enabled", false),
+				Enabled: r.GetBoolProperty("EncryptionAtRestOptions.Enabled"),
 			},
 			Endpoint: elasticsearch.Endpoint{
-				EnforceHTTPS: r.GetBoolProperty("DomainEndpointOptions.EnforceHTTPS", false),
-				TLSPolicy:    r.GetStringProperty("DomainEndpointOptions.TLSSecurityPolicy", ""),
+				EnforceHTTPS: r.GetBoolProperty("DomainEndpointOptions.EnforceHTTPS"),
+				TLSPolicy:    r.GetStringProperty("DomainEndpointOptions.TLSSecurityPolicy"),
 			},
 		}
 

@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 	"gopkg.in/yaml.v2"
 )
 
@@ -33,7 +33,7 @@ type service struct {
 	Docs    []string `yaml:"docs"`
 }
 
-func generateNavIndexFile(registeredChecks []rule.Rule) error {
+func generateNavIndexFile(registeredChecks []rules.Rule) error {
 
 	topLevel := &[]navBlock{
 		{
@@ -62,7 +62,7 @@ func generateNavIndexFile(registeredChecks []rule.Rule) error {
 	return err
 }
 
-func getServices(checks []rule.Rule) []service {
+func getServices(checks []rules.Rule) []service {
 
 	serviceMap := make(map[string][]string)
 

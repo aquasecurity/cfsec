@@ -138,6 +138,60 @@ func (p *Property) resolveValue() *Property {
 	return ResolveIntrinsicFunc(p)
 }
 
+func (p *Property) GetStringProperty(path string, defaultValue ...string) types.StringValue {
+	defVal := ""
+	if len(defaultValue) > 0 {
+		defVal = defaultValue[0]
+	}
+
+	prop := p.GetProperty(path)
+
+	if prop.IsNotString() {
+		return p.StringDefault(defVal)
+	}
+	return prop.AsStringValue()
+}
+
+func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.BoolValue {
+	defVal := false
+	if len(defaultValue) > 0 {
+		defVal = defaultValue[0]
+	}
+
+	prop := p.GetProperty(path)
+
+	if prop.IsNotBool() {
+		return p.BoolDefault(defVal)
+	}
+	return prop.AsBoolValue()
+}
+
+func (p *Property) GetIntProperty(path string, defaultValue ...int) types.IntValue {
+	defVal := 0
+	if len(defaultValue) > 0 {
+		defVal = defaultValue[0]
+	}
+
+	prop := p.GetProperty(path)
+
+	if prop.IsNotInt() {
+		return p.IntDefault(defVal)
+	}
+	return prop.AsIntValue()
+}
+
+func (p *Property) StringDefault(defaultValue string) types.StringValue {
+	return types.StringDefault(defaultValue, p.Metadata())
+}
+
+func (p *Property) BoolDefault(defaultValue bool) types.BoolValue {
+	return types.BoolDefault(defaultValue, p.Metadata())
+}
+
+func (p *Property) IntDefault(defaultValue int) types.IntValue {
+	return types.IntDefault(defaultValue, p.Metadata())
+}
+
 // GetProperty takes a path to the property separated by '.' and returns
 // the resolved value
 func (p *Property) GetProperty(path string) *Property {

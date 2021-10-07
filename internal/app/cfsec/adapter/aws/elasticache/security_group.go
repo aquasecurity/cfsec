@@ -3,7 +3,6 @@ package elasticache
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws/elasticache"
-	"github.com/aquasecurity/defsec/types"
 )
 
 func getSecurityGroups(ctx parser.FileContext) (securityGroups []elasticache.SecurityGroup) {
@@ -14,7 +13,7 @@ func getSecurityGroups(ctx parser.FileContext) (securityGroups []elasticache.Sec
 
 		sg := elasticache.SecurityGroup{
 			Metadata:    r.Metadata(),
-			Description: getDescription(r),
+			Description: r.GetStringProperty("Description"),
 		}
 		securityGroups = append(securityGroups, sg)
 	}
@@ -22,11 +21,3 @@ func getSecurityGroups(ctx parser.FileContext) (securityGroups []elasticache.Sec
 	return securityGroups
 }
 
-func getDescription(r *parser.Resource) types.StringValue {
-
-	descProp := r.GetProperty("Description")
-	if descProp.IsNotString() {
-		return types.StringDefault("", r.Metadata())
-	}
-	return descProp.AsStringValue()
-}

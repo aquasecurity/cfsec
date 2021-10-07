@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 )
 
 type checkBlock struct {
@@ -22,7 +22,7 @@ type checksBlock struct {
 	Checks []checkBlock `json:"checks"`
 }
 
-func generateExtensionCodeFile(registeredChecks []rule.Rule) error {
+func generateExtensionCodeFile(registeredChecks []rules.Rule) error {
 	var blocks []checkBlock
 
 	for _, check := range registeredChecks {

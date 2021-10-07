@@ -5,7 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
 	"github.com/spf13/cobra"
 
@@ -41,7 +41,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func getSortedChecks() []rule.Rule {
+func getSortedChecks() []rules.Rule {
 	checks := scanner.GetRegisteredRules()
 
 	// sort the checks alpha

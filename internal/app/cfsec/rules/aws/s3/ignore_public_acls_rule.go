@@ -1,13 +1,13 @@
 package s3
 
 import (
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
 	"github.com/aquasecurity/defsec/rules/aws/s3"
 )
 
 func init() {
-	scanner.RegisterCheckRule(rule.Rule{
+	scanner.RegisterCheckRule(rules.Rule{
 
 		BadExample: []string{
 			`---
@@ -25,10 +25,15 @@ Resources:
   GoodExample:
     Properties:
       AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
     Type: AWS::S3::Bucket
 `,
 		},
 
-		Base: s3.CheckForPublicACL,
+		Base: s3.CheckPublicACLsAreIgnored,
 	})
 }

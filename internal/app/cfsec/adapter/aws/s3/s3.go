@@ -7,7 +7,19 @@ import (
 
 func Adapt(cfFile parser.FileContext) s3.S3 {
 
+	buckets := getBuckets(cfFile)
+
 	return s3.S3{
-		Buckets: getBuckets(cfFile),
+		Buckets:            buckets,
+		PublicAccessBlocks: getPublicAccessBlocks(buckets),
 	}
+}
+
+func getPublicAccessBlocks(buckets []s3.Bucket) (publicAccessBlocks []s3.PublicAccessBlock) {
+	for _, b := range buckets {
+		if b.PublicAccessBlock != nil {
+			publicAccessBlocks = append(publicAccessBlocks, *b.PublicAccessBlock)
+		}
+	}
+	return publicAccessBlocks
 }

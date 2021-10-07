@@ -14,8 +14,8 @@ func getStreams(ctx parser.FileContext) (streams []kinesis.Stream) {
 		stream := kinesis.Stream{
 			Metadata: r.Metadata(),
 			Encryption: kinesis.Encryption{
-				Type:     r.GetStringProperty("StreamEncryption.EncryptionType", ""),
-				KMSKeyID: r.GetStringProperty("StreamEncryption.KeyId", ""),
+				Type:     r.GetStringProperty("StreamEncryption.EncryptionType"),
+				KMSKeyID: r.GetStringProperty("StreamEncryption.KeyId"),
 			},
 		}
 

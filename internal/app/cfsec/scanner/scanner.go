@@ -5,15 +5,15 @@ import (
 	"sort"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	rules2 "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/rules"
 )
 
-var registeredRules []rule.Rule
+var registeredRules []rules2.Rule
 
-func RegisterCheckRule(rules ...rule.Rule) {
+func RegisterCheckRule(rules ...rules2.Rule) {
 	registeredRules = append(registeredRules, rules...)
 }
 
@@ -54,14 +54,14 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 }
 
 // GetRegisteredRules provides all Checks which have been registered with this package
-func GetRegisteredRules() []rule.Rule {
+func GetRegisteredRules() []rules2.Rule {
 	sort.Slice(registeredRules, func(i, j int) bool {
 		return registeredRules[i].ID() < registeredRules[j].ID()
 	})
 	return registeredRules
 }
 
-func GetRuleById(ID string) (*rule.Rule, error) {
+func GetRuleById(ID string) (*rules2.Rule, error) {
 	for _, r := range registeredRules {
 		if r.ID() == ID {
 			return &r, nil

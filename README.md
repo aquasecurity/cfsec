@@ -1,8 +1,12 @@
 # cfsec
 
-## What might it be
+[![GoReportCard](https://goreportcard.com/badge/github.com/aquasecurity/cfsec)](https://goreportcard.com/report/github.com/aquasecurity/cfsec)
 
-tfsec is the premier terraform scanning tool. cfsec may be the solution for CloudFormation scanning. The concepts of blocks and attributes are already present in tfsec and should be reusable in cfsec
+> NOTE: cfsec is early release status - please raise issues and be patient
+
+## What is it?
+
+cfsec scans your yaml or json cloudformation configuration files for common security misconfigurations.
 
 ## An Example
 

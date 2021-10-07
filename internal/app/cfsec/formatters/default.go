@@ -91,7 +91,9 @@ func getFileContent(ref parser.CFReference, issueRange types.Range) (string, err
 	for i := issueRange.GetStartLine() - 1; i < issueRange.GetEndLine(); i++ {
 		if i == issueRange.GetEndLine()-1 && ref.ResolvedAttributeValue() != nil {
 			prop := ref.ResolvedAttributeValue().(parser.Property)
-			resolvedValue = fmt.Sprintf("[%v]", prop.RawValue())
+			if prop.IsNotNil() {
+				resolvedValue = fmt.Sprintf("[%v]", prop.RawValue())
+			}
 		}
 		bodyStrings[i] = fmt.Sprintf("<red>%s %s</red>", bodyStrings[i], resolvedValue)
 	}

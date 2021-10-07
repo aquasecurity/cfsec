@@ -3,6 +3,8 @@ package parser
 import (
 	"io/ioutil"
 	"strings"
+
+	"github.com/aquasecurity/defsec/types"
 )
 
 type SourceFormat string
@@ -70,4 +72,10 @@ func (t *FileContext) GetResourceByType(names ...string) []*Resource {
 		}
 	}
 	return resources
+}
+
+func (t *FileContext) Metadata() types.Metadata {
+	rng := types.NewRange(t.filepath, 1, len(t.lines))
+
+	return types.NewMetadata(rng, NewCFReference(rng))
 }

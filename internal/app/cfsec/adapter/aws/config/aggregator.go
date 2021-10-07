@@ -11,10 +11,13 @@ func getConfiguraionAggregator(ctx parser.FileContext) (aggregator config.Config
 	aggregatorResources := ctx.GetResourceByType("AWS::Config::ConfigurationAggregator")
 
 	if len(aggregatorResources) == 0 {
-		return
+		return config.ConfigurationAggregrator{
+			SourceAllRegions: types.BoolDefault(false, ctx.Metadata()),
+		}
 	}
 
 	return config.ConfigurationAggregrator{
+		IsDefined:        true,
 		SourceAllRegions: isSourcingAllRegions(aggregatorResources[0]),
 	}
 }

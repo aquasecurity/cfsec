@@ -2,6 +2,10 @@ package rules
 
 import "github.com/aquasecurity/defsec/rules"
 
+
+
+
+
 type Rule struct {
 	Base rules.RegisteredRule
 

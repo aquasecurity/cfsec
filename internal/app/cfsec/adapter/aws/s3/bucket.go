@@ -27,17 +27,25 @@ func getBuckets(cfFile parser.FileContext) []s3.Bucket {
 			Versioning: s3.Versioning{
 				Enabled: hasVersioning(r),
 			},
-			PublicAccessBlock: &s3.PublicAccessBlock{
-				BlockPublicACLs:       r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicAcls"),
-				BlockPublicPolicy:     r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicPolicy"),
-				IgnorePublicACLs:      r.GetBoolProperty("PublicAccessBlockConfiguration.IgnorePublicAcls"),
-				RestrictPublicBuckets: r.GetBoolProperty("PublicAccessBlockConfiguration.RestrictPublicBuckets"),
-			},
+			PublicAccessBlock: getPublicAccessBlock(r),
 		}
 
 		buckets = append(buckets, s3b)
 	}
 	return buckets
+}
+
+func getPublicAccessBlock(r *parser.Resource) *s3.PublicAccessBlock {
+	if block := r.GetProperty("PublicAccessBlockConfiguration"); block.IsNil() {
+		return nil
+	}
+
+	return &s3.PublicAccessBlock{
+		BlockPublicACLs:       r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicAcls"),
+		BlockPublicPolicy:     r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicPolicy"),
+		IgnorePublicACLs:      r.GetBoolProperty("PublicAccessBlockConfiguration.IgnorePublicAcls"),
+		RestrictPublicBuckets: r.GetBoolProperty("PublicAccessBlockConfiguration.RestrictPublicBuckets"),
+	}
 }
 
 func convertAclValue(aclValue types.StringValue) types.StringValue {
@@ -86,12 +94,12 @@ func getEncryption(r *parser.Resource, _ parser.FileContext) s3.Encryption {
 	}
 
 	first := encryptProps.AsList()[0]
-	bucketKeyEnabled := first.GetProperty("BucketKeyEnabled")
 
-	return s3.Encryption{
-		Enabled:   types.Bool(bucketKeyEnabled.AsBool(), first.MetadataWithValue(bucketKeyEnabled)),
+	enc := s3.Encryption{
+		Enabled:   first.GetBoolProperty("BucketKeyEnabled"),
 		Algorithm: types.StringDefault("", r.Metadata()),
 		KMSKeyId:  types.StringDefault("", r.Metadata()),
 	}
+	return enc
 
 }

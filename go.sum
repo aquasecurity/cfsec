@@ -71,6 +71,16 @@ github.com/aquasecurity/defsec v0.0.19 h1:Q4sEBTsoMlsDJW8JJXnQGYddszVPl0jGkxyoX8
 github.com/aquasecurity/defsec v0.0.19/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
 github.com/aquasecurity/defsec v0.0.20 h1:8sRGukX5ul8INqXBIC5AF884Jy7Lcwos6SvRtUgsvr8=
 github.com/aquasecurity/defsec v0.0.20/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
+github.com/aquasecurity/defsec v0.0.21 h1:GptiX91OIcEvNw+e4/W0M1v/uoC9eEeM8MPrzrTbSwk=
+github.com/aquasecurity/defsec v0.0.21/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
+github.com/aquasecurity/defsec v0.0.22 h1:Ftu2m3oc8m/IvIHvZI+5we5KDyvCgbAGjRX/EUK7o20=
+github.com/aquasecurity/defsec v0.0.22/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
+github.com/aquasecurity/defsec v0.0.23 h1:ZDS82mKv+r02AJ6mHs0Ca1prLAf0AP4gagrQtnMUvCI=
+github.com/aquasecurity/defsec v0.0.23/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
+github.com/aquasecurity/defsec v0.0.24 h1:P+ROlaMZzXAeHKCbqw5LDHsLh7N6Ydr8hGNUyTt8Bpg=
+github.com/aquasecurity/defsec v0.0.24/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
+github.com/aquasecurity/defsec v0.0.25 h1:018c093pPZYSJZDnzpZO2ln5HiwR4N5Sz2ZUIKB+wzY=
+github.com/aquasecurity/defsec v0.0.25/go.mod h1:E53TX/xJkcgpJyF5GPSat3Z+cZiLyvSNBdJAyfdl3fc=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=

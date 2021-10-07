@@ -51,3 +51,13 @@ quality: cyclo vet
 fix-typos:
 	which codespell || pip install codespell
 	codespell -S vendor --ignore-words .codespellignore -f -w -i1
+
+.PHONY: tagger
+tagger:
+	@git checkout master
+	@git fetch --tags
+	@echo "the most recent tag was `git describe --tags --abbrev=0`"
+	@echo ""
+	read -p "Tag number: " TAG; \
+	 git tag -a "$${TAG}" -m "$${TAG}"; \
+	 git push origin "$${TAG}"

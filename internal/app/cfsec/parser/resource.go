@@ -3,6 +3,7 @@ package parser
 import (
 	"strings"
 
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
@@ -22,12 +23,14 @@ type ResourceInner struct {
 }
 
 func (r *Resource) ConfigureResource(id, filepath string, ctx *FileContext) {
+
 	r.setId(id)
 	r.setFile(filepath)
 	r.setContext(ctx)
 }
 
 func (r *Resource) setId(id string) {
+	debug.Log("Updating resource id to %s", id)
 	r.id = id
 
 	for n, p := range r.properties() {
@@ -37,6 +40,7 @@ func (r *Resource) setId(id string) {
 }
 
 func (r *Resource) setFile(filepath string) {
+	debug.Log("Setting the range on %s to %s", r.ID(), filepath)
 	r.rng = types.NewRange(filepath, r.rng.GetStartLine(), r.rng.GetEndLine())
 
 	for _, p := range r.Inner.Properties {

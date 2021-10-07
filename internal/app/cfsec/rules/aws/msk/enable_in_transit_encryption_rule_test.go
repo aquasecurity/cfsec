@@ -4,14 +4,15 @@ import (
 	"testing"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/test"
+	"github.com/aquasecurity/defsec/rules/aws/msk"
 )
 
-func Test_MSK_InTransit_FailureExamples(t *testing.T) {
-	expectedCode := "aws-msk-enable-in-transit-encryption"
+func Test_CheckEnableInTransitEncryption_FailureExamples(t *testing.T) {
+	expectedCode := msk.CheckEnableInTransitEncryption.Rule().LongID()
 	test.RunFailureExamplesTest(t, expectedCode)
 }
 
-func Test_MSK_InTransit_SuccessExamples(t *testing.T) {
-	expectedCode := "aws-msk-enable-in-transit-encryption"
+func Test_CheckEnableInTransitEncryption_SuccessExamples(t *testing.T) {
+	expectedCode := msk.CheckEnableInTransitEncryption.Rule().LongID()
 	test.RunPassingExamplesTest(t, expectedCode)
 }

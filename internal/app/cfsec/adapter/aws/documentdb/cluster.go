@@ -13,10 +13,10 @@ func getClusters(ctx parser.FileContext) (clusters []documentdb.Cluster) {
 	for _, r := range clusterResources {
 		cluster := documentdb.Cluster{
 			Metadata:          r.Metadata(),
-			Identifier:        getIdentifier(r),
+			Identifier:        r.GetStringProperty("DBClusterIdentifier"),
 			EnabledLogExports: getLogExports(r),
-			StorageEncrypted:  isStorageEncrypted(r),
-			KMSKeyID:          getKmsKeyId(r),
+			StorageEncrypted:  r.GetBoolProperty("StorageEncrypted"),
+			KMSKeyID:          r.GetStringProperty("KmsKeyId"),
 		}
 
 		updateInstancesOnCluster(&cluster, ctx)
@@ -31,7 +31,7 @@ func updateInstancesOnCluster(cluster *documentdb.Cluster, ctx parser.FileContex
 	instanceResources := ctx.GetResourceByType("AWS::DocDB::DBInstance")
 
 	for _, r := range instanceResources {
-		clusterIdentifier := getIdentifier(r)
+		clusterIdentifier := r.GetStringProperty("DBClusterIdentifier")
 		if clusterIdentifier == cluster.Identifier {
 			cluster.Instances = append(cluster.Instances, documentdb.Instance{
 				Metadata: r.Metadata(),
@@ -39,14 +39,6 @@ func updateInstancesOnCluster(cluster *documentdb.Cluster, ctx parser.FileContex
 			})
 		}
 	}
-}
-
-func getKmsKeyId(r *parser.Resource) types.StringValue {
-	kmsIdProp := r.GetProperty("KmsKeyId")
-	if kmsIdProp.IsNil() || kmsIdProp.IsNotString() {
-		return types.StringDefault("", r.Metadata())
-	}
-	return kmsIdProp.AsStringValue()
 }
 
 func getLogExports(r *parser.Resource) (logExports []types.StringValue) {
@@ -61,20 +53,4 @@ func getLogExports(r *parser.Resource) (logExports []types.StringValue) {
 		logExports = append(logExports, export.AsStringValue())
 	}
 	return logExports
-}
-
-func isStorageEncrypted(r *parser.Resource) types.BoolValue {
-	encryptedProp := r.GetProperty("StorageEncrypted")
-	if encryptedProp.IsNil() || encryptedProp.IsNotBool() {
-		return types.BoolDefault(false, r.Metadata())
-	}
-	return encryptedProp.AsBoolValue()
-}
-
-func getIdentifier(r *parser.Resource) types.StringValue {
-	identifierProp := r.GetProperty("DBClusterIdentifier")
-	if identifierProp.IsNil() {
-		return types.StringDefault("", r.Metadata())
-	}
-	return identifierProp.AsStringValue()
 }

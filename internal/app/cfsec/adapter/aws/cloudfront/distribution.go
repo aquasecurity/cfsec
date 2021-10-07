@@ -12,14 +12,14 @@ func getDistributions(ctx parser.FileContext) (distributions []cloudfront.Distri
 
 	for _, r := range distributionResources {
 		distribution := cloudfront.Distribution{
-			WAFID: getWafId(r, ctx),
+			WAFID: r.GetStringProperty("DistributionConfig.WebACLId"),
 			Logging: cloudfront.Logging{
-				Bucket: getBucketName(r, ctx),
+				Bucket: r.GetStringProperty("DistributionConfig.Logging.Bucket"),
 			},
-			DefaultCacheBehaviour:  getDefaultCacheBehaviour(r, ctx),
+			DefaultCacheBehaviour:  getDefaultCacheBehaviour(r),
 			OrdererCacheBehaviours: nil,
 			ViewerCertificate: cloudfront.ViewerCertificate{
-				MinimumProtocolVersion: getTlsVersion(r),
+				MinimumProtocolVersion: r.GetStringProperty("DistributionConfig.ViewerCertificate.MinimumProtocolVersion"),
 			},
 		}
 
@@ -29,7 +29,7 @@ func getDistributions(ctx parser.FileContext) (distributions []cloudfront.Distri
 	return distributions
 }
 
-func getDefaultCacheBehaviour(r *parser.Resource, ctx parser.FileContext) cloudfront.CacheBehaviour {
+func getDefaultCacheBehaviour(r *parser.Resource) cloudfront.CacheBehaviour {
 	defaultCache := r.GetProperty("DistributionConfig.DefaultCacheBehavior")
 	if defaultCache.IsNil() {
 		return cloudfront.CacheBehaviour{
@@ -46,41 +46,4 @@ func getDefaultCacheBehaviour(r *parser.Resource, ctx parser.FileContext) cloudf
 	return cloudfront.CacheBehaviour{
 		ViewerProtocolPolicy: protoProp.AsStringValue(),
 	}
-}
-
-func getTlsVersion(r *parser.Resource) types.StringValue {
-
-	tlsVerProp := r.GetProperty("DistributionConfig.ViewerCertificate.MinimumProtocolVersion")
-
-	if tlsVerProp.IsNil() {
-		return types.StringDefault("TLSv1", r.Metadata())
-	}
-
-	if tlsVerProp.IsEmpty() {
-		return types.StringDefault("TLSv1", r.Metadata())
-	}
-
-	return tlsVerProp.AsStringValue()
-}
-
-func getBucketName(r *parser.Resource, ctx parser.FileContext) types.StringValue {
-	logBucketProp := r.GetProperty("DistributionConfig.Logging.Bucket")
-	if logBucketProp.IsNil() {
-		return types.StringDefault("", r.Metadata())
-	}
-	if logBucketProp.IsEmpty() {
-		return types.StringDefault("", logBucketProp.Metadata())
-	}
-	return logBucketProp.AsStringValue()
-}
-
-func getWafId(r *parser.Resource, ctx parser.FileContext) types.StringValue {
-	wafIdProp := r.GetProperty("DistributionConfig.WebACLId")
-	if wafIdProp.IsNil() {
-		return types.StringDefault("", r.Metadata())
-	}
-	if wafIdProp.IsEmpty() {
-		return types.StringDefault("", wafIdProp.Metadata())
-	}
-	return wafIdProp.AsStringValue()
 }

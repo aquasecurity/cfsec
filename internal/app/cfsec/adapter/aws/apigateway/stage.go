@@ -8,7 +8,7 @@ import (
 
 func getApis(cfFile parser.FileContext) (apis []apigateway.API) {
 
-	apiResources := cfFile.GetResourceByType(apiGatewayType)
+	apiResources := cfFile.GetResourceByType("AWS::ApiGatewayV2::Api")
 	for _, apiRes := range apiResources {
 		api := apigateway.API{
 			Metadata: apiRes.Metadata(),
@@ -24,37 +24,21 @@ func getStages(apiId string, cfFile parser.FileContext) []apigateway.Stage {
 	var apiStages []apigateway.Stage
 
 	stageResources := cfFile.GetResourceByType("AWS::ApiGatewayV2::Stage")
-	for _, stageRes := range stageResources {
-		stageApiId := getApiID(stageRes)
+	for _, r := range stageResources {
+		stageApiId := r.GetStringProperty("ApiId")
 		if stageApiId.Value() != apiId {
 			continue
 		}
 
 		s := apigateway.Stage{
-			Metadata:      stageRes.Metadata(),
-			Name:          getStageName(stageRes),
-			AccessLogging: getAccessLogging(stageRes),
+			Metadata:      r.Metadata(),
+			Name:          r.GetStringProperty("StageName"),
+			AccessLogging: getAccessLogging(r),
 		}
 		apiStages = append(apiStages, s)
 	}
 
 	return apiStages
-}
-
-func getApiID(res *parser.Resource) types.StringValue {
-	apiIDProp := res.GetProperty("ApiId")
-	if apiIDProp == nil {
-		return types.StringDefault("", res.Metadata())
-	}
-	return apiIDProp.AsStringValue()
-}
-
-func getStageName(res *parser.Resource) types.StringValue {
-	stageNameProp := res.GetProperty("StageName")
-	if stageNameProp == nil {
-		return types.StringDefault("", res.Metadata())
-	}
-	return stageNameProp.AsStringValue()
 }
 
 func getAccessLogging(r *parser.Resource) apigateway.AccessLogging {

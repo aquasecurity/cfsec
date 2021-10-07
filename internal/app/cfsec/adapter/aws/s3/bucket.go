@@ -16,12 +16,11 @@ func getBuckets(cfFile parser.FileContext) []s3.Bucket {
 	bucketResources := cfFile.GetResourceByType("AWS::S3::Bucket")
 
 	for _, r := range bucketResources {
-
 		s3b := s3.Bucket{
-			Name:       getName(r),
-			Encryption: getEncryption(r, cfFile),
 			Metadata:   r.Metadata(),
-			ACL:        getAcl(r),
+			Name:       r.GetStringProperty("BucketName"),
+			Encryption: getEncryption(r, cfFile),
+			ACL:        convertAclValue(r.GetStringProperty("AccessControl", "private")),
 			Logging: s3.Logging{
 				Enabled: hasLogging(r),
 			},
@@ -29,10 +28,10 @@ func getBuckets(cfFile parser.FileContext) []s3.Bucket {
 				Enabled: hasVersioning(r),
 			},
 			PublicAccessBlock: &s3.PublicAccessBlock{
-				BlockPublicACLs:       getPublicBlockAccessValue(r, "BlockPublicAcls"),
-				BlockPublicPolicy:     getPublicBlockAccessValue(r, "BlockPublicPolicy"),
-				IgnorePublicACLs:      getPublicBlockAccessValue(r, "IgnorePublicACLs"),
-				RestrictPublicBuckets: getPublicBlockAccessValue(r, "RestrictPublicBuckets"),
+				BlockPublicACLs:       r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicAcls"),
+				BlockPublicPolicy:     r.GetBoolProperty("PublicAccessBlockConfiguration.BlockPublicPolicy"),
+				IgnorePublicACLs:      r.GetBoolProperty("PublicAccessBlockConfiguration.IgnorePublicAcls"),
+				RestrictPublicBuckets: r.GetBoolProperty("PublicAccessBlockConfiguration.RestrictPublicBuckets"),
 			},
 		}
 
@@ -41,33 +40,10 @@ func getBuckets(cfFile parser.FileContext) []s3.Bucket {
 	return buckets
 }
 
-func getName(r *parser.Resource) types.StringValue {
-	bucketNameProp := r.GetProperty("BucketName")
+func convertAclValue(aclValue types.StringValue) types.StringValue {
+	matches := aclConvertRegex.FindAllString(aclValue.Value(), -1)
 
-	if bucketNameProp.IsNil() {
-		return types.StringDefault("", r.Metadata())
-	}
-
-	// add code for reference lookup
-
-	return types.String(bucketNameProp.AsString(), r.Metadata())
-}
-
-func getAcl(r *parser.Resource) types.StringValue {
-	accessControlProp := r.GetProperty("AccessControl")
-
-	if accessControlProp.IsNil() {
-		return types.StringDefault("private", r.Metadata())
-	}
-
-	aclValue := convertAclValue(accessControlProp.AsString())
-	return types.String(aclValue, accessControlProp.Metadata())
-}
-
-func convertAclValue(aclValue string) string {
-	matches := aclConvertRegex.FindAllString(aclValue, -1)
-
-	return strings.ToLower(strings.Join(matches, "-"))
+	return types.String(strings.ToLower(strings.Join(matches, "-")), *aclValue.GetMetadata())
 }
 
 func hasLogging(r *parser.Resource) types.BoolValue {
@@ -97,17 +73,7 @@ func hasVersioning(r *parser.Resource) types.BoolValue {
 	return types.Bool(versioningEnabled, versioningProp.Metadata())
 }
 
-func getPublicBlockAccessValue(r *parser.Resource, propertyName string) types.BoolValue {
-
-	prop := r.GetProperty(propertyName)
-
-	if prop.IsNil() {
-		return types.BoolDefault(false, r.Metadata())
-	}
-	return types.Bool(prop.IsTrue(), prop.Metadata())
-}
-
-func getEncryption(r *parser.Resource, ctx parser.FileContext) s3.Encryption {
+func getEncryption(r *parser.Resource, _ parser.FileContext) s3.Encryption {
 
 	encryptProps := r.GetProperty("BucketEncryption.ServerSideEncryptionConfiguration")
 

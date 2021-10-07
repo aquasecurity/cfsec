@@ -29,7 +29,7 @@ func getListeners(lbr *parser.Resource, ctx parser.FileContext) (listeners []elb
 	listenerResources := ctx.GetResourceByType("AWS::ElasticLoadBalancingV2::Listener")
 
 	for _, r := range listenerResources {
-		if r.GetStringProperty("LoadBalancerArn", "").Value() == lbr.ID() {
+		if r.GetStringProperty("LoadBalancerArn").Value() == lbr.ID() {
 			listener := elb.Listener{
 				Metadata:      r.Metadata(),
 				Protocol:      r.GetStringProperty("Protocol", "HTTP"),

@@ -1,13 +1,13 @@
 package cloudfront
 
 import (
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
 	"github.com/aquasecurity/defsec/rules/aws/cloudfront"
 )
 
 func init() {
-	scanner.RegisterCheckRule(rule.Rule{
+	scanner.RegisterCheckRule(rules.Rule{
 
 		BadExample: []string{
 			`---

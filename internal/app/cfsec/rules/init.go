@@ -1,5 +1,0 @@
-package rules
-
-func init() {
-
-}

@@ -40,11 +40,7 @@ func getEncryptionConfig(r *parser.Resource) eks.Encryption {
 		}
 	}
 
-	kmsKeyProp := r.GetProperty("EncryptionConfig.Provider.KeyArn")
-	if kmsKeyProp.IsString() {
-		encryption.KMSKeyID = kmsKeyProp.AsStringValue()
-	}
+	encryption.KMSKeyID = r.GetStringProperty("EncryptionConfig.Provider.KeyArn")
 
 	return encryption
-
 }

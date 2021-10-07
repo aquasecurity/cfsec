@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/rule"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 )
 
 const (
@@ -71,7 +71,7 @@ type docEntry struct {
 	Links       []string
 }
 
-func newEntry(check rule.Rule) docEntry {
+func newEntry(check rules.Rule) docEntry {
 	return docEntry{
 		Summary:     check.Base.Rule().Summary,
 		ID:          check.ID(),
@@ -86,7 +86,7 @@ func newEntry(check rule.Rule) docEntry {
 	}
 }
 
-func generateWebPages(fileContents []rule.Rule) error {
+func generateWebPages(fileContents []rules.Rule) error {
 	for _, check := range fileContents {
 		webProviderPath := fmt.Sprintf("%s/docs/%s", webPath, strings.ToLower(check.Base.Rule().Service))
 		entry := newEntry(check)

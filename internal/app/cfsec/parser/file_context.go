@@ -4,15 +4,19 @@ import (
 	"github.com/aquasecurity/defsec/types"
 )
 
+// SourceFormat ...
 type SourceFormat string
 
+// YamlSourceFormat ...
 const (
 	YamlSourceFormat SourceFormat = "yaml"
 	JsonSourceFormat SourceFormat = "json"
 )
 
+// FileContexts ...
 type FileContexts []*FileContext
 
+// FileContext ...
 type FileContext struct {
 	filepath     string
 	lines        []string
@@ -23,6 +27,7 @@ type FileContext struct {
 	Mappings     map[string]interface{} `json:"Mappings,omitempty" yaml:"Mappings"`
 }
 
+// GetResourceByName ...
 func (t *FileContext) GetResourceByName(name string) *Resource {
 	for n, r := range t.Resources {
 		if name == n {
@@ -32,6 +37,7 @@ func (t *FileContext) GetResourceByName(name string) *Resource {
 	return nil
 }
 
+// GetResourceByType ...
 func (t *FileContext) GetResourceByType(names ...string) []*Resource {
 
 	var resources []*Resource
@@ -45,6 +51,7 @@ func (t *FileContext) GetResourceByType(names ...string) []*Resource {
 	return resources
 }
 
+// Metadata ...
 func (t *FileContext) Metadata() types.Metadata {
 	rng := types.NewRange(t.filepath, 1, len(t.lines))
 

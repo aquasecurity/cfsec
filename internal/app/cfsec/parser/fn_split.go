@@ -8,6 +8,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
+// ResolveSplit ...
 func ResolveSplit(property *Property) (resolved *Property) {
 	if !property.isFunction() {
 		return property

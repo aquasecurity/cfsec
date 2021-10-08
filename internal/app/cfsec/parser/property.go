@@ -9,12 +9,15 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// EqualityOptions ...
 type EqualityOptions = int
 
+// IgnoreCase ...
 const (
 	IgnoreCase EqualityOptions = iota
 )
 
+// Property ...
 type Property struct {
 	ctx         *FileContext
 	name        string
@@ -24,6 +27,7 @@ type Property struct {
 	Inner       PropertyInner
 }
 
+// PropertyInner ...
 type PropertyInner struct {
 	Type  cftypes.CfType
 	Value interface{} `json:"Value" yaml:"Value"`
@@ -83,6 +87,7 @@ func (p *Property) setFileAndParentRange(filepath string, parentRange types.Rang
 	}
 }
 
+// UnmarshalYAML ...
 func (p *Property) UnmarshalYAML(node *yaml.Node) error {
 	p.rng = types.NewRange("", node.Line, calculateEndLine(node))
 
@@ -90,23 +95,29 @@ func (p *Property) UnmarshalYAML(node *yaml.Node) error {
 	return setPropertyValueFromYaml(node, &p.Inner)
 }
 
+// UnmarshalJSONWithMetadata ...
 func (p *Property) UnmarshalJSONWithMetadata(node jfather.Node) error {
 	p.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
 	return setPropertyValueFromJson(node, &p.Inner)
 }
 
+// Type ...
 func (p *Property) Type() cftypes.CfType {
 	return p.Inner.Type
 }
 
+// Range ...
 func (p *Property) Range() types.Range {
 	return p.rng
 }
+
+// Metadata ...
 func (p *Property) Metadata() types.Metadata {
 	ref := NewCFReferenceWithValue(p.parentRange, *p.resolveValue())
 	return types.NewMetadata(p.Range(), ref)
 }
 
+// MetadataWithValue ...
 func (p *Property) MetadataWithValue(resolvedValue *Property) types.Metadata {
 	ref := NewCFReferenceWithValue(p.parentRange, *resolvedValue)
 	return types.NewMetadata(p.Range(), ref)
@@ -126,6 +137,7 @@ func (p *Property) RawValue() interface{} {
 	return p.Inner.Value
 }
 
+// AsRawStrings ...
 func (p *Property) AsRawStrings() ([]string, error) {
 	return p.ctx.lines[p.rng.GetStartLine()-1 : p.rng.GetEndLine()], nil
 }
@@ -138,6 +150,7 @@ func (p *Property) resolveValue() *Property {
 	return ResolveIntrinsicFunc(p)
 }
 
+// GetStringProperty ...
 func (p *Property) GetStringProperty(path string, defaultValue ...string) types.StringValue {
 	defVal := ""
 	if len(defaultValue) > 0 {
@@ -152,6 +165,7 @@ func (p *Property) GetStringProperty(path string, defaultValue ...string) types.
 	return prop.AsStringValue()
 }
 
+// GetBoolProperty ...
 func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.BoolValue {
 	defVal := false
 	if len(defaultValue) > 0 {
@@ -166,6 +180,7 @@ func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.Bool
 	return prop.AsBoolValue()
 }
 
+// GetIntProperty ...
 func (p *Property) GetIntProperty(path string, defaultValue ...int) types.IntValue {
 	defVal := 0
 	if len(defaultValue) > 0 {
@@ -180,14 +195,17 @@ func (p *Property) GetIntProperty(path string, defaultValue ...int) types.IntVal
 	return prop.AsIntValue()
 }
 
+// StringDefault ...
 func (p *Property) StringDefault(defaultValue string) types.StringValue {
 	return types.StringDefault(defaultValue, p.Metadata())
 }
 
+// BoolDefault ...
 func (p *Property) BoolDefault(defaultValue bool) types.BoolValue {
 	return types.BoolDefault(defaultValue, p.Metadata())
 }
 
+// IntDefault ...
 func (p *Property) IntDefault(defaultValue int) types.IntValue {
 	return types.IntDefault(defaultValue, p.Metadata())
 }

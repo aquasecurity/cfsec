@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/eks"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) eks.EKS {
 
 	return eks.EKS{

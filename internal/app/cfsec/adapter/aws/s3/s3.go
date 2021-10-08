@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/s3"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) s3.S3 {
 
 	buckets := getBuckets(cfFile)

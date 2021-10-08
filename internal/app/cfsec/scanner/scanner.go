@@ -13,10 +13,12 @@ import (
 
 var registeredRules []rules2.Rule
 
+// RegisterCheckRule ...
 func RegisterCheckRule(rules ...rules2.Rule) {
 	registeredRules = append(registeredRules, rules...)
 }
 
+// Scanner ...
 type Scanner struct {
 	includePassed     bool
 	includeIgnored    bool
@@ -35,6 +37,8 @@ func New(options ...Option) *Scanner {
 	}
 	return s
 }
+
+// Scan ...
 func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 
 	var results []rules.Result
@@ -61,6 +65,7 @@ func GetRegisteredRules() []rules2.Rule {
 	return registeredRules
 }
 
+// GetRuleById ...
 func GetRuleById(ID string) (*rules2.Rule, error) {
 	for _, r := range registeredRules {
 		if r.ID() == ID {

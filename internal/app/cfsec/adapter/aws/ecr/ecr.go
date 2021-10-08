@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/ecr"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) ecr.ECR {
 
 	return ecr.ECR{

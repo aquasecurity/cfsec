@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/cloudfront"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) cloudfront.Cloudfront {
 
 	return cloudfront.Cloudfront{

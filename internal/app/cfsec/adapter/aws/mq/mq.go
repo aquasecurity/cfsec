@@ -5,9 +5,9 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/mq"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) mq.MQ {
 	return mq.MQ{
 		Brokers: getBrokers(cfFile),
 	}
 }
-

@@ -6,6 +6,7 @@ import (
 	"github.com/aquasecurity/defsec/state"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) *state.State {
 	return &state.State{
 		AWS: aws.Adapt(cfFile),

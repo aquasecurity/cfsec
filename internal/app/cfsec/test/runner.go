@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// RunPassingExamplesTest ...
 func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 
 	rule, err := scanner.GetRuleById(expectedCode)
@@ -32,6 +33,7 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 
 }
 
+// RunFailureExamplesTest ...
 func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 
 	rule, err := scanner.GetRuleById(expectedCode)
@@ -57,6 +59,7 @@ func scanTestSource(t *testing.T, source string) []rules.Result {
 	return s.Scan(fileCtx)
 }
 
+// CreateFileContexts ...
 func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error) {
 	fs, err := filesystem.New()
 	if err != nil {

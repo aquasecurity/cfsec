@@ -38,6 +38,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) aws.AWS {
 	return aws.AWS{
 		APIGateway:    apigateway.Adapt(cfFile),

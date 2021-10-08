@@ -34,6 +34,8 @@ func DeregisterRuleByID(id string) {
 	registeredRules = filtered
 }
 
+
+// Scanner ...
 type Scanner struct {
 	includePassed     bool
 	includeIgnored    bool
@@ -53,6 +55,7 @@ func New(options ...Option) *Scanner {
 	return s
 }
 
+// Scan ...
 func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 	var results []rules.Result
 	for _, ctx := range contexts {

@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/elb"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) elb.ELB {
 
 	return elb.ELB{

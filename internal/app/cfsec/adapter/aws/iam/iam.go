@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/iam"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) iam.IAM {
 	return iam.IAM{
 		Policies:      getPolicies(cfFile),

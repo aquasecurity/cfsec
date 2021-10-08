@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Resource ...
 type Resource struct {
 	ctx     *FileContext
 	rng     types.Range
@@ -17,11 +18,13 @@ type Resource struct {
 	Inner   ResourceInner
 }
 
+// ResourceInner ...
 type ResourceInner struct {
 	Type       string               `json:"Type" yaml:"Type"`
 	Properties map[string]*Property `json:"Properties" yaml:"Properties"`
 }
 
+// ConfigureResource ...
 func (r *Resource) ConfigureResource(id, filepath string, ctx *FileContext) {
 
 	r.setId(id)
@@ -57,33 +60,40 @@ func (r *Resource) setContext(ctx *FileContext) {
 	}
 }
 
+// UnmarshalYAML ...
 func (r *Resource) UnmarshalYAML(value *yaml.Node) error {
 	r.rng = types.NewRange("", value.Line-1, calculateEndLine(value))
 	r.comment = value.LineComment
 	return value.Decode(&r.Inner)
 }
 
+// UnmarshalJSONWithMetadata ...
 func (r *Resource) UnmarshalJSONWithMetadata(node jfather.Node) error {
 	r.rng = types.NewRange("", node.Range().Start.Line, node.Range().End.Line)
 	return node.Decode(&r.Inner)
 }
 
+// ID ...
 func (r *Resource) ID() string {
 	return r.id
 }
 
+// Type ...
 func (r *Resource) Type() string {
 	return r.Inner.Type
 }
 
+// Range ...
 func (r *Resource) Range() types.Range {
 	return r.rng
 }
 
+// SourceFormat ...
 func (r *Resource) SourceFormat() SourceFormat {
 	return r.ctx.SourceFormat
 }
 
+// Metadata ...
 func (r *Resource) Metadata() types.Metadata {
 	return types.NewMetadata(r.Range(), NewCFReference(r.rng))
 }
@@ -92,6 +102,7 @@ func (r *Resource) properties() map[string]*Property {
 	return r.Inner.Properties
 }
 
+// IsNil ...
 func (r *Resource) IsNil() bool {
 	return r.id == ""
 }
@@ -123,6 +134,7 @@ func (r *Resource) GetProperty(path string) *Property {
 	return &Property{}
 }
 
+// GetStringProperty ...
 func (r *Resource) GetStringProperty(path string, defaultValue ...string) types.StringValue {
 	defVal := ""
 	if len(defaultValue) > 0 {
@@ -137,6 +149,7 @@ func (r *Resource) GetStringProperty(path string, defaultValue ...string) types.
 	return prop.AsStringValue()
 }
 
+// GetBoolProperty ...
 func (r *Resource) GetBoolProperty(path string, defaultValue ...bool) types.BoolValue {
 	defVal := false
 	if len(defaultValue) > 0 {
@@ -151,6 +164,7 @@ func (r *Resource) GetBoolProperty(path string, defaultValue ...bool) types.Bool
 	return prop.AsBoolValue()
 }
 
+// GetIntProperty ...
 func (r *Resource) GetIntProperty(path string, defaultValue ...int) types.IntValue {
 	defVal := 0
 	if len(defaultValue) > 0 {
@@ -165,14 +179,17 @@ func (r *Resource) GetIntProperty(path string, defaultValue ...int) types.IntVal
 	return prop.AsIntValue()
 }
 
+// StringDefault ...
 func (r *Resource) StringDefault(defaultValue string) types.StringValue {
 	return types.StringDefault(defaultValue, r.Metadata())
 }
 
+// BoolDefault ...
 func (r *Resource) BoolDefault(defaultValue bool) types.BoolValue {
 	return types.BoolDefault(defaultValue, r.Metadata())
 }
 
+// IntDefault ...
 func (r *Resource) IntDefault(defaultValue int) types.IntValue {
 	return types.IntDefault(defaultValue, r.Metadata())
 }

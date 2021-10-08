@@ -9,6 +9,7 @@ import (
 	"github.com/aquasecurity/defsec/rules"
 )
 
+// FormatCSV ...
 func FormatCSV(w io.Writer, results []rules.Result, _ string, _ ...FormatterOption) error {
 
 	records := [][]string{

@@ -13,8 +13,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Parser ...
 type Parser struct{}
 
+// ParseFiles ...
 func ParseFiles(filepaths ...string) (FileContexts, error) {
 	var contexts FileContexts
 	for _, path := range filepaths {
@@ -87,6 +89,7 @@ func Parse(reader io.Reader, source string) (*FileContext, error) {
 
 }
 
+// ParseDirectory ...
 func ParseDirectory(dir string) (FileContexts, error) {
 
 	if stat, err := os.Stat(dir); err != nil || !stat.IsDir() {

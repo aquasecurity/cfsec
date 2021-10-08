@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/documentdb"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) documentdb.DocumentDB {
 
 	return documentdb.DocumentDB{

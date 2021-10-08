@@ -29,8 +29,10 @@ func init() {
 	}
 }
 
+// PassthroughResolution ...
 func PassthroughResolution(property *Property) *Property { return property }
 
+// IsIntrinsicFunc ...
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {
 		return false
@@ -44,6 +46,7 @@ func IsIntrinsicFunc(node *yaml.Node) bool {
 	return false
 }
 
+// IsIntrinsic ...
 func IsIntrinsic(key string) bool {
 	for tag := range intrinsicFuncs {
 		if tag == key {
@@ -53,6 +56,7 @@ func IsIntrinsic(key string) bool {
 	return false
 }
 
+// ResolveIntrinsicFunc ...
 func ResolveIntrinsicFunc(property *Property) *Property {
 	if !property.IsMap() {
 		return property

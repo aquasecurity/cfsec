@@ -8,10 +8,12 @@ import (
 	"strings"
 )
 
+// FileSystem ...
 type FileSystem struct {
 	root string
 }
 
+// New ...
 func New() (*FileSystem, error) {
 
 	tempDir := os.TempDir()
@@ -32,18 +34,22 @@ func New() (*FileSystem, error) {
 	}, nil
 }
 
+// RealPath ...
 func (fs *FileSystem) RealPath(path string) string {
 	return filepath.Join(fs.root, path)
 }
 
+// Close ...
 func (fs *FileSystem) Close() error {
 	return os.RemoveAll(fs.root)
 }
 
+// AddDir ...
 func (fs *FileSystem) AddDir(path string) error {
 	return os.MkdirAll(filepath.Join(fs.root, path), 0700)
 }
 
+// WriteFile ...
 func (fs *FileSystem) WriteFile(path string, data []byte) error {
 	if err := fs.AddDir(filepath.Dir(path)); err != nil {
 		return err
@@ -51,6 +57,7 @@ func (fs *FileSystem) WriteFile(path string, data []byte) error {
 	return ioutil.WriteFile(filepath.Join(fs.root, path), data, 0600)
 }
 
+// WriteTextFile ...
 func (fs *FileSystem) WriteTextFile(path string, text string) error {
 	return fs.WriteFile(path, []byte(text))
 }

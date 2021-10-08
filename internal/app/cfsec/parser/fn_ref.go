@@ -2,6 +2,7 @@ package parser
 
 import "github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 
+// ResolveReference ...
 func ResolveReference(property *Property) (resolved *Property) {
 	if !property.isFunction() {
 		return property

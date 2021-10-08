@@ -8,6 +8,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
+// ResolveJoin ...
 func ResolveJoin(property *Property) (resolved *Property) {
 	if !property.isFunction() {
 		return property

@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/sqs"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) sqs.SQS {
 	return sqs.SQS{
 		Queues: getQueues(cfFile),

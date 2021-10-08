@@ -1,7 +1,9 @@
 package cftypes
 
+// CfType ...
 type CfType string
 
+// String ...
 const (
 	String  CfType = "string"
 	Int            = "int"

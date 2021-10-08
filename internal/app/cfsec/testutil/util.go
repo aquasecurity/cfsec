@@ -9,13 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TestFileExt ...
 type TestFileExt string
 
+// YamlTestFileExt ...
 const (
 	YamlTestFileExt TestFileExt = "yaml"
 	JsonTestFileExt TestFileExt = "json"
 )
 
+// AssertCheckCode ...
 func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, results []rules.Result) {
 
 	var foundInclude bool
@@ -39,6 +42,7 @@ func AssertCheckCode(t *testing.T, includeCode string, excludeCode string, resul
 	}
 }
 
+// CreateTestFile ...
 func CreateTestFile(source string, ext TestFileExt) string {
 	testFiles, err := filesystem.New()
 	if err != nil {

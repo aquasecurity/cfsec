@@ -37,7 +37,7 @@ func isSourcingAllRegions(r *parser.Resource) types.BoolValue {
 
 	if orgProp.IsNotNil() {
 		regionsProp := orgProp.GetProperty("AllAwsRegions")
-		if regionsProp.IsNotNil() || regionsProp.IsBool() {
+		if regionsProp.IsBool() {
 			return regionsProp.AsBoolValue()
 		}
 	}

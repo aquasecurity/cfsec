@@ -201,6 +201,10 @@ func (p *Property) GetProperty(path string) *Property {
 	first := pathParts[0]
 	var property *Property
 
+	if p.IsNotMap() {
+		return nil
+	}
+
 	for n, p := range p.AsMap() {
 		if n == first {
 			property = p

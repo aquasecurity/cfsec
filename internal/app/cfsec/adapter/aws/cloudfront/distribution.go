@@ -37,7 +37,7 @@ func getDefaultCacheBehaviour(r *parser.Resource) cloudfront.CacheBehaviour {
 		}
 	}
 	protoProp := r.GetProperty("DistributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy")
-	if protoProp.IsNil() {
+	if protoProp.IsNotString() {
 		return cloudfront.CacheBehaviour{
 			ViewerProtocolPolicy: types.StringDefault("allow-all", r.Metadata()),
 		}

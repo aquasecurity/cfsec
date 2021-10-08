@@ -45,7 +45,7 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 	return contexts, nil
 }
 
-// Parse parses content from a io.Reader, which may not necessarily be a traditional file.
+// Parse parses content from an io.Reader, which may not necessarily be a traditional file.
 // the 'source' argument should identify the source of the content, be it a url, a filesystem path, a container etc.
 func Parse(reader io.Reader, source string) (*FileContext, error) {
 

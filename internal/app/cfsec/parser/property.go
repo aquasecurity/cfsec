@@ -29,6 +29,10 @@ type PropertyInner struct {
 	Value interface{} `json:"Value" yaml:"Value"`
 }
 
+func (p *Property) Comment() string {
+	return p.comment
+}
+
 func (p *Property) setName(name string) {
 	p.name = name
 	if p.Type() == cftypes.Map {

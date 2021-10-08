@@ -15,7 +15,7 @@ import (
 
 func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 
-	rule, err := scanner.GetRuleById(expectedCode)
+	rule, err := scanner.GetRuleByLongID(expectedCode)
 
 	if err != nil {
 		t.Fatalf("Rule not found: %s", expectedCode)
@@ -34,7 +34,7 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 
 func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 
-	rule, err := scanner.GetRuleById(expectedCode)
+	rule, err := scanner.GetRuleByLongID(expectedCode)
 
 	if err != nil {
 		t.Fatalf("Rule not found: %s", expectedCode)

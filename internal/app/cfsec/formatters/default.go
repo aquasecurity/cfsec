@@ -42,13 +42,13 @@ func FormatDefault(_ io.Writer, results []rules.Result, _ string, options ...For
 func printResult(res rules.Result, i int, includePassedChecks bool) {
 	resultHeader := fmt.Sprintf("  <underline>Result %d</underline>\n", i+1)
 	var severity string
-	//if includePassedChecks && res.Status == result.Passed {
-	//terminal.PrintSuccessf(resultHeader)
-	//severity = tml.Sprintf("<green>PASSED</green>")
-	//} else {
-	terminal.PrintErrorf(resultHeader)
-	severity = severityFormat[res.Rule().Severity]
-	//}
+	if includePassedChecks && res.Status() == rules.StatusPassed {
+		terminal.PrintSuccessf(resultHeader)
+		severity = tml.Sprintf("<green>PASSED</green>")
+	} else {
+		terminal.PrintErrorf(resultHeader)
+		severity = severityFormat[res.Rule().Severity]
+	}
 
 	_ = tml.Printf(`
   <blue>[</blue>%s<blue>]</blue><blue>[</blue>%s<blue>]</blue> %s

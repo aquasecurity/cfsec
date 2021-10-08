@@ -32,7 +32,6 @@ func Test_PanicTeasing(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func mutateInputs(input ...string) []string {

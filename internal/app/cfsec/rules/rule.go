@@ -2,10 +2,6 @@ package rules
 
 import "github.com/aquasecurity/defsec/rules"
 
-
-
-
-
 type Rule struct {
 	Base rules.RegisteredRule
 
@@ -20,5 +16,9 @@ type Rule struct {
 }
 
 func (r Rule) ID() string {
+	return r.Base.Rule().ID
+}
+
+func (r Rule) LongID() string {
 	return r.Base.Rule().LongID()
 }

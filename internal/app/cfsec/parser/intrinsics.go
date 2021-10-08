@@ -17,14 +17,15 @@ var intrinsicFuncs map[string]func(property *Property) *Property
 
 func init() {
 	intrinsicFuncs = map[string]func(property *Property) *Property{
-		"Ref":        ResolveReference,
-		"Fn::Base64": ResolveBase64,
-		"Fn::Equals": ResolveEquals,
-		"Fn::Join":   ResolveJoin,
-		"Fn::Split":  ResolveSplit,
-		"Fn::Sub":    PassthroughResolution,
-		"Fn::Select": PassthroughResolution,
-		"Fn::GetAtt": ResolveGetAtt,
+		"Ref":           ResolveReference,
+		"Fn::Base64":    ResolveBase64,
+		"Fn::Equals":    ResolveEquals,
+		"Fn::Join":      ResolveJoin,
+		"Fn::Split":     ResolveSplit,
+		"Fn::Sub":       PassthroughResolution, // TODO support this
+		"Fn::Select":    PassthroughResolution, // TODO support this
+		"Fn::FindInMap": PassthroughResolution, // TODO support this
+		"Fn::GetAtt":    ResolveGetAtt,
 	}
 }
 

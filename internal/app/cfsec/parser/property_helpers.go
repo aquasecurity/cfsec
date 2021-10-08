@@ -160,6 +160,8 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 			return strings.EqualFold(p.AsString(), checkValue.(string))
 		}
 		return p.AsString() == checkValue.(string)
+	case cftypes.Int:
+		return p.AsInt() == checkValue.(int)
 	default:
 		return false
 	}

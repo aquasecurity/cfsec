@@ -28,14 +28,14 @@ func ResolveGetAtt(property *Property) (resolved *Property) {
 	}
 
 	if len(refValue) != 2 {
-		fmt.Fprintln(os.Stderr, "Fn::GetAtt should have exactly 2 values, returning original Property")
+		_, _ = fmt.Fprintln(os.Stderr, "Fn::GetAtt should have exactly 2 values, returning original Property")
 		return property
 	}
 
 	logicalId := refValue[0]
 	attribute := refValue[1]
 
-	referencedResource := property.ctx.GetResourceByName(logicalId)
+	referencedResource := property.ctx.GetResourceByLogicalID(logicalId)
 	if referencedResource == nil || referencedResource.IsNil() {
 		return property.deriveResolved(cftypes.String, "")
 	}

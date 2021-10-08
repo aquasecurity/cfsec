@@ -122,7 +122,7 @@ Resources:
 	assert.Len(t, file.Resources, 1)
 	assert.Len(t, file.Parameters, 2)
 
-	res := file.GetResourceByName("S3Bucket")
+	res := file.GetResourceByLogicalID("S3Bucket")
 	assert.NotNil(t, res)
 
 	refProp := res.GetProperty("BucketName")
@@ -161,7 +161,7 @@ Resources:
 	assert.Len(t, ctx.Resources, 1)
 	assert.Len(t, ctx.Parameters, 2)
 
-	res := ctx.GetResourceByName("S3Bucket")
+	res := ctx.GetResourceByLogicalID("S3Bucket")
 	assert.NotNil(t, res)
 
 	refProp := res.GetProperty("BucketName")

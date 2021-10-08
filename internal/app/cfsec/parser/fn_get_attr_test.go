@@ -36,7 +36,7 @@ Resources:
 
 	ctx := contexts[0]
 
-	testRes := ctx.GetResourceByName("ElasticacheCluster")
+	testRes := ctx.GetResourceByLogicalID("ElasticacheCluster")
 	assert.NotNil(t, testRes)
 
 	sgProp := testRes.GetProperty("VpcSecurityGroupIds")

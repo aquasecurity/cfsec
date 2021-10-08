@@ -30,7 +30,6 @@ func init() {
 	}
 }
 
-// IsIntrinsicFunc returns true if the yaml.Node is a function
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {
 		return false

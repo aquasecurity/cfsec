@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"strings"
+	"os"
 
 	"gopkg.in/yaml.v3"
 )
@@ -81,4 +82,10 @@ func getIntrinsicTag(tag string) string {
 	default:
 		return fmt.Sprintf("Fn::%s", tag)
 	}
+}
+
+
+func abortIntrinsic(property *Property, msg string, components ...string) *Property {
+	_, _ =  fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
+	return property
 }

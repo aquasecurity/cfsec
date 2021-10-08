@@ -1,10 +1,5 @@
 package parser
 
-import (
-	"fmt"
-	"os"
-)
-
 // ResolveSelect attempts to resolve the value from a Fn::Select with a Property
 func ResolveSelect(property *Property) (resolved *Property) {
 	if !property.isFunction() {
@@ -27,10 +22,5 @@ func ResolveSelect(property *Property) (resolved *Property) {
 	// return property.deriveResolved(cftypes.Bool, index.resolveValue().EqualTo(propB.resolveValue().RawValue()))
 
 
-	return property
-}
-
-func abortIntrinsic(property *Property, msg string, components ...string) *Property {
-	_, _ =  fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
 	return property
 }

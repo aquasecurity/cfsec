@@ -40,9 +40,9 @@ var rootCmd = &cobra.Command{
 	Long:  "Use cfsec to scan your yaml of json Cloudformation configurations for common security misconfigurations",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 
-		// disable colour if running on windows - colour formatting doesn't work
+		// disable colour if running on Windows - colour formatting doesn't work
 		if disableColours || runtime.GOOS == "windows" {
-			debug.Log("Disabled formatting.")
+			debug.Log("Disabled colour formatting")
 			tml.DisableFormatting()
 		}
 	},

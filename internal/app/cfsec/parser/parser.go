@@ -84,6 +84,7 @@ func Parse(reader io.Reader, source string) (*FileContext, error) {
 	}
 
 	return &context, nil
+
 }
 
 func ParseDirectory(dir string) (FileContexts, error) {

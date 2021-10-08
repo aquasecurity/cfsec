@@ -57,4 +57,3 @@ func getRules(id string, ctx parser.FileContext) (rules []vpc.NetworkACLRule) {
 	}
 	return rules
 }
-

@@ -59,4 +59,3 @@ func getBlockDevices(r *parser.Resource) []autoscaling.BlockDevice {
 
 	return blockDevices
 }
-

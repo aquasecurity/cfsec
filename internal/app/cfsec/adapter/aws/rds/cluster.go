@@ -66,4 +66,3 @@ func getClassicSecurityGroups(ctx parser.FileContext) (groups []rds.DBSecurityGr
 	}
 	return groups
 }
-

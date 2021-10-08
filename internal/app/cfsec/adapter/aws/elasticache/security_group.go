@@ -20,4 +20,3 @@ func getSecurityGroups(ctx parser.FileContext) (securityGroups []elasticache.Sec
 
 	return securityGroups
 }
-

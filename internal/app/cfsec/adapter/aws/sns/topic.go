@@ -9,7 +9,7 @@ func getTopics(ctx parser.FileContext) (topics []sns.Topic) {
 	for _, r := range ctx.GetResourceByType("AWS::SNS::Topic") {
 
 		topic := sns.Topic{
-			Metadata:   r.Metadata(),
+			Metadata: r.Metadata(),
 			Encryption: sns.Encryption{
 				KMSKeyID: r.GetStringProperty("KmsMasterKeyId"),
 			},

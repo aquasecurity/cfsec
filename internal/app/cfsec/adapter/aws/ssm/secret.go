@@ -16,4 +16,3 @@ func getSecrets(ctx parser.FileContext) (secrets []ssm.Secret) {
 	}
 	return secrets
 }
-

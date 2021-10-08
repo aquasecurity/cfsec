@@ -12,11 +12,11 @@ import (
 func getQueues(ctx parser.FileContext) (queues []sqs.Queue) {
 	for _, r := range ctx.GetResourceByType("AWS::SQS::Queue") {
 		queue := sqs.Queue{
-			Metadata:   r.Metadata(),
+			Metadata: r.Metadata(),
 			Encryption: sqs.Encryption{
 				KMSKeyID: r.GetStringProperty("KmsMasterKeyId"),
 			},
-			Policy:     iam.PolicyDocument{},
+			Policy: iam.PolicyDocument{},
 		}
 		if policy, err := getPolicy(r.ID(), ctx); err == nil {
 			queue.Policy = *policy

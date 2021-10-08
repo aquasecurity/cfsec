@@ -9,7 +9,7 @@ func getClusters(ctx parser.FileContext) (clusters []redshift.Cluster) {
 	for _, r := range ctx.GetResourceByType("AWS::Redshift::Cluster") {
 
 		cluster := redshift.Cluster{
-			Encryption:      redshift.Encryption{
+			Encryption: redshift.Encryption{
 				Enabled:  r.GetBoolProperty("Encrypted"),
 				KMSKeyID: r.GetStringProperty("KmsKeyId"),
 			},
@@ -20,4 +20,3 @@ func getClusters(ctx parser.FileContext) (clusters []redshift.Cluster) {
 	}
 	return clusters
 }
-

@@ -11,7 +11,7 @@ func getBrokers(ctx parser.FileContext) (brokers []mq.Broker) {
 		broker := mq.Broker{
 			Metadata:     r.Metadata(),
 			PublicAccess: r.GetBoolProperty("PubliclyAccessible"),
-			Logging:      mq.Logging{
+			Logging: mq.Logging{
 				General: r.GetBoolProperty("Logs.General"),
 				Audit:   r.GetBoolProperty("Logs.Audit"),
 			},

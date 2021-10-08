@@ -21,4 +21,3 @@ func getFileSystems(ctx parser.FileContext) (filesystems []efs.FileSystem) {
 
 	return filesystems
 }
-

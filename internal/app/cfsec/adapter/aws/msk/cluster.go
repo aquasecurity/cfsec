@@ -12,16 +12,16 @@ func getClusters(ctx parser.FileContext) (clusters []msk.Cluster) {
 			EncryptionInTransit: msk.EncryptionInTransit{
 				ClientBroker: r.GetStringProperty("EncryptionInfo.EncryptionInTransit.ClientBroker", "TLS"),
 			},
-			Logging:             msk.Logging{
+			Logging: msk.Logging{
 				Broker: msk.BrokerLogging{
-					S3:         msk.S3Logging{
-						Enabled:r.GetBoolProperty("LoggingInfo.BrokerLogs.S3.Enabled"),
+					S3: msk.S3Logging{
+						Enabled: r.GetBoolProperty("LoggingInfo.BrokerLogs.S3.Enabled"),
 					},
 					Cloudwatch: msk.CloudwatchLogging{
 						Enabled: r.GetBoolProperty("LoggingInfo.BrokerLogs.CloudWatchLogs.Enabled"),
 					},
-					Firehose:   msk.FirehoseLogging{
-						Enabled:r.GetBoolProperty("LoggingInfo.BrokerLogs.Firehose.Enabled"),
+					Firehose: msk.FirehoseLogging{
+						Enabled: r.GetBoolProperty("LoggingInfo.BrokerLogs.Firehose.Enabled"),
 					},
 				},
 			},
@@ -31,4 +31,3 @@ func getClusters(ctx parser.FileContext) (clusters []msk.Cluster) {
 	}
 	return clusters
 }
-

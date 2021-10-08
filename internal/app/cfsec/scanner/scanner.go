@@ -3,18 +3,35 @@ package scanner
 import (
 	"fmt"
 	"sort"
+	"sync"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
-	rules2 "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
+	internalRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/rules"
 )
 
-var registeredRules []rules2.Rule
+var ruleMu sync.Mutex
+var registeredRules []internalRules.Rule
 
-func RegisterCheckRule(rules ...rules2.Rule) {
+func RegisterCheckRule(rules ...internalRules.Rule) {
+	ruleMu.Lock()
+	defer ruleMu.Unlock()
 	registeredRules = append(registeredRules, rules...)
+}
+
+func DeregisterRuleByID(id string) {
+	ruleMu.Lock()
+	defer ruleMu.Unlock()
+	var filtered []internalRules.Rule
+	for _, rule := range registeredRules {
+		if rule.ID() == id {
+			continue
+		}
+		filtered = append(filtered, rule)
+	}
+	registeredRules = filtered
 }
 
 type Scanner struct {
@@ -35,37 +52,35 @@ func New(options ...Option) *Scanner {
 	}
 	return s
 }
+
 func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
-
 	var results []rules.Result
-
 	for _, ctx := range contexts {
-
 		state := adapter.Adapt(*ctx)
-
 		for _, rule := range GetRegisteredRules() {
-
-			results = append(results, rule.Base.Evaluate(state)...)
+			for _, result := range rule.Base.Evaluate(state) {
+				if !isIgnored(result) {
+					results = append(results, result)
+				}
+			}
 		}
-
 	}
-
 	return results
 }
 
 // GetRegisteredRules provides all Checks which have been registered with this package
-func GetRegisteredRules() []rules2.Rule {
+func GetRegisteredRules() []internalRules.Rule {
 	sort.Slice(registeredRules, func(i, j int) bool {
 		return registeredRules[i].ID() < registeredRules[j].ID()
 	})
 	return registeredRules
 }
 
-func GetRuleById(ID string) (*rules2.Rule, error) {
+func GetRuleByLongID(long string) (*internalRules.Rule, error) {
 	for _, r := range registeredRules {
-		if r.ID() == ID {
+		if r.LongID() == long {
 			return &r, nil
 		}
 	}
-	return nil, fmt.Errorf("could not find rule with legacyID '%s'", ID)
+	return nil, fmt.Errorf("could not find rule with long ID '%s'", long)
 }

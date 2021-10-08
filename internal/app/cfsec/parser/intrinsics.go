@@ -16,23 +16,24 @@ var intrinsicTags = []string{
 var intrinsicFuncs map[string]func(property *Property) *Property
 
 func init() {
-	intrinsicFuncs = map[string]func(property *Property) *Property{
-		"Ref":           ResolveReference,
-		"Fn::Base64":    ResolveBase64,
-		"Fn::Equals":    ResolveEquals,
-		"Fn::Join":      ResolveJoin,
-		"Fn::Split":     ResolveSplit,
-		"Fn::Sub":       PassthroughResolution, // TODO support this
-		"Fn::Select":    PassthroughResolution, // TODO support this
-		"Fn::FindInMap": ResolveFindInMap, // TODO support this
-		"Fn::GetAtt":    ResolveGetAtt,
+	intrinsicFuncs = map[string]func(property *Property) *Property {
+		"Ref":        ResolveReference,
+		"Fn::Base64": ResolveBase64,
+		"Fn::Equals": ResolveEquals,
+		"Fn::Join":   ResolveJoin,
+		"Fn::Split":  ResolveSplit,
+		"Fn::Sub":    PassthroughResolution,
+		"Fn::FindInMap": ResolveFindInMap,
+		"Fn::Select": ResolveSelect,
+		"Fn::GetAtt": ResolveGetAtt,
+
 	}
 }
 
-// PassthroughResolution ...
+// PassthroughResolution returns the Property verbatim
 func PassthroughResolution(property *Property) *Property { return property }
 
-// IsIntrinsicFunc ...
+// IsIntrinsicFunc returns true if the yaml.Node is a function
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {
 		return false

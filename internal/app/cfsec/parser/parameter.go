@@ -33,6 +33,8 @@ func (p *Parameter) Type() cftypes.CfType {
 		return cftypes.Bool
 	case "String":
 		return cftypes.String
+	case "Integer":
+		return cftypes.Int
 	default:
 		return cftypes.String
 	}

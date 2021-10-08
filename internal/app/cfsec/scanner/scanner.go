@@ -6,16 +6,18 @@ import (
 	"sync"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
-	internalRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
+
+	cfRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/rules"
 )
 
-var ruleMu sync.Mutex
-var registeredRules []internalRules.Rule
 
-func RegisterCheckRule(rules ...internalRules.Rule) {
+var ruleMu sync.Mutex
+var registeredRules []cfRules.Rule
+
+func RegisterCheckRule(rules ...cfRules.Rule) {
 	ruleMu.Lock()
 	defer ruleMu.Unlock()
 	registeredRules = append(registeredRules, rules...)
@@ -24,7 +26,7 @@ func RegisterCheckRule(rules ...internalRules.Rule) {
 func DeregisterRuleByID(id string) {
 	ruleMu.Lock()
 	defer ruleMu.Unlock()
-	var filtered []internalRules.Rule
+	var filtered []cfRules.Rule
 	for _, rule := range registeredRules {
 		if rule.ID() == id {
 			continue
@@ -72,14 +74,17 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 }
 
 // GetRegisteredRules provides all Checks which have been registered with this package
-func GetRegisteredRules() []internalRules.Rule {
+
+func GetRegisteredRules() []cfRules.Rule {
 	sort.Slice(registeredRules, func(i, j int) bool {
 		return registeredRules[i].ID() < registeredRules[j].ID()
 	})
 	return registeredRules
 }
 
-func GetRuleByLongID(long string) (*internalRules.Rule, error) {
+// GetRuleByLongID ...
+func GetRuleByLongID(long string) (*cfRules.Rule, error) {
+
 	for _, r := range registeredRules {
 		if r.LongID() == long {
 			return &r, nil

@@ -6,7 +6,12 @@ func ResolveReference(property *Property) (resolved *Property) {
 	if !property.isFunction() {
 		return property
 	}
-	refValue := property.AsMap()["Ref"].AsString()
+
+	refProp := property.AsMap()["Ref"]
+	if refProp.IsNotString() {
+		return property
+	}
+	refValue := refProp.AsString()
 	var param *Parameter
 	for k := range property.ctx.Parameters {
 		if k == refValue {

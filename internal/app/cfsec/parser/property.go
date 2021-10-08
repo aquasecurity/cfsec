@@ -169,7 +169,6 @@ func (p *Property) GetStringProperty(path string, defaultValue ...string) types.
 	return prop.AsStringValue()
 }
 
-
 // StringDefault ...
 func (p *Property) StringDefault(defaultValue string) types.StringValue {
 	return types.StringDefault(defaultValue, p.Metadata())

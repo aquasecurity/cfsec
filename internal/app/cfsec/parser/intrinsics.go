@@ -17,6 +17,7 @@ var intrinsicTags = []string{
 var intrinsicFuncs map[string]func(property *Property) *Property
 
 func init() {
+
 	intrinsicFuncs = map[string]func(property *Property) *Property{
 		"Ref":           ResolveReference,
 		"Fn::Base64":    ResolveBase64,

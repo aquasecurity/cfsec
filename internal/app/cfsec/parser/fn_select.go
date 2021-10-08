@@ -1,5 +1,6 @@
 package parser
 
+
 // ResolveSelect attempts to resolve the value from a Fn::Select with a Property
 func ResolveSelect(property *Property) (resolved *Property) {
 	if !property.isFunction() {
@@ -14,6 +15,7 @@ func ResolveSelect(property *Property) (resolved *Property) {
 
 	index := refValue[0]
 	list := refValue[1]
+
 
 	if index.IsNotInt() {
 		return abortIntrinsic(property, "index should be an int, returning original Property")

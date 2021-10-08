@@ -1,6 +1,5 @@
 package parser
 
-
 // ResolveSelect attempts to resolve the value from a Fn::Select with a Property
 func ResolveSelect(property *Property) (resolved *Property) {
 	if !property.isFunction() {

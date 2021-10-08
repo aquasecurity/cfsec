@@ -3,6 +3,8 @@ package parser
 import (
 	"fmt"
 	"os"
+
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 func ResolveFindInMap(property *Property) (resolved *Property) {
@@ -18,7 +20,7 @@ func ResolveFindInMap(property *Property) (resolved *Property) {
 
 	mapName := refValue[0].AsString()
 	topLevelKey := refValue[1].AsString()
-	secondaryLevelKey := refValue[1].AsString()
+	secondaryLevelKey := refValue[2].AsString()
 
 	if property.ctx == nil {
 		return abortFindInMap(property, "the property does not have an attached context, returning original Property")
@@ -41,7 +43,7 @@ func ResolveFindInMap(property *Property) (resolved *Property) {
 	if prop, ok := mapValues[secondaryLevelKey]; !ok {
 		return abortFindInMap(property, "could not find a value for %s in %s, returning original Property", secondaryLevelKey, topLevelKey)
 	} else {
-		return prop.(*Property)
+		return property.deriveResolved(cftypes.String, prop)
 	}
 
 

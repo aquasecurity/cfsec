@@ -23,7 +23,7 @@ type FileContext struct {
 	Mappings     map[string]interface{} `json:"Mappings,omitempty" yaml:"Mappings"`
 }
 
-func (t *FileContext) GetResourceByName(name string) *Resource {
+func (t *FileContext) GetResourceByLogicalID(name string) *Resource {
 	for n, r := range t.Resources {
 		if name == n {
 			return r

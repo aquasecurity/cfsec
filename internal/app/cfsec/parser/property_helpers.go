@@ -109,7 +109,10 @@ func (p *Property) IsNotBool() bool {
 // AsString ...
 func (p *Property) AsString() string {
 	if p.isFunction() {
-		return p.resolveValue().AsString()
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.AsString()
+		}
 	}
 	return p.Inner.Value.(string)
 }
@@ -181,9 +184,12 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 			return strings.EqualFold(p.AsString(), checkValue.(string))
 		}
 		return p.AsString() == checkValue.(string)
-	default:
-		return false
+	case cftypes.Int:
+		if val, ok := checkValue.(int); ok {
+			return p.AsInt() == val
+		}
 	}
+	return false
 }
 
 // IsTrue ...

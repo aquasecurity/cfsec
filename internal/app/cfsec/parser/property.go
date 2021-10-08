@@ -175,7 +175,7 @@ func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.Bool
 	prop := p.GetProperty(path)
 
 	if prop.IsNotBool() {
-		return p.BoolDefault(defVal)
+		return p.inferBool(prop, defVal)
 	}
 	return prop.AsBoolValue()
 }
@@ -253,4 +253,38 @@ func (p *Property) deriveResolved(propType cftypes.CfType, propValue interface{}
 			Value: propValue,
 		},
 	}
+}
+
+func (p *Property) inferBool(prop *Property, defaultValue bool) types.BoolValue {
+	if prop.IsString() {
+		if prop.EqualTo("true", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("yes", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("1", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("false", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo("no", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo("0", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+	}
+
+	if prop.IsInt() {
+		if prop.EqualTo(0) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo(1) {
+			return types.Bool(true, prop.Metadata())
+		}
+	}
+
+	return p.BoolDefault(defaultValue)
 }

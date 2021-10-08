@@ -52,6 +52,7 @@ func (r *Resource) setFile(filepath string) {
 }
 
 func (r *Resource) setContext(ctx *FileContext) {
+	debug.Log("Updating the context for %s", r.ID())
 	r.ctx = ctx
 
 	for _, p := range r.Inner.Properties {
@@ -158,7 +159,7 @@ func (r *Resource) GetBoolProperty(path string, defaultValue ...bool) types.Bool
 	prop := r.GetProperty(path)
 
 	if prop.IsNotBool() {
-		return r.BoolDefault(defVal)
+		return r.inferBool(prop, defVal)
 	}
 	return prop.AsBoolValue()
 }
@@ -191,4 +192,38 @@ func (r *Resource) BoolDefault(defaultValue bool) types.BoolValue {
 // IntDefault ...
 func (r *Resource) IntDefault(defaultValue int) types.IntValue {
 	return types.IntDefault(defaultValue, r.Metadata())
+}
+
+func (r *Resource) inferBool(prop *Property, defaultValue bool) types.BoolValue {
+	if prop.IsString() {
+		if prop.EqualTo("true", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("yes", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("1", IgnoreCase) {
+			return types.Bool(true, prop.Metadata())
+		}
+		if prop.EqualTo("false", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo("no", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo("0", IgnoreCase) {
+			return types.Bool(false, prop.Metadata())
+		}
+	}
+
+	if prop.IsInt(){
+		if prop.EqualTo(0) {
+			return types.Bool(false, prop.Metadata())
+		}
+		if prop.EqualTo(1) {
+			return types.Bool(true, prop.Metadata())
+		}
+	}
+
+	return r.BoolDefault(defaultValue)
 }

@@ -93,13 +93,18 @@ func getEncryption(r *parser.Resource, _ parser.FileContext) s3.Encryption {
 		}
 	}
 
-	first := encryptProps.AsList()[0]
-
 	enc := s3.Encryption{
-		Enabled:   first.GetBoolProperty("BucketKeyEnabled"),
 		Algorithm: types.StringDefault("", r.Metadata()),
 		KMSKeyId:  types.StringDefault("", r.Metadata()),
 	}
+
+	list := encryptProps.AsList()
+	if len(list) == 0 {
+		enc.Enabled = types.BoolDefault(false, r.Metadata())
+		return enc
+	}
+
+	enc.Enabled = list[0].GetBoolProperty("BucketKeyEnabled")
 	return enc
 
 }

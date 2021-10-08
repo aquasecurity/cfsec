@@ -20,7 +20,10 @@ func (p *Property) IsString() bool {
 		return false
 	}
 	if p.isFunction() {
-		return p.resolveValue().IsString()
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.IsString()
+		}
 	}
 	return p.Inner.Type == cftypes.String
 }
@@ -34,7 +37,10 @@ func (p *Property) IsInt() bool {
 		return false
 	}
 	if p.isFunction() {
-		return p.resolveValue().IsInt()
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.IsInt()
+		}
 	}
 	return p.Inner.Type == cftypes.Int
 }
@@ -59,7 +65,10 @@ func (p *Property) IsList() bool {
 		return false
 	}
 	if p.isFunction() {
-		return p.resolveValue().IsList()
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.IsList()
+		}
 	}
 	return p.Inner.Type == cftypes.List
 }
@@ -73,7 +82,10 @@ func (p *Property) IsBool() bool {
 		return false
 	}
 	if p.isFunction() {
-		return p.resolveValue().IsBool()
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.IsBool()
+		}
 	}
 	return p.Inner.Type == cftypes.Bool
 }
@@ -120,7 +132,10 @@ func (p *Property) AsMap() map[string]*Property {
 }
 
 func (p *Property) AsList() []*Property {
-	return p.Inner.Value.([]*Property)
+	if list, ok := p.Inner.Value.([]*Property); ok {
+		return list
+	}
+	return nil
 }
 
 func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOptions) bool {

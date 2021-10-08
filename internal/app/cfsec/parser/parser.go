@@ -48,19 +48,31 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 // Parse parses content from a io.Reader, which may not necessarily be a traditional file.
 // the 'source' argument should identify the source of the content, be it a url, a filesystem path, a container etc.
 func Parse(reader io.Reader, source string) (*FileContext, error) {
-	context := newFileContext(source)
+
+	sourceFmt := YamlSourceFormat
+	if strings.HasSuffix(strings.ToLower(source), ".json") {
+		sourceFmt = JsonSourceFormat
+	}
+
+	content, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(content), "\n")
+
+	context := FileContext{
+		filepath:     source,
+		lines:        lines,
+		SourceFormat: sourceFmt,
+	}
 
 	if strings.HasSuffix(strings.ToLower(source), ".json") {
-		content, err := ioutil.ReadAll(reader)
-		if err != nil {
-			return nil, err
-		}
 		if err := jfather.Unmarshal(content, &context); err != nil {
 			return nil, fmt.Errorf("source '%s' contains invalid JSON: %w", source, err)
 		}
 	} else {
-		decoder := yaml.NewDecoder(reader)
-		if err := decoder.Decode(&context); err != nil {
+		if err := yaml.Unmarshal(content, &context); err != nil {
 			return nil, fmt.Errorf("source '%s' contains invalid YAML: %w", source, err)
 		}
 	}
@@ -68,10 +80,11 @@ func Parse(reader io.Reader, source string) (*FileContext, error) {
 	debug.Log("Context loaded from source %s", source)
 
 	for name, r := range context.Resources {
-		r.ConfigureResource(name, source, context)
+		r.ConfigureResource(name, source, &context)
 	}
 
-	return context, nil
+	return &context, nil
+
 }
 
 func ParseDirectory(dir string) (FileContexts, error) {

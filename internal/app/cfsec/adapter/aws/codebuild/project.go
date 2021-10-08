@@ -46,7 +46,7 @@ func getArtifactSettings(r *parser.Resource) (artifactSettings codebuild.Artifac
 func getSetting(property *parser.Property) codebuild.ArtifactSettings {
 	result := types.BoolDefault(true, property.Metadata())
 	encryptionDisabled := property.GetProperty("EncryptionDisabled")
-	if encryptionDisabled.IsNotNil() {
+	if encryptionDisabled.IsBool() {
 		result = types.Bool(!encryptionDisabled.AsBool(), encryptionDisabled.Metadata())
 	}
 

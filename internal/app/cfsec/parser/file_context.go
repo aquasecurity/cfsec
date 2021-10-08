@@ -1,9 +1,6 @@
 package parser
 
 import (
-	"io/ioutil"
-	"strings"
-
 	"github.com/aquasecurity/defsec/types"
 )
 
@@ -24,32 +21,6 @@ type FileContext struct {
 	Resources    map[string]*Resource   `json:"Resources" yaml:"Resources"`
 	Globals      map[string]*Resource   `json:"Globals" yaml:"Globals"`
 	Mappings     map[string]interface{} `json:"Mappings,omitempty" yaml:"Mappings"`
-}
-
-func newFileContext(filepath string) *FileContext {
-	sourceFmt := YamlSourceFormat
-	if strings.HasSuffix(strings.ToLower(filepath), ".json") {
-		sourceFmt = JsonSourceFormat
-	}
-
-	lines, err := getLines(filepath)
-	if err != nil {
-		lines = []string{}
-	}
-
-	return &FileContext{
-		filepath:     filepath,
-		lines:        lines,
-		SourceFormat: sourceFmt,
-	}
-}
-
-func getLines(filepath string) ([]string, error) {
-	content, err := ioutil.ReadFile(filepath)
-	if err != nil {
-		return nil, err
-	}
-	return strings.Split(string(content), "\n"), nil
 }
 
 func (t *FileContext) GetResourceByName(name string) *Resource {

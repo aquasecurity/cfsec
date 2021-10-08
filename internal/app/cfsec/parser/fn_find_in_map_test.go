@@ -17,11 +17,11 @@ Parameters:
 Mappings:
   CacheNodeTypes:
     production:
-      NodeType: ami-0e9a69a55428bef3b
+      NodeType: cache.t2.large
     test:
-      NodeType: ami-0548a8b7c1afc24ee
+      NodeType: cache.t2.small
     dev:
-      NodeType: ami-0b19db5a228d1055f
+      NodeType: cache.t2.micro
 Resources:
 	ElasticacheSecurityGroup:
 	  Type: 'AWS::EC2::SecurityGroup'
@@ -48,7 +48,9 @@ Resources:
 
 	ctx := contexts[0]
 
-	testRes := ctx.GetResourceByLogicalID("CacheNodeType")
+	testRes := ctx.GetResourceByLogicalID("ElasticacheCluster")
 	assert.NotNil(t, testRes)
 
+	nodeTypeProp := testRes.GetStringProperty("CacheNodeType", "")
+	assert.Equal(t, "cache.t2.large", nodeTypeProp.Value())
 }

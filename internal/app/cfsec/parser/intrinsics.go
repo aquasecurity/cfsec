@@ -24,7 +24,7 @@ func init() {
 		"Fn::Split":     ResolveSplit,
 		"Fn::Sub":       PassthroughResolution, // TODO support this
 		"Fn::Select":    PassthroughResolution, // TODO support this
-		"Fn::FindInMap": PassthroughResolution, // TODO support this
+		"Fn::FindInMap": ResolveFindInMap, // TODO support this
 		"Fn::GetAtt":    ResolveGetAtt,
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/cloudwatch"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) cloudwatch.CloudWatch {
 
 	return cloudwatch.CloudWatch{

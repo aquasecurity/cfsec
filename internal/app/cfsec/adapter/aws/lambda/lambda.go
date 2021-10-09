@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/lambda"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) lambda.Lambda {
 
 	return lambda.Lambda{

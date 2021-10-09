@@ -27,4 +27,3 @@ func getWorkGroups(cfFile parser.FileContext) []athena.Workgroup {
 
 	return workgroups
 }
-

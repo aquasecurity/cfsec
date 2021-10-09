@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/elasticache"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) elasticache.ElastiCache {
 	return elasticache.ElastiCache{
 		Clusters:          getClusterGroups(cfFile),

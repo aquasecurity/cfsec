@@ -17,6 +17,7 @@ import (
 
 var severityFormat map[severity.Severity]string
 
+// FormatDefault ...
 func FormatDefault(_ io.Writer, results []rules.Result, _ string, options ...FormatterOption) error {
 	if severityFormat == nil {
 		severityFormat = map[severity.Severity]string{
@@ -53,7 +54,7 @@ func printResult(res rules.Result, i int, includePassedChecks bool) {
 	_ = tml.Printf(`
   <blue>[</blue>%s<blue>]</blue><blue>[</blue>%s<blue>]</blue> %s
   <blue>%s</blue>
-  
+
 `, res.Rule().LongID(), severity, res.Description(), res.Metadata().Range())
 
 	cfRef := res.Reference().(*parser.CFReference)

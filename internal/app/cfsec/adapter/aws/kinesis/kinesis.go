@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/kinesis"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) kinesis.Kinesis {
 	return kinesis.Kinesis{
 		Streams: getStreams(cfFile),

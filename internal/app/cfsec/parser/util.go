@@ -46,7 +46,7 @@ func setPropertyValueFromJson(node jfather.Node, propertyData *PropertyInner) er
 
 func setPropertyValueFromYaml(node *yaml.Node, propertyData *PropertyInner) error {
 	if IsIntrinsicFunc(node) {
-		newContent := []*yaml.Node{}
+		var newContent []*yaml.Node
 
 		newContent = append(newContent, &yaml.Node{
 			Tag:   "!!str",

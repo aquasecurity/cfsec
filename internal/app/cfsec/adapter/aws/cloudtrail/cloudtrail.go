@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/cloudtrail"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) cloudtrail.CloudTrail {
 
 	return cloudtrail.CloudTrail{

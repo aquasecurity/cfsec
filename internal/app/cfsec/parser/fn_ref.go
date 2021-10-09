@@ -1,7 +1,10 @@
 package parser
 
-import "github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+import (
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+)
 
+// ResolveReference ...
 func ResolveReference(property *Property) (resolved *Property) {
 	if !property.isFunction() {
 		return property
@@ -12,6 +15,11 @@ func ResolveReference(property *Property) (resolved *Property) {
 		return property
 	}
 	refValue := refProp.AsString()
+
+	if pseudo, ok := pseudoParameters[refValue]; ok {
+		return property.deriveResolved(cftypes.String, pseudo.(string))
+	}
+
 	var param *Parameter
 	for k := range property.ctx.Parameters {
 		if k == refValue {
@@ -30,3 +38,4 @@ func ResolveReference(property *Property) (resolved *Property) {
 	}
 	return resolved
 }
+

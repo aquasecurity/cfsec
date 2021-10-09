@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -169,7 +170,7 @@ Resources:
 	assert.Equal(t, "somebucket", refProp.AsString())
 }
 
-func createTestFileContexts(t *testing.T, source string) FileContexts {
+func createTestFileContext(t *testing.T, source string) *FileContext {
 
 	fs, err := filesystem.New()
 	require.NoError(t, err)
@@ -188,7 +189,7 @@ func createTestFileContexts(t *testing.T, source string) FileContexts {
 		t.Fatal(err)
 	}
 
-	fileContext, err := ParseFiles(fs.RealPath(filename))
+	fileContext, err := Parse(bytes.NewReader([]byte(source)), filename)
 	require.NoError(t, err)
 	return fileContext
 }

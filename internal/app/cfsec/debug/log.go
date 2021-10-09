@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+// Enabled ...
 var Enabled bool
 
+// Log ...
 func Log(format string, args ...interface{}) {
 	if !Enabled {
 		return

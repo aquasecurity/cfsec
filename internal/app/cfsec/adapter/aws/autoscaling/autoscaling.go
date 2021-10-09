@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/autoscaling"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) autoscaling.Autoscaling {
 
 	return autoscaling.Autoscaling{

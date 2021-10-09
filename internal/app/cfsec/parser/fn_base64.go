@@ -6,6 +6,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
+// ResolveBase64 ...
 func ResolveBase64(property *Property) *Property {
 	if !property.isFunction() {
 		return property

@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/vpc"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) vpc.VPC {
 	return vpc.VPC{
 		DefaultVPCs:    getDefaultVPCs(),

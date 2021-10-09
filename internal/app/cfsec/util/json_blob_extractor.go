@@ -8,6 +8,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// GetJsonBytes ...
 func GetJsonBytes(policyProp *parser.Property, format parser.SourceFormat) []byte {
 	lines, err := policyProp.AsRawStrings()
 	if err != nil {

@@ -7,14 +7,17 @@ import (
 	"github.com/aquasecurity/defsec/types"
 )
 
+// IsNil ...
 func (p *Property) IsNil() bool {
 	return p == nil || p.Inner.Value == nil
 }
 
+// IsNotNil ...
 func (p *Property) IsNotNil() bool {
 	return !p.IsNil()
 }
 
+// IsString ...
 func (p *Property) IsString() bool {
 	if p.IsNil() {
 		return false
@@ -28,10 +31,12 @@ func (p *Property) IsString() bool {
 	return p.Inner.Type == cftypes.String
 }
 
+// IsNotString ...
 func (p *Property) IsNotString() bool {
 	return !p.IsString()
 }
 
+// IsInt ...
 func (p *Property) IsInt() bool {
 	if p.IsNil() {
 		return false
@@ -45,10 +50,12 @@ func (p *Property) IsInt() bool {
 	return p.Inner.Type == cftypes.Int
 }
 
+// IsNotInt ...
 func (p *Property) IsNotInt() bool {
 	return !p.IsInt()
 }
 
+// IsMap ...
 func (p *Property) IsMap() bool {
 	if p.IsNil() {
 		return false
@@ -56,10 +63,12 @@ func (p *Property) IsMap() bool {
 	return p.Inner.Type == cftypes.Map
 }
 
+// IsNotMap ...
 func (p *Property) IsNotMap() bool {
 	return !p.IsMap()
 }
 
+// IsList ...
 func (p *Property) IsList() bool {
 	if p.IsNil() {
 		return false
@@ -73,10 +82,12 @@ func (p *Property) IsList() bool {
 	return p.Inner.Type == cftypes.List
 }
 
+// IsNotList ...
 func (p *Property) IsNotList() bool {
 	return !p.IsList()
 }
 
+// IsBool ...
 func (p *Property) IsBool() bool {
 	if p.IsNil() {
 		return false
@@ -90,10 +101,12 @@ func (p *Property) IsBool() bool {
 	return p.Inner.Type == cftypes.Bool
 }
 
+// IsNotBool ...
 func (p *Property) IsNotBool() bool {
 	return !p.IsBool()
 }
 
+// AsString ...
 func (p *Property) AsString() string {
 	if p.isFunction() {
 		prop := p.resolveValue()
@@ -104,10 +117,12 @@ func (p *Property) AsString() string {
 	return p.Inner.Value.(string)
 }
 
+// AsStringValue ...
 func (p *Property) AsStringValue() types.StringValue {
 	return types.StringExplicit(p.AsString(), p.Metadata())
 }
 
+// AsInt ...
 func (p *Property) AsInt() int {
 	if p.isFunction() {
 		return p.resolveValue().AsInt()
@@ -115,10 +130,12 @@ func (p *Property) AsInt() int {
 	return p.Inner.Value.(int)
 }
 
+// AsIntValue ...
 func (p *Property) AsIntValue() types.IntValue {
 	return types.IntExplicit(p.AsInt(), p.Metadata())
 }
 
+// AsBool ...
 func (p *Property) AsBool() bool {
 	if p.isFunction() {
 		return p.resolveValue().AsBool()
@@ -126,14 +143,17 @@ func (p *Property) AsBool() bool {
 	return p.Inner.Value.(bool)
 }
 
+// AsBoolValue ...
 func (p *Property) AsBoolValue() types.BoolValue {
 	return types.Bool(p.AsBool(), p.Metadata())
 }
 
+// AsMap ...
 func (p *Property) AsMap() map[string]*Property {
 	return p.Inner.Value.(map[string]*Property)
 }
 
+// AsList ...
 func (p *Property) AsList() []*Property {
 	if list, ok := p.Inner.Value.([]*Property); ok {
 		return list
@@ -141,6 +161,7 @@ func (p *Property) AsList() []*Property {
 	return nil
 }
 
+// EqualTo ...
 func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOptions) bool {
 	var ignoreCase bool
 	for _, option := range equalityOptions {
@@ -171,6 +192,7 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 	return false
 }
 
+// IsTrue ...
 func (p *Property) IsTrue() bool {
 	if p.IsNil() || !p.IsBool() {
 		return false
@@ -179,6 +201,7 @@ func (p *Property) IsTrue() bool {
 	return p.AsBool()
 }
 
+// IsEmpty ...
 func (p *Property) IsEmpty() bool {
 
 	if p.IsNil() {
@@ -195,6 +218,7 @@ func (p *Property) IsEmpty() bool {
 	}
 }
 
+// Contains ...
 func (p *Property) Contains(checkVal interface{}) bool {
 	if p == nil || p.IsNil() {
 		return false

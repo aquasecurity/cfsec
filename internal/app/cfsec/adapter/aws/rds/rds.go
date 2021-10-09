@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/rds"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) rds.RDS {
 	clusters, orphans := getClustersAndInstances(cfFile)
 

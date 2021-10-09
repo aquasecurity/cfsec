@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/sns"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) sns.SNS {
 	return sns.SNS{
 		Topics: getTopics(cfFile),

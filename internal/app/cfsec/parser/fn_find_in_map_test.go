@@ -43,10 +43,8 @@ Resources:
 	        - ElasticacheSecurityGroup
 	        - GroupId
 `
-	contexts := createTestFileContexts(t, source)
-	require.Len(t, contexts, 1)
-
-	ctx := contexts[0]
+	ctx := createTestFileContext(t, source)
+	require.NotNil(t, ctx)
 
 	testRes := ctx.GetResourceByLogicalID("ElasticacheCluster")
 	assert.NotNil(t, testRes)
@@ -91,10 +89,8 @@ Resources:
 	        - ElasticacheSecurityGroup
 	        - GroupId
 `
-	contexts := createTestFileContexts(t, source)
-	require.Len(t, contexts, 1)
-
-	ctx := contexts[0]
+	ctx := createTestFileContext(t, source)
+	require.NotNil(t, ctx)
 
 	testRes := ctx.GetResourceByLogicalID("ElasticacheCluster")
 	assert.NotNil(t, testRes)

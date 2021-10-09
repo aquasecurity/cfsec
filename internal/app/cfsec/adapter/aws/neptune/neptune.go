@@ -5,6 +5,7 @@ import (
 	"github.com/aquasecurity/defsec/provider/aws/neptune"
 )
 
+// Adapt ...
 func Adapt(cfFile parser.FileContext) neptune.Neptune {
 	return neptune.Neptune{
 		Clusters: getClusters(cfFile),

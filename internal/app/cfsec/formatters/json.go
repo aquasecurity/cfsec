@@ -7,11 +7,13 @@ import (
 	"github.com/aquasecurity/defsec/rules"
 )
 
+// JSONOutput ...
 type JSONOutput struct {
 	Results []rules.FlatResult `json:"results"`
 }
 
-func FormatJSON(w io.Writer, results []rules.Result, _ string, options ...FormatterOption) error {
+// FormatJSON ...
+func FormatJSON(w io.Writer, results []rules.Result, _ string, _ ...FormatterOption) error {
 	var flattened []rules.FlatResult
 
 	for _, result := range results {

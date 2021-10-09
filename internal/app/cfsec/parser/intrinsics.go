@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"os"
 
 	"gopkg.in/yaml.v3"
 )
@@ -18,7 +17,6 @@ var intrinsicTags = []string{
 var intrinsicFuncs map[string]func(property *Property) *Property
 
 func init() {
-
 	intrinsicFuncs = map[string]func(property *Property) *Property{
 		"Ref":           ResolveReference,
 		"Fn::Base64":    ResolveBase64,
@@ -31,6 +29,7 @@ func init() {
 		"Fn::GetAtt":    ResolveGetAtt,
 	}
 }
+
 
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {

@@ -15,7 +15,6 @@ func ResolveSelect(property *Property) (resolved *Property) {
 	index := refValue[0]
 	list := refValue[1]
 
-
 	if index.IsNotInt() {
 		return abortIntrinsic(property, "index should be an int, returning original Property")
 	}

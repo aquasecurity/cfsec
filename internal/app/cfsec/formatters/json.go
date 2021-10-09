@@ -13,7 +13,7 @@ type JSONOutput struct {
 }
 
 // FormatJSON ...
-func FormatJSON(w io.Writer, results []rules.Result, _ string, options ...FormatterOption) error {
+func FormatJSON(w io.Writer, results []rules.Result, _ string, _ ...FormatterOption) error {
 	var flattened []rules.FlatResult
 
 	for _, result := range results {

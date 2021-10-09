@@ -2,8 +2,8 @@ package parser
 
 import (
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -17,22 +17,18 @@ var intrinsicTags = []string{
 var intrinsicFuncs map[string]func(property *Property) *Property
 
 func init() {
-	intrinsicFuncs = map[string]func(property *Property) *Property {
-		"Ref":        ResolveReference,
-		"Fn::Base64": ResolveBase64,
-		"Fn::Equals": ResolveEquals,
-		"Fn::Join":   ResolveJoin,
-		"Fn::Split":  ResolveSplit,
-		"Fn::Sub":    PassthroughResolution,
+	intrinsicFuncs = map[string]func(property *Property) *Property{
+		"Ref":           ResolveReference,
+		"Fn::Base64":    ResolveBase64,
+		"Fn::Equals":    ResolveEquals,
+		"Fn::Join":      ResolveJoin,
+		"Fn::Split":     ResolveSplit,
+		"Fn::Sub":       ResolveSub,
 		"Fn::FindInMap": ResolveFindInMap,
-		"Fn::Select": ResolveSelect,
-		"Fn::GetAtt": ResolveGetAtt,
-
+		"Fn::Select":    ResolveSelect,
+		"Fn::GetAtt":    ResolveGetAtt,
 	}
 }
-
-// PassthroughResolution returns the Property verbatim
-func PassthroughResolution(property *Property) *Property { return property }
 
 // IsIntrinsicFunc returns true if the yaml.Node is a function
 func IsIntrinsicFunc(node *yaml.Node) bool {
@@ -68,9 +64,7 @@ func ResolveIntrinsicFunc(property *Property) *Property {
 		if fn := intrinsicFuncs[funcName]; fn != nil {
 			return fn(property)
 		}
-
 	}
-
 	return property
 }
 
@@ -84,8 +78,7 @@ func getIntrinsicTag(tag string) string {
 	}
 }
 
-
 func abortIntrinsic(property *Property, msg string, components ...string) *Property {
-	_, _ =  fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
+	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
 	return property
 }

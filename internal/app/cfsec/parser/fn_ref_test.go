@@ -1,10 +1,12 @@
 package parser
 
 import (
+	"testing"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
-	"testing"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_resolve_referenced_value(t *testing.T) {
@@ -58,4 +60,25 @@ func Test_property_value_correct_when_not_reference(t *testing.T) {
 	resolvedProperty := ResolveIntrinsicFunc(property)
 
 	assert.Equal(t, "someBucketName", resolvedProperty.AsString())
+}
+
+func Test_resolve_ref_with_pseudo_value(t *testing.T) {
+	source := `---
+Resources:
+  TestInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "ami-79fd7eee"
+      KeyName: !Join [":", ["aws", !Ref AWS::Region, "key" ]]
+`
+	ctx := createTestFileContext(t, source)
+	require.NotNil(t, ctx)
+
+	testRes := ctx.GetResourceByLogicalID("TestInstance")
+	require.NotNil(t, testRes)
+
+	keyNameProp := testRes.GetProperty("KeyName")
+	require.NotNil(t, keyNameProp)
+
+	assert.Equal(t, "aws:eu-west-1:key", keyNameProp.AsString())
 }

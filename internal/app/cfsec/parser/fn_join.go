@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-	"os"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -17,8 +15,7 @@ func ResolveJoin(property *Property) (resolved *Property) {
 	refValue := property.AsMap()["Fn::Join"].AsList()
 
 	if len(refValue) != 2 {
-		fmt.Fprintln(os.Stderr, "Fn::Join should have exactly 2 values, returning original Property")
-		return property
+		return abortIntrinsic(property, "Fn::Join should have exactly 2 values, returning original Property")
 	}
 
 	joiner := refValue[0].AsString()

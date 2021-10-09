@@ -14,7 +14,7 @@ sanity: test
 	go run ./cmd/cfsec  ./example > /dev/null
 
 .PHONY: pr-ready
-pr-ready: quality sanity pr-lint typos
+pr-ready: quality sanity lint-pr-checks typos
 
 .PHONY: lint-pr-checks
 lint-pr-checks:

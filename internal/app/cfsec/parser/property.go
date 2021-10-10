@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -162,7 +163,6 @@ func (p *Property) GetStringProperty(path string, defaultValue ...string) types.
 	}
 
 	prop := p.GetProperty(path)
-
 	if prop.IsNotString() {
 		return p.StringDefault(defVal)
 	}
@@ -292,4 +292,15 @@ func (p *Property) inferBool(prop *Property, defaultValue bool) types.BoolValue 
 	}
 
 	return p.BoolDefault(defaultValue)
+}
+
+func (p *Property) String() string {
+	r := ""
+	switch p.Type() {
+	case cftypes.String:
+		r = p.AsString()
+	case cftypes.Int:
+		r = strconv.Itoa( p.AsInt())
+	}
+	return r
 }

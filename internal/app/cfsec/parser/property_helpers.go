@@ -155,6 +155,13 @@ func (p *Property) AsMap() map[string]*Property {
 
 // AsList ...
 func (p *Property) AsList() []*Property {
+	if p.isFunction() {
+		prop := p.resolveValue()
+		if prop != p {
+			return prop.AsList()
+		}
+	}
+
 	if list, ok := p.Inner.Value.([]*Property); ok {
 		return list
 	}
@@ -242,3 +249,4 @@ func (p *Property) Contains(checkVal interface{}) bool {
 	}
 	return false
 }
+

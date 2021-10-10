@@ -13,7 +13,7 @@ func Test_resolve_select_value(t *testing.T) {
 Parameters:
     EngineIndex:
       Type: Integer
-      Default: 2
+      Default: 1
 Resources:
 	ElasticacheCluster:
 	  Type: 'AWS::ElastiCache::CacheCluster'

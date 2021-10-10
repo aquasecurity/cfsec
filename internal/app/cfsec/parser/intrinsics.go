@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"gopkg.in/yaml.v3"
 )
 
@@ -27,7 +28,16 @@ func init() {
 		"Fn::FindInMap": ResolveFindInMap,
 		"Fn::Select":    ResolveSelect,
 		"Fn::GetAtt":    ResolveGetAtt,
+		"Fn::GetAZs": GetAzs,
 	}
+}
+
+func GetAzs(property *Property) *Property {
+	return property.deriveResolved(cftypes.List, []*Property{
+		property.deriveResolved(cftypes.String, "us-east-1a"),
+		property.deriveResolved(cftypes.String, "us-east-1a"),
+		property.deriveResolved(cftypes.String, "us-east-1a"),
+	})
 }
 
 

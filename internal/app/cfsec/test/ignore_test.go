@@ -26,7 +26,7 @@ Resources:
       BucketName: evil #cfsec:ignore:%s
 `, ruleID)
 
-	ctx, err := parser.Parse(strings.NewReader(code), "test.yaml")
+	ctx, err := parser.NewParser().Parse(strings.NewReader(code), "test.yaml")
 	if err != nil {
 		t.Fatalf("Failed to parse YAML:\n\n%s\n\nError: %s", code, err)
 	}
@@ -51,7 +51,7 @@ Resources:
       BucketName: evil #cfsec:ignore:%s:exp:%s
 `, ruleID, time.Now().Add(time.Hour*24).Format("2006-01-02"))
 
-	ctx, err := parser.Parse(strings.NewReader(code), "test.yaml")
+	ctx, err := parser.NewParser().Parse(strings.NewReader(code), "test.yaml")
 	if err != nil {
 		t.Fatalf("Failed to parse YAML:\n\n%s\n\nError: %s", code, err)
 	}
@@ -76,7 +76,7 @@ Resources:
       BucketName: evil #cfsec:ignore:%s:exp:%s
 `, ruleID, time.Now().Add(-time.Hour*24).Format("2006-01-02"))
 
-	ctx, err := parser.Parse(strings.NewReader(code), "test.yaml")
+	ctx, err := parser.NewParser().Parse(strings.NewReader(code), "test.yaml")
 	if err != nil {
 		t.Fatalf("Failed to parse YAML:\n\n%s\n\nError: %s", code, err)
 	}

@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"strconv"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
@@ -43,4 +45,19 @@ func (p *Parameter) Type() cftypes.CfType {
 // Default ...
 func (p *Parameter) Default() interface{} {
 	return p.inner.Default
+}
+
+func (p *Parameter) UpdateDefault(inVal interface{}) {
+	passedVal := inVal.(string)
+
+	switch p.inner.Type {
+	case "Boolean":
+		p.inner.Default, _ = strconv.ParseBool(passedVal)
+	case "String":
+		p.inner.Default = passedVal
+	case "Integer":
+		p.inner.Default , _ = strconv.Atoi(passedVal)
+	default:
+		p.inner.Default = passedVal
+	}
 }

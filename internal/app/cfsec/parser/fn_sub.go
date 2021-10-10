@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -38,7 +39,24 @@ func resolveMapSub(refValue *Property, original *Property) *Property {
 	components := refValues[1].AsMap()
 
 	for k, v := range components {
-		workingString = strings.ReplaceAll(workingString, fmt.Sprintf("${%s}", k), v.AsString())
+		replacement := "[failed to resolve]"
+		switch v.Type() {
+		case cftypes.Map:
+			replacement = ResolveIntrinsicFunc(v).AsString()
+		case cftypes.String:
+			replacement = v.AsString()
+		case cftypes.Int:
+			replacement = strconv.Itoa(v.AsInt())
+		case cftypes.Bool:
+			replacement = fmt.Sprintf("%v", v.AsBool())
+		case cftypes.List:
+			var parts []string
+			for _, p := range v.AsList() {
+				parts = append(parts, p.String())
+			}
+			replacement = fmt.Sprintf("[%s]", strings.Join(parts, ", "))
+		}
+		workingString = strings.ReplaceAll(workingString, fmt.Sprintf("${%s}", k), replacement)
 	}
 
 	return original.deriveResolved(cftypes.String, workingString)

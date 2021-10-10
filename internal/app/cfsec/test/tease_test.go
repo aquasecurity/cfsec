@@ -22,7 +22,7 @@ func Test_PanicTeasing(t *testing.T) {
 							t.Fatalf("Panic encountered for code:\n\n%s\n\nPanic: %s\n\nStacktrace:\n%s", code, err, string(debug.Stack()))
 						}
 					}()
-					ctx, err := parser.Parse(strings.NewReader(code), "test.yaml")
+					ctx, err := parser.NewParser().Parse(strings.NewReader(code), "test.yaml")
 					if err != nil {
 						t.Fatalf("Failed to parse YAML:\n\n%s\n\nError: %s", code, err)
 					}

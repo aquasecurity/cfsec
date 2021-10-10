@@ -13,11 +13,25 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+
+
 // Parser ...
-type Parser struct{}
+type Parser struct{
+	parameters map[string]Parameter
+}
+
+func NewParser(options ...Option) *Parser {
+	p := &Parser{}
+
+	for _, option := range options {
+		option(p)
+	}
+
+	return p
+}
 
 // ParseFiles ...
-func ParseFiles(filepaths ...string) (FileContexts, error) {
+func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 	var contexts FileContexts
 	for _, path := range filepaths {
 		if err := func() error {
@@ -33,7 +47,7 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 			}
 			defer file.Close()
 
-			context, err := Parse(file, path)
+			context, err := p.Parse(file, path)
 			if err != nil {
 				return err
 			}
@@ -49,7 +63,7 @@ func ParseFiles(filepaths ...string) (FileContexts, error) {
 
 // Parse parses content from an io.Reader, which may not necessarily be a traditional file.
 // the 'source' argument should identify the source of the content, be it a url, a filesystem path, a container etc.
-func Parse(reader io.Reader, source string) (*FileContext, error) {
+func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 
 	sourceFmt := YamlSourceFormat
 	if strings.HasSuffix(strings.ToLower(source), ".json") {
@@ -85,12 +99,18 @@ func Parse(reader io.Reader, source string) (*FileContext, error) {
 		r.ConfigureResource(name, source, &context)
 	}
 
+	if p.parameters != nil {
+		for name, passedParameter := range p.parameters {
+			context.Parameters[name].UpdateDefault(passedParameter.Default())
+		}
+	}
+
 	return &context, nil
 
 }
 
 // ParseDirectory ...
-func ParseDirectory(dir string) (FileContexts, error) {
+func (p *Parser) ParseDirectory(dir string) (FileContexts, error) {
 
 	if stat, err := os.Stat(dir); err != nil || !stat.IsDir() {
 		return nil, fmt.Errorf("cannot use the provided filepath: %s", dir)
@@ -109,7 +129,7 @@ func ParseDirectory(dir string) (FileContexts, error) {
 		return nil, err
 	}
 
-	return ParseFiles(files...)
+	return p.ParseFiles(files...)
 }
 
 func includeFile(filename string) bool {

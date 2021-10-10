@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 
 	cfRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
@@ -63,7 +64,12 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 	for _, ctx := range contexts {
 		state := adapter.Adapt(*ctx)
 		for _, rule := range GetRegisteredRules() {
-			for _, result := range rule.Base.Evaluate(state) {
+			debug.Log("Executing rule: %s", rule.LongID())
+			evalResult := rule.Base.Evaluate(state)
+			if len(evalResult) > 0 {
+				debug.Log("Found %d results for %s", len(evalResult), rule.LongID())
+			}
+			for _, result := range evalResult {
 				if !isIgnored(result) {
 					results = append(results, result)
 				}

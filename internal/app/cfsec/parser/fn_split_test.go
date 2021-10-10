@@ -4,6 +4,8 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"testing"
 )
 
@@ -44,7 +46,8 @@ func Test_resolve_split_value(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 	assert.True(t, resolvedProperty.IsNotNil())
 	assert.True(t, resolvedProperty.IsList())
 	listContents := resolvedProperty.AsList()

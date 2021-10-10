@@ -118,7 +118,8 @@ func (p *Property) Range() types.Range {
 
 // Metadata ...
 func (p *Property) Metadata() types.Metadata {
-	ref := NewCFReferenceWithValue(p.parentRange, *p.resolveValue())
+	resolved, _ := p.resolveValue()
+	ref := NewCFReferenceWithValue(p.parentRange, *resolved)
 	return types.NewMetadata(p.Range(), ref)
 }
 
@@ -147,9 +148,9 @@ func (p *Property) AsRawStrings() ([]string, error) {
 	return p.ctx.lines[p.rng.GetStartLine()-1 : p.rng.GetEndLine()], nil
 }
 
-func (p *Property) resolveValue() *Property {
+func (p *Property) resolveValue() (*Property, bool) {
 	if !p.isFunction() {
-		return p
+		return p, true
 	}
 
 	return ResolveIntrinsicFunc(p)
@@ -240,7 +241,8 @@ func (p *Property) GetProperty(path string) *Property {
 	}
 
 	if nestedProperty := property.GetProperty(strings.Join(pathParts[1:], ".")); nestedProperty != nil {
-		return nestedProperty.resolveValue()
+		resolved, _ :=  nestedProperty.resolveValue()
+		return resolved
 	}
 
 	return nil

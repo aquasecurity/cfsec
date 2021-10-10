@@ -7,13 +7,14 @@ import (
 )
 
 // ResolveBase64 ...
-func ResolveBase64(property *Property) *Property {
+func ResolveBase64(property *Property) (*Property, bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValue := property.AsMap()["Fn::Base64"].AsString()
+
 	retVal := base64.StdEncoding.EncodeToString([]byte(refValue))
 
-	return property.deriveResolved(cftypes.String, retVal)
+	return property.deriveResolved(cftypes.String, retVal), true
 }

@@ -6,9 +6,9 @@ import (
 )
 
 // ResolveSelect attempts to resolve the value from a Fn::Select with a Property
-func ResolveSelect(property *Property) (resolved *Property) {
+func ResolveSelect(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValue := property.AsMap()["Fn::Select"].AsList()
@@ -30,9 +30,9 @@ func ResolveSelect(property *Property) (resolved *Property) {
 	}
 
 	if list.IsNotList() {
-		return abortIntrinsic(property, "list should be a list, returning original Property")
+		return abortIntrinsic(property, "list on property [%s] should be a list, returning original Property", property.name)
 	}
 
 	listItems := list.AsList()
-	return listItems[index.AsInt()]
+	return listItems[index.AsInt()], true
 }

@@ -38,7 +38,8 @@ func Test_resolve_referenced_value(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.Equal(t, "someBucketName", resolvedProperty.AsString())
 }
@@ -57,7 +58,8 @@ func Test_property_value_correct_when_not_reference(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.Equal(t, "someBucketName", resolvedProperty.AsString())
 }

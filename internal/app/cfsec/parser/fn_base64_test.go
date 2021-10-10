@@ -4,6 +4,8 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"testing"
 )
 
@@ -26,7 +28,8 @@ func Test_resolve_base64_value(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty,success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.Equal(t, "SGVsbG9Xb3JsZA==", resolvedProperty.AsString())
 }

@@ -1,27 +1,23 @@
 package parser
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 // ResolveEquals ...
-func ResolveEquals(property *Property) (resolved *Property) {
+func ResolveEquals(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValue := property.AsMap()["Fn::Equals"].AsList()
 
 	if len(refValue) != 2 {
-		fmt.Fprintln(os.Stderr, "Fn::Equals should have exactly 2 values, returning original Property")
-		return property
+		return abortIntrinsic(property, "Fn::Equals should have exactly 2 values, returning original Property")
 	}
 
-	propA := refValue[0]
-	propB := refValue[1]
-	return property.deriveResolved(cftypes.Bool, propA.resolveValue().EqualTo(propB.resolveValue().RawValue()))
+	propA, _ := refValue[0].resolveValue()
+	propB, _ := refValue[1].resolveValue()
+	return property.deriveResolved(cftypes.Bool, propA.EqualTo(propB.RawValue())), true
 
 }

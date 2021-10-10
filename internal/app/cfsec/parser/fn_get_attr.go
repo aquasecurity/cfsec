@@ -1,17 +1,15 @@
 package parser
 
 import (
-	"fmt"
-	"os"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
 // ResolveGetAtt ...
-func ResolveGetAtt(property *Property) (resolved *Property) {
+func ResolveGetAtt(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValueProp := property.AsMap()["Fn::GetAtt"]
@@ -29,8 +27,7 @@ func ResolveGetAtt(property *Property) (resolved *Property) {
 	}
 
 	if len(refValue) != 2 {
-		_, _ = fmt.Fprintln(os.Stderr, "Fn::GetAtt should have exactly 2 values, returning original Property")
-		return property
+		return abortIntrinsic(property, "Fn::GetAtt should have exactly 2 values, returning original Property")
 	}
 
 	logicalId := refValue[0]
@@ -38,14 +35,14 @@ func ResolveGetAtt(property *Property) (resolved *Property) {
 
 	referencedResource := property.ctx.GetResourceByLogicalID(logicalId)
 	if referencedResource == nil || referencedResource.IsNil() {
-		return property.deriveResolved(cftypes.String, "")
+		return property.deriveResolved(cftypes.String, ""), true
 	}
 
 	referencedProperty := referencedResource.GetProperty(attribute)
 	if referencedProperty.IsNil() {
 		// if the attribute value can't be found, just return the ID for the resource
-		return property.deriveResolved(cftypes.String, referencedResource.ID())
+		return property.deriveResolved(cftypes.String, referencedResource.ID()), true
 	}
 
-	return property.deriveResolved(referencedProperty.Type(), referencedProperty)
+	return property.deriveResolved(referencedProperty.Type(), referencedProperty), true
 }

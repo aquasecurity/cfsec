@@ -7,9 +7,9 @@ import (
 )
 
 // ResolveJoin ...
-func ResolveJoin(property *Property) (resolved *Property) {
+func ResolveJoin(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValue := property.AsMap()["Fn::Join"].AsList()
@@ -23,13 +23,13 @@ func ResolveJoin(property *Property) (resolved *Property) {
 
 	var itemValues []string
 	for _, item := range items {
-		resolved := item.resolveValue()
-		if resolved.IsString() {
+		resolved, success := item.resolveValue()
+		if success {
 			itemValues = append(itemValues, resolved.AsString())
 		}
 	}
 
 	joined := strings.Join(itemValues, joiner)
 
-	return property.deriveResolved(cftypes.String, joined)
+	return property.deriveResolved(cftypes.String, joined), true
 }

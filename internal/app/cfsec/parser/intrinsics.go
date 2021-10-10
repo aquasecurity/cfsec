@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"gopkg.in/yaml.v3"
 )
 
@@ -15,10 +14,10 @@ var intrinsicTags = []string{
 	"Equals", "Cidr", "And", "If", "Not", "Or",
 }
 
-var intrinsicFuncs map[string]func(property *Property) *Property
+var intrinsicFuncs map[string]func(property *Property) (*Property,bool)
 
 func init() {
-	intrinsicFuncs = map[string]func(property *Property) *Property{
+	intrinsicFuncs = map[string]func(property *Property) (*Property, bool) {
 		"Ref":           ResolveReference,
 		"Fn::Base64":    ResolveBase64,
 		"Fn::Equals":    ResolveEquals,
@@ -28,18 +27,10 @@ func init() {
 		"Fn::FindInMap": ResolveFindInMap,
 		"Fn::Select":    ResolveSelect,
 		"Fn::GetAtt":    ResolveGetAtt,
-		"Fn::GetAZs": GetAzs,
+		"Fn::GetAZs":    GetAzs,
+		"Fn::Cidr":      GetCidr,
 	}
 }
-
-func GetAzs(property *Property) *Property {
-	return property.deriveResolved(cftypes.List, []*Property{
-		property.deriveResolved(cftypes.String, "us-east-1a"),
-		property.deriveResolved(cftypes.String, "us-east-1a"),
-		property.deriveResolved(cftypes.String, "us-east-1a"),
-	})
-}
-
 
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {
@@ -65,9 +56,9 @@ func IsIntrinsic(key string) bool {
 }
 
 // ResolveIntrinsicFunc ...
-func ResolveIntrinsicFunc(property *Property) *Property {
+func ResolveIntrinsicFunc(property *Property) (*Property, bool) {
 	if !property.IsMap() {
-		return property
+		return property, true
 	}
 
 	for funcName := range property.AsMap() {
@@ -75,7 +66,7 @@ func ResolveIntrinsicFunc(property *Property) *Property {
 			return fn(property)
 		}
 	}
-	return property
+	return property, false
 }
 
 func getIntrinsicTag(tag string) string {
@@ -88,7 +79,8 @@ func getIntrinsicTag(tag string) string {
 	}
 }
 
-func abortIntrinsic(property *Property, msg string, components ...string) *Property {
+func abortIntrinsic(property *Property, msg string, components ...string) (*Property, bool) {
 	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
-	return property
+	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("occurred %s:%d", property.rng.GetFilename(), property.rng.GetStartLine()))
+	return property, false
 }

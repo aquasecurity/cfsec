@@ -5,19 +5,19 @@ import (
 )
 
 // ResolveReference ...
-func ResolveReference(property *Property) (resolved *Property) {
+func ResolveReference(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refProp := property.AsMap()["Ref"]
 	if refProp.IsNotString() {
-		return property
+		return property, false
 	}
 	refValue := refProp.AsString()
 
 	if pseudo, ok := pseudoParameters[refValue]; ok {
-		return property.deriveResolved(cftypes.String, pseudo.(string))
+		return property.deriveResolved(cftypes.String, pseudo.(string)), true
 	}
 
 	var param *Parameter
@@ -25,7 +25,7 @@ func ResolveReference(property *Property) (resolved *Property) {
 		if k == refValue {
 			param = property.ctx.Parameters[k]
 			resolved = property.deriveResolved(param.Type(), param.Default())
-			return resolved
+			return resolved, true
 		}
 	}
 
@@ -36,6 +36,6 @@ func ResolveReference(property *Property) (resolved *Property) {
 			break
 		}
 	}
-	return resolved
+	return resolved, true
 }
 

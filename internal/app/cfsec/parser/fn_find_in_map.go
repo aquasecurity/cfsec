@@ -4,9 +4,9 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 )
 
-func ResolveFindInMap(property *Property) (resolved *Property) {
+func ResolveFindInMap(property *Property) (resolved *Property, success bool) {
 	if !property.isFunction() {
-		return property
+		return property, true
 	}
 
 	refValue := property.AsMap()["Fn::FindInMap"].AsList()
@@ -40,6 +40,6 @@ func ResolveFindInMap(property *Property) (resolved *Property) {
 	if prop, ok := mapValues[secondaryLevelKey]; !ok {
 		return abortIntrinsic(property, "could not find a value for %s in %s, returning original Property", secondaryLevelKey, topLevelKey)
 	} else {
-		return property.deriveResolved(cftypes.String, prop)
+		return property.deriveResolved(cftypes.String, prop), true
 	}
 }

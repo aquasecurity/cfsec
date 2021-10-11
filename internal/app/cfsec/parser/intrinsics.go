@@ -8,12 +8,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var intrinsicTags = []string{
-	"Ref", "GetAtt", "Base64", "FindInMap", "GetAZs",
-	"ImportValue", "Join", "Select", "Split", "Sub",
-	"Equals", "Cidr", "And", "If", "Not", "Or",
-}
-
 var intrinsicFuncs map[string]func(property *Property) (*Property,bool)
 
 func init() {
@@ -29,7 +23,12 @@ func init() {
 		"Fn::GetAtt":    ResolveGetAtt,
 		"Fn::GetAZs":    GetAzs,
 		"Fn::Cidr":      GetCidr,
+		"Fn::If": PassthroughResolution,
 	}
+}
+
+func PassthroughResolution(property *Property) (*Property, bool) {
+	return property, true
 }
 
 func IsIntrinsicFunc(node *yaml.Node) bool {
@@ -37,7 +36,7 @@ func IsIntrinsicFunc(node *yaml.Node) bool {
 		return false
 	}
 
-	for _, tag := range intrinsicTags {
+	for tag := range intrinsicFuncs {
 		if strings.TrimPrefix(node.Tag, "!") == tag {
 			return true
 		}

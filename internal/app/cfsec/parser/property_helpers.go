@@ -114,6 +114,10 @@ func (p *Property) AsString() string {
 		_ , _ = fmt.Fprintf(os.Stderr, "Could not resolve function at %s, returning type default", p.rng)
 		return ""
 	}
+	if p.IsNil() {
+		return ""
+	}
+
 	return p.Inner.Value.(string)
 }
 

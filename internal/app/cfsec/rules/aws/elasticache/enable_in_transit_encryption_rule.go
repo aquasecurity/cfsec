@@ -10,6 +10,7 @@ func init() {
 
 	scanner.RegisterCheckRule(rules.Rule{
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   BadExample:
     Type: 'AWS::ElastiCache::ReplicationGroup'
@@ -30,6 +31,7 @@ Resources:
       SnapshotWindow: '10:00-12:00'
 `},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodExample:
     Type: 'AWS::ElastiCache::ReplicationGroup'
@@ -55,6 +57,7 @@ Resources:
 }
 
 var b = `---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   BadExample:
     Type: 'AWS::ElastiCache::ReplicationGroup'

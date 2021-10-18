@@ -28,6 +28,7 @@ func init() {
       PreferredMaintenanceWindow: 'sat:06:54-sat:07:24'
 `},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodExample:
     Type: "AWS::DocDB::DBCluster"

@@ -10,6 +10,7 @@ func init() {
 
 	scanner.RegisterCheckRule(rules.Rule{
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   BadExample:
     Type: AWS::Lambda::Function
@@ -28,6 +29,7 @@ Resources:
           - subnet-071f712345678e7c8
           - subnet-07fd123456788a036`},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   Function:
     Type: AWS::Lambda::Function

@@ -11,6 +11,7 @@ func init() {
 	scanner.RegisterCheckRule(rules.Rule{
 
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   BadExample:
     Type: 'AWS::EKS::Cluster'
@@ -27,6 +28,7 @@ Resources:
           - subnet-e7e761ac
 `},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodExample:
     Type: 'AWS::EKS::Cluster'

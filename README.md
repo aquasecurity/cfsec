@@ -4,6 +4,10 @@
 
 > NOTE: cfsec is early release status - please raise issues and be patient
 
+## Installation
+
+Check the [pre-releases](https://github.com/aquasecurity/cfsec/releases/tag/v0.0.1-alpha) for the latest Alpha build of cfsec.
+
 ## What is it?
 
 cfsec scans your yaml or json CloudFormation configuration files for common security misconfigurations.

@@ -10,6 +10,7 @@ func init() {
 
 	scanner.RegisterCheckRule(rules.Rule{
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodProject:
     Type: AWS::CodeBuild::Project
@@ -36,6 +37,7 @@ Resources:
           Type: "String"
 `,
 			`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodProject:
     Type: AWS::CodeBuild::Project
@@ -63,6 +65,7 @@ Resources:
 `},
 
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodProject:
     Type: AWS::CodeBuild::Project

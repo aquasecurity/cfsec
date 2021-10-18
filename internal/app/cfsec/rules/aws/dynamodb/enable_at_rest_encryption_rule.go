@@ -11,6 +11,7 @@ func init() {
 	scanner.RegisterCheckRule(rules.Rule{
 
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   daxCluster:
     Type: AWS::DAX::Cluster
@@ -23,6 +24,7 @@ Resources:
       SubnetGroupName: !Ref subnetGroupClu
 `},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   daxCluster:
     Type: AWS::DAX::Cluster

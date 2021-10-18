@@ -20,16 +20,6 @@ pr-ready: quality sanity lint-pr-checks typos
 lint-pr-checks:
 	@go run ./cmd/cfsec-pr-lint
 
-.PHONY: tagger
-tagger:
-	@git checkout master
-	@git fetch --tags
-	@echo "the most recent tag was `git describe --tags --abbrev=0`"
-	@echo ""
-	read -p "Tag number: " TAG; \
-	 git tag -a "$${TAG}" -m "$${TAG}"; \
-	 git push origin "$${TAG}"
-
 .PHONY: cyclo
 cyclo:
 	which gocyclo || go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
@@ -61,3 +51,7 @@ tagger:
 	read -p "Tag number: " TAG; \
 	 git tag -a "$${TAG}" -m "$${TAG}"; \
 	 git push origin "$${TAG}"
+
+.PHONY: publish-docs
+publish-docs:
+	./scripts/publish-docs.sh

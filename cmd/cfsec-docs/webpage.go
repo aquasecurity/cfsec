@@ -72,6 +72,16 @@ type docEntry struct {
 }
 
 func newEntry(check rules.Rule) docEntry {
+
+	var links []string
+	for _, link := range check.Base.Rule().Links {
+		if strings.HasPrefix(link, "https://cfsec.dev") {
+			continue
+		}
+		links = append(links, link)
+	}
+
+
 	return docEntry{
 		Summary:     check.Base.Rule().Summary,
 		ID:          check.ID(),
@@ -82,7 +92,7 @@ func newEntry(check rules.Rule) docEntry {
 		BadExample:  check.BadExample,
 		GoodExample: check.GoodExample,
 		Service:     check.Base.Rule().Service,
-		Links:       append(check.Base.Rule().Links, check.Links...),
+		Links:       links,
 	}
 }
 

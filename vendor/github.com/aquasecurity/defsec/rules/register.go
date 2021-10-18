@@ -30,3 +30,7 @@ func Register(rule Rule, f CheckFunc) RegisteredRule {
 func (r RegisteredRule) Rule() Rule {
 	return r.rule
 }
+
+func (r *RegisteredRule) AddLink(link string) {
+	r.rule.Links = append([]string{link}, r.rule.Links...)
+}

@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
 )
 

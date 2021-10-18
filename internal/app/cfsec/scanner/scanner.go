@@ -19,6 +19,12 @@ var ruleMu sync.Mutex
 var registeredRules []cfRules.Rule
 
 func RegisterCheckRule(rules ...cfRules.Rule) {
+	for i, rule := range rules {
+		cfsecLink := fmt.Sprintf("https://cfsec.dev/docs/%s/%s/#%s", rule.Base.Rule().Service, rule.Base.Rule().ShortCode, rule.Base.Rule().Service)
+		rules[i].Base.AddLink(cfsecLink)
+	}
+
+
 	ruleMu.Lock()
 	defer ruleMu.Unlock()
 	registeredRules = append(registeredRules, rules...)

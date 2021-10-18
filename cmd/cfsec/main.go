@@ -18,12 +18,14 @@ import (
 
 var disableColours = false
 var format string
+var parameters string
 
 func init() {
 	rootCmd.Flags().BoolVar(&debug.Enabled, "verbose", debug.Enabled, "Enable verbose logging")
 	rootCmd.Flags().BoolVar(&disableColours, "no-colour", disableColours, "Disable coloured output")
 	rootCmd.Flags().BoolVar(&disableColours, "no-color", disableColours, "Disable colored output (American style!)")
 	rootCmd.Flags().StringVarP(&format, "format", "f", format, "Select output format: default, json, csv")
+	rootCmd.Flags().StringVarP(&parameters, "parameters", "p", parameters, "Pass comma separated parameter values. eg; Key1=Value1,Key2=Value2")
 }
 
 func main() {
@@ -61,12 +63,13 @@ var rootCmd = &cobra.Command{
 		}
 
 		var contexts parser.FileContexts
+		p := parser.NewParser(getOptions()...)
 
 		if stat, err := os.Stat(dir); err == nil {
 			if stat.IsDir() {
-				contexts, err = parser.ParseDirectory(dir)
+				contexts, err = p.ParseDirectory(dir)
 			} else {
-				contexts, err = parser.ParseFiles(dir)
+				contexts, err = p.ParseFiles(dir)
 			}
 			if err != nil {
 				return err
@@ -89,6 +92,14 @@ var rootCmd = &cobra.Command{
 
 		return formatter(os.Stdout, results, "")
 	},
+}
+
+func getOptions() []parser.Option {
+	var options []parser.Option
+	if len(parameters) > 0 {
+		options = append(options, parser.ProvidedParametersOption(parameters))
+	}
+	return options
 }
 
 func getFormatter() (formatters.Formatter, error) {

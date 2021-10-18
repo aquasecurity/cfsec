@@ -82,7 +82,7 @@ func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error
 
 	path := fs.RealPath(filename)
 
-	fileCtx, err := parser.ParseFiles(path)
+	fileCtx, err := parser.NewParser().ParseFiles(path)
 	if err != nil {
 		return nil, err
 	}

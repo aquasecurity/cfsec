@@ -1,9 +1,13 @@
 package parser
 
 import (
+	"fmt"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/defsec/types"
 )
 
@@ -23,8 +27,7 @@ func (p *Property) IsString() bool {
 		return false
 	}
 	if p.isFunction() {
-		prop := p.resolveValue()
-		if prop != p {
+		if prop, success := p.resolveValue(); success {
 			return prop.IsString()
 		}
 	}
@@ -42,8 +45,7 @@ func (p *Property) IsInt() bool {
 		return false
 	}
 	if p.isFunction() {
-		prop := p.resolveValue()
-		if prop != p {
+		if prop, success := p.resolveValue(); success {
 			return prop.IsInt()
 		}
 	}
@@ -74,8 +76,7 @@ func (p *Property) IsList() bool {
 		return false
 	}
 	if p.isFunction() {
-		prop := p.resolveValue()
-		if prop != p {
+		if prop, success := p.resolveValue(); success {
 			return prop.IsList()
 		}
 	}
@@ -93,9 +94,8 @@ func (p *Property) IsBool() bool {
 		return false
 	}
 	if p.isFunction() {
-		prop := p.resolveValue()
-		if prop != p {
-			return prop.IsBool()
+		if prop, success := p.resolveValue(); success {
+			return prop.AsBool()
 		}
 	}
 	return p.Inner.Type == cftypes.Bool
@@ -109,11 +109,16 @@ func (p *Property) IsNotBool() bool {
 // AsString ...
 func (p *Property) AsString() string {
 	if p.isFunction() {
-		prop := p.resolveValue()
-		if prop != p {
+		if prop, success := p.resolveValue(); success {
 			return prop.AsString()
 		}
+		_, _ = fmt.Fprintf(os.Stderr, "Could not resolve function at %s, returning type default\n", p.rng)
+		return ""
 	}
+	if p.IsNil() {
+		return ""
+	}
+
 	return p.Inner.Value.(string)
 }
 
@@ -125,8 +130,19 @@ func (p *Property) AsStringValue() types.StringValue {
 // AsInt ...
 func (p *Property) AsInt() int {
 	if p.isFunction() {
-		return p.resolveValue().AsInt()
+		if prop, success := p.resolveValue(); success {
+			return prop.AsInt()
+		}
+		debug.Error("Could not resolve function at %s, returning type default", p.rng)
+		return 0
 	}
+	if p.IsNotInt() {
+		if p.isConvertableToInt() {
+			return p.convertToInt().AsInt()
+		}
+		return 0
+	}
+
 	return p.Inner.Value.(int)
 }
 
@@ -138,7 +154,11 @@ func (p *Property) AsIntValue() types.IntValue {
 // AsBool ...
 func (p *Property) AsBool() bool {
 	if p.isFunction() {
-		return p.resolveValue().AsBool()
+		if prop, success := p.resolveValue(); success {
+			return prop.AsBool()
+		}
+		debug.Error("Could not resolve function at %s, returning type default", p.rng)
+		return false
 	}
 	return p.Inner.Value.(bool)
 }
@@ -155,6 +175,14 @@ func (p *Property) AsMap() map[string]*Property {
 
 // AsList ...
 func (p *Property) AsList() []*Property {
+	if p.isFunction() {
+		if prop, success := p.resolveValue(); success {
+			return prop.AsList()
+		}
+		debug.Error("Could not resolve function at %s, returning type default", p.rng)
+		return []*Property{}
+	}
+
 	if list, ok := p.Inner.Value.([]*Property); ok {
 		return list
 	}
@@ -170,26 +198,34 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 		}
 	}
 
-	if p.IsNil() {
-		return checkValue == nil
+
+	switch checkerVal := checkValue.(type) {
+	case string:
+		if p.IsNil() {
+			return false
+		}
+
+		switch p.Inner.Type {
+		case cftypes.String:
+			if ignoreCase {
+				return strings.EqualFold(p.AsString(), checkerVal)
+			}
+			return p.AsString() == checkerVal
+		case cftypes.Int:
+			if val, err := strconv.Atoi(checkerVal); err == nil {
+				return p.AsInt() == val
+			}
+		}
+		return false
+	case bool:
+		return p.Inner.Value == checkerVal
+	case int:
+		return p.Inner.Value == checkerVal
 	}
 
-	if p.RawValue() == checkValue {
-		return true
-	}
 
-	switch p.Inner.Type {
-	case cftypes.String:
-		if ignoreCase {
-			return strings.EqualFold(p.AsString(), checkValue.(string))
-		}
-		return p.AsString() == checkValue.(string)
-	case cftypes.Int:
-		if val, ok := checkValue.(int); ok {
-			return p.AsInt() == val
-		}
-	}
-	return false
+return false
+
 }
 
 // IsTrue ...

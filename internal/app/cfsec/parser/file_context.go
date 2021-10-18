@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/defsec/types"
 )
 
@@ -38,11 +39,11 @@ func (t *FileContext) GetResourceByLogicalID(name string) *Resource {
 
 // GetResourceByType ...
 func (t *FileContext) GetResourceByType(names ...string) []*Resource {
-
 	var resources []*Resource
 	for _, r := range t.Resources {
 		for _, name := range names {
 			if name == r.Type() {
+				debug.Log("Adding %s for translation", r.ID())
 				resources = append(resources, r)
 			}
 		}

@@ -6,6 +6,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_resolve_join_value(t *testing.T) {
@@ -58,7 +59,8 @@ func Test_resolve_join_value(t *testing.T) {
 			},
 		},
 	}
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.Equal(t, "s3::part1::part2", resolvedProperty.AsString())
 }
@@ -141,7 +143,8 @@ func Test_resolve_join_value_with_reference(t *testing.T) {
 			},
 		},
 	}
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.Equal(t, "s3::part1::staging", resolvedProperty.AsString())
 }

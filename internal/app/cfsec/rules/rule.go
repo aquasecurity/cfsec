@@ -1,6 +1,10 @@
 package rules
 
-import "github.com/aquasecurity/defsec/rules"
+import (
+	"github.com/aquasecurity/defsec/rules"
+	_ "github.com/aquasecurity/defsec/rules/aws/apigateway"
+
+)
 
 
 // Rule ...

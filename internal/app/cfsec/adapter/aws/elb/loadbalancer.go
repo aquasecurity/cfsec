@@ -70,12 +70,13 @@ func checkForDropInvalidHeaders(r *parser.Resource) types.BoolValue {
 		if attr.IsNotMap() {
 			continue
 		}
-		for k, v := range attr.AsMap() {
-			if k == "Key" && v.AsString() != "routing.http.drop_invalid_header_fields.enabled" {
-				continue
-			} else if v.IsBool() {
-				return v.AsBoolValue()
+
+		if attr.AsMap()["Key"].AsString() == 	"routing.http.drop_invalid_header_fields.enabled" {
+			val := attr.AsMap()["Value"]
+			if val.IsBool() {
+				return val.AsBoolValue()
 			}
+
 		}
 	}
 

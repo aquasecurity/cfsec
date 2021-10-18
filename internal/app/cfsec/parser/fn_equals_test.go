@@ -6,6 +6,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_resolve_equals_value(t *testing.T) {
@@ -40,7 +41,8 @@ func Test_resolve_equals_value(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success:= ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.True(t, resolvedProperty.IsTrue())
 }
@@ -77,7 +79,8 @@ func Test_resolve_equals_value_to_false(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.False(t, resolvedProperty.IsTrue())
 }
@@ -114,8 +117,8 @@ func Test_resolve_equals_value_to_true_when_boolean(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
-
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 	assert.True(t, resolvedProperty.IsTrue())
 }
 
@@ -168,7 +171,8 @@ func Test_resolve_equals_value_when_one_is_a_reference(t *testing.T) {
 		},
 	}
 
-	resolvedProperty := ResolveIntrinsicFunc(property)
+	resolvedProperty, success := ResolveIntrinsicFunc(property)
+	require.True(t, success)
 
 	assert.True(t, resolvedProperty.IsTrue())
 }

@@ -2,22 +2,16 @@ package parser
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"gopkg.in/yaml.v3"
 )
 
-var intrinsicTags = []string{
-	"Ref", "GetAtt", "Base64", "FindInMap", "GetAZs",
-	"ImportValue", "Join", "Select", "Split", "Sub",
-	"Equals", "Cidr", "And", "If", "Not", "Or",
-}
-
-var intrinsicFuncs map[string]func(property *Property) *Property
+var intrinsicFuncs map[string]func(property *Property) (*Property, bool)
 
 func init() {
-	intrinsicFuncs = map[string]func(property *Property) *Property{
+	intrinsicFuncs = map[string]func(property *Property) (*Property, bool){
 		"Ref":           ResolveReference,
 		"Fn::Base64":    ResolveBase64,
 		"Fn::Equals":    ResolveEquals,
@@ -27,17 +21,28 @@ func init() {
 		"Fn::FindInMap": ResolveFindInMap,
 		"Fn::Select":    ResolveSelect,
 		"Fn::GetAtt":    ResolveGetAtt,
+		"Fn::GetAZs":    GetAzs,
+		"Fn::Cidr":      GetCidr,
+		// "Fn::If":        PassthroughResolution,
 	}
 }
 
-// IsIntrinsicFunc returns true if the yaml.Node is a function
+func PassthroughResolution(property *Property) (*Property, bool) {
+	return property, true
+}
+
 func IsIntrinsicFunc(node *yaml.Node) bool {
 	if node == nil || node.Tag == "" {
 		return false
 	}
 
-	for _, tag := range intrinsicTags {
-		if strings.TrimPrefix(node.Tag, "!") == tag {
+	nodeTag := strings.TrimPrefix(node.Tag, "!")
+	if nodeTag != "Ref" {
+		nodeTag = fmt.Sprintf("Fn::%s", nodeTag)
+	}
+	for tag := range intrinsicFuncs {
+
+		if nodeTag == tag {
 			return true
 		}
 	}
@@ -55,17 +60,21 @@ func IsIntrinsic(key string) bool {
 }
 
 // ResolveIntrinsicFunc ...
-func ResolveIntrinsicFunc(property *Property) *Property {
+func ResolveIntrinsicFunc(property *Property) (*Property, bool) {
+	if property == nil {
+		return nil, false
+	}
 	if !property.IsMap() {
-		return property
+		return property, true
 	}
 
 	for funcName := range property.AsMap() {
 		if fn := intrinsicFuncs[funcName]; fn != nil {
+			debug.Log("Resolving property [%s] with intrinsic function [%s]", property.name, funcName)
 			return fn(property)
 		}
 	}
-	return property
+	return property, false
 }
 
 func getIntrinsicTag(tag string) string {
@@ -78,7 +87,7 @@ func getIntrinsicTag(tag string) string {
 	}
 }
 
-func abortIntrinsic(property *Property, msg string, components ...string) *Property {
-	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
-	return property
+func abortIntrinsic(property *Property, msg string, components ...string) (*Property, bool) {
+	debug.Log(msg, components)
+	return property, false
 }

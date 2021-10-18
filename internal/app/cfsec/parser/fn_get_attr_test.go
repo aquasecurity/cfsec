@@ -42,7 +42,8 @@ Resources:
 	require.True(t, sgProp.IsList())
 
 	for _, property := range sgProp.AsList() {
-		resolved := ResolveIntrinsicFunc(property)
+		resolved, success := ResolveIntrinsicFunc(property)
+		require.True(t, success)
 		assert.True(t, resolved.IsNotNil())
 	}
 

@@ -1,9 +1,11 @@
 package parser
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
@@ -117,7 +119,8 @@ func (p *Property) Range() types.Range {
 
 // Metadata ...
 func (p *Property) Metadata() types.Metadata {
-	ref := NewCFReferenceWithValue(p.parentRange, *p.resolveValue())
+	resolved, _ := p.resolveValue()
+	ref := NewCFReferenceWithValue(p.parentRange, *resolved)
 	return types.NewMetadata(p.Range(), ref)
 }
 
@@ -128,6 +131,9 @@ func (p *Property) MetadataWithValue(resolvedValue *Property) types.Metadata {
 }
 
 func (p *Property) isFunction() bool {
+	if p == nil {
+		return false
+	}
 	if p.Type() == cftypes.Map {
 		for n := range p.AsMap() {
 			return IsIntrinsic(n)
@@ -143,12 +149,16 @@ func (p *Property) RawValue() interface{} {
 
 // AsRawStrings ...
 func (p *Property) AsRawStrings() ([]string, error) {
+	if len(p.ctx.lines) < p.rng.GetEndLine() {
+		debug.Log(p.parentRange.GetFilename())
+		debug.Log("#%v", p.ctx.lines)
+	}
 	return p.ctx.lines[p.rng.GetStartLine()-1 : p.rng.GetEndLine()], nil
 }
 
-func (p *Property) resolveValue() *Property {
+func (p *Property) resolveValue() (*Property, bool) {
 	if !p.isFunction() {
-		return p
+		return p, true
 	}
 
 	return ResolveIntrinsicFunc(p)
@@ -162,7 +172,6 @@ func (p *Property) GetStringProperty(path string, defaultValue ...string) types.
 	}
 
 	prop := p.GetProperty(path)
-
 	if prop.IsNotString() {
 		return p.StringDefault(defVal)
 	}
@@ -173,7 +182,6 @@ func (p *Property) GetStringProperty(path string, defaultValue ...string) types.
 func (p *Property) StringDefault(defaultValue string) types.StringValue {
 	return types.StringDefault(defaultValue, p.Metadata())
 }
-
 
 // GetBoolProperty ...
 func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.BoolValue {
@@ -241,7 +249,8 @@ func (p *Property) GetProperty(path string) *Property {
 	}
 
 	if nestedProperty := property.GetProperty(strings.Join(pathParts[1:], ".")); nestedProperty != nil {
-		return nestedProperty.resolveValue()
+		resolved, _ :=  nestedProperty.resolveValue()
+		return resolved
 	}
 
 	return nil
@@ -293,4 +302,15 @@ func (p *Property) inferBool(prop *Property, defaultValue bool) types.BoolValue 
 	}
 
 	return p.BoolDefault(defaultValue)
+}
+
+func (p *Property) String() string {
+	r := ""
+	switch p.Type() {
+	case cftypes.String:
+		r = p.AsString()
+	case cftypes.Int:
+		r = strconv.Itoa( p.AsInt())
+	}
+	return r
 }

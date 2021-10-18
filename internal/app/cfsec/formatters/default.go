@@ -10,7 +10,6 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/rules"
 	"github.com/aquasecurity/defsec/severity"
-	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/clinch/terminal"
 	"github.com/liamg/tml"
 )
@@ -58,7 +57,7 @@ func printResult(res rules.Result, i int, includePassedChecks bool) {
 `, res.Rule().LongID(), severity, res.Description(), res.Metadata().Range())
 
 	cfRef := res.Reference().(*parser.CFReference)
-	render, err := getFileContent(*cfRef, res.Metadata().Range())
+	render, err := getFileContent(*cfRef)
 	if err != nil {
 		fmt.Fprint(os.Stderr, err.Error())
 	}
@@ -81,10 +80,12 @@ func printResult(res rules.Result, i int, includePassedChecks bool) {
 	fmt.Printf("\n\n")
 }
 
-func getFileContent(ref parser.CFReference, issueRange types.Range) (string, error) {
+func getFileContent(ref parser.CFReference) (string, error) {
 	rng := ref.ResourceRange()
 
-	resolvedValue := ""
+	var resolvedValue string
+	prop := ref.ResolvedAttributeValue().(parser.Property)
+	hasFailureAttr := prop.IsNotNil()
 
 	content, err := ioutil.ReadFile(rng.GetFilename())
 	if err != nil {
@@ -93,16 +94,30 @@ func getFileContent(ref parser.CFReference, issueRange types.Range) (string, err
 
 	bodyStrings := strings.Split(string(content), "\n")
 
-	for i := issueRange.GetStartLine() - 1; i < issueRange.GetEndLine(); i++ {
-		if i == issueRange.GetEndLine()-1 && ref.ResolvedAttributeValue() != nil {
-			prop := ref.ResolvedAttributeValue().(parser.Property)
-			if prop.IsNotNil() {
-				resolvedValue = fmt.Sprintf("[%v]", prop.RawValue())
+	var coloured []string
+	for i, bodyString := range bodyStrings {
+		resolvedValue = ""
+		if i >= rng.GetStartLine()-1 && i <= rng.GetEndLine() {
+			// TODO: Fix this for json
+			if !strings.HasSuffix(rng.GetFilename(), ".json") {
+				if prop.IsNotNil() && prop.Range().GetStartLine()-1 == i {
+					resolvedValue = fmt.Sprintf("<blue>[%v]</blue>", prop.RawValue())
+				}
+			}
+
+			if hasFailureAttr {
+				if resolvedValue == "" {
+					coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <yellow>%s</yellow>", i, bodyString))
+				} else {
+					coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <red>%s    %s</red>", i, bodyString, resolvedValue))
+				}
+			} else {
+				coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <red>%s</red>", i, bodyString))
+
 			}
 		}
-		bodyStrings[i] = fmt.Sprintf("<red>%s %s</red>", bodyStrings[i], resolvedValue)
 	}
 
-	return strings.Join(bodyStrings[rng.GetStartLine()-1:rng.GetEndLine()], "\n"), nil
+	return strings.Join(coloured, "\n"), nil
 
 }

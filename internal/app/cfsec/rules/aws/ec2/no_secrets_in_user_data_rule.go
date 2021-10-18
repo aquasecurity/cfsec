@@ -10,6 +10,7 @@ func init() {
 
 	scanner.RegisterCheckRule(rules.Rule{
 		BadExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   BadExample:
     Type: AWS::EC2::Instance
@@ -28,6 +29,7 @@ Resources:
 
 `},
 		GoodExample: []string{`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodExample:
     Type: AWS::EC2::Instance

@@ -11,6 +11,7 @@ func init() {
 
 		BadExample: []string{
 			`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   DisabledEncryptionBucket:
     Properties:
@@ -20,6 +21,7 @@ Resources:
 
 		GoodExample: []string{
 			`---
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GoodExample:
     Properties:

@@ -6,7 +6,7 @@
 
 ## Installation
 
-Check the [pre-releases](https://github.com/aquasecurity/cfsec/releases/tag/v0.0.1-alpha) for the latest Alpha build of cfsec.
+Check the [pre-releases](https://github.com/aquasecurity/cfsec/releases) for the latest Alpha build of cfsec.
 
 ## What is it?
 

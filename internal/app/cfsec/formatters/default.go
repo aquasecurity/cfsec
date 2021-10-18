@@ -93,18 +93,31 @@ func getFileContent(ref parser.CFReference, issueRange types.Range) (string, err
 
 	bodyStrings := strings.Split(string(content), "\n")
 
-	for i := issueRange.GetStartLine() - 1; i < issueRange.GetEndLine(); i++ {
-		// TODO: Fix this for json
-		// if i == issueRange.GetEndLine()-1 && ref.ResolvedAttributeValue() != nil {
-		// 	prop := ref.ResolvedAttributeValue().(parser.Property)
-		// 	if prop.IsNotNil() {
-		// 		resolvedValue = fmt.Sprintf("[%v]", prop.RawValue())
-		// 	}
-		// }
-		bodyStrings[i] = fmt.Sprintf("<red>%s %s</red>", bodyStrings[i], resolvedValue)
+	var coloured []string
+	for i, bodyString := range bodyStrings {
 		resolvedValue = ""
+		if i >= issueRange.GetStartLine() - 1 && i <= issueRange.GetEndLine() {
+			// TODO: Fix this for json
+			if !strings.HasSuffix(rng.GetFilename(), ".json") {
+				if i == issueRange.GetEndLine()-1 && ref.ResolvedAttributeValue() != nil {
+					prop := ref.ResolvedAttributeValue().(parser.Property)
+					if prop.IsNotNil() && prop.Range().GetStartLine() -1  == i{
+						resolvedValue = fmt.Sprintf("<blue>[%v]</blue>", prop.RawValue())
+						coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <red>%s    %s</red>", i, bodyString, resolvedValue))
+						continue
+					}
+
+				}
+			}
+			coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <yellow>%s</yellow>", i, bodyString))
+
+		} else {
+			coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> | <yellow>%s</yellow>", i, bodyString))
+		}
 	}
 
-	return strings.Join(bodyStrings[rng.GetStartLine()-1:rng.GetEndLine()], "\n"), nil
+
+
+	return strings.Join(coloured[rng.GetStartLine()-1:rng.GetEndLine()], "\n"), nil
 
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/defsec/types"
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
@@ -130,6 +131,9 @@ func (p *Property) MetadataWithValue(resolvedValue *Property) types.Metadata {
 }
 
 func (p *Property) isFunction() bool {
+	if p == nil {
+		return false
+	}
 	if p.Type() == cftypes.Map {
 		for n := range p.AsMap() {
 			return IsIntrinsic(n)
@@ -145,6 +149,10 @@ func (p *Property) RawValue() interface{} {
 
 // AsRawStrings ...
 func (p *Property) AsRawStrings() ([]string, error) {
+	if len(p.ctx.lines) < p.rng.GetEndLine() {
+		debug.Log(p.parentRange.GetFilename())
+		debug.Log("#%v", p.ctx.lines)
+	}
 	return p.ctx.lines[p.rng.GetStartLine()-1 : p.rng.GetEndLine()], nil
 }
 

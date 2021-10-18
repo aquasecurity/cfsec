@@ -2,6 +2,7 @@ package parser
 
 import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 )
 
 // ResolveReference ...
@@ -24,7 +25,20 @@ func ResolveReference(property *Property) (resolved *Property, success bool) {
 	for k := range property.ctx.Parameters {
 		if k == refValue {
 			param = property.ctx.Parameters[k]
-			resolved = property.deriveResolved(param.Type(), param.Default())
+			resolvedType := param.Type()
+
+			switch param.Default().(type) {
+			case bool:
+				resolvedType = cftypes.Bool
+			case string:
+				resolvedType = cftypes.String
+			case int:
+				resolvedType = cftypes.Int
+			}
+			if resolvedType != param.Type() {
+				debug.Log("Overriding property type, parameter type appears incorrect: property: %s, type: %s", property.name, resolvedType)
+			}
+			resolved = property.deriveResolved(resolvedType, param.Default())
 			return resolved, true
 		}
 	}

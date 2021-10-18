@@ -2,16 +2,16 @@ package parser
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"gopkg.in/yaml.v3"
 )
 
-var intrinsicFuncs map[string]func(property *Property) (*Property,bool)
+var intrinsicFuncs map[string]func(property *Property) (*Property, bool)
 
 func init() {
-	intrinsicFuncs = map[string]func(property *Property) (*Property, bool) {
+	intrinsicFuncs = map[string]func(property *Property) (*Property, bool){
 		"Ref":           ResolveReference,
 		"Fn::Base64":    ResolveBase64,
 		"Fn::Equals":    ResolveEquals,
@@ -23,7 +23,7 @@ func init() {
 		"Fn::GetAtt":    ResolveGetAtt,
 		"Fn::GetAZs":    GetAzs,
 		"Fn::Cidr":      GetCidr,
-		"Fn::If": PassthroughResolution,
+		// "Fn::If":        PassthroughResolution,
 	}
 }
 
@@ -36,8 +36,13 @@ func IsIntrinsicFunc(node *yaml.Node) bool {
 		return false
 	}
 
+	nodeTag := strings.TrimPrefix(node.Tag, "!")
+	if nodeTag != "Ref" {
+		nodeTag = fmt.Sprintf("Fn::%s", nodeTag)
+	}
 	for tag := range intrinsicFuncs {
-		if strings.TrimPrefix(node.Tag, "!") == tag {
+
+		if nodeTag == tag {
 			return true
 		}
 	}
@@ -56,12 +61,16 @@ func IsIntrinsic(key string) bool {
 
 // ResolveIntrinsicFunc ...
 func ResolveIntrinsicFunc(property *Property) (*Property, bool) {
+	if property == nil {
+		return nil, false
+	}
 	if !property.IsMap() {
 		return property, true
 	}
 
 	for funcName := range property.AsMap() {
 		if fn := intrinsicFuncs[funcName]; fn != nil {
+			debug.Log("Resolving property [%s] with intrinsic function [%s]", property.name, funcName)
 			return fn(property)
 		}
 	}
@@ -79,7 +88,6 @@ func getIntrinsicTag(tag string) string {
 }
 
 func abortIntrinsic(property *Property, msg string, components ...string) (*Property, bool) {
-	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf(msg, components))
-	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("occurred %s:%d", property.rng.GetFilename(), property.rng.GetStartLine()))
+	debug.Log(msg, components)
 	return property, false
 }

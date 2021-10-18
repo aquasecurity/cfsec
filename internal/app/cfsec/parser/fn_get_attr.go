@@ -44,5 +44,5 @@ func ResolveGetAtt(property *Property) (resolved *Property, success bool) {
 		return property.deriveResolved(cftypes.String, referencedResource.ID()), true
 	}
 
-	return property.deriveResolved(referencedProperty.Type(), referencedProperty), true
+	return property.deriveResolved(referencedProperty.Type(), referencedProperty.RawValue()), true
 }

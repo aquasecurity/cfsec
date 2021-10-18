@@ -21,7 +21,7 @@ func ResolveSelect(property *Property) (resolved *Property, success bool) {
 	list := refValue[1]
 
 	if index.IsNotInt() {
-		if index.CanBeConverted(cftypes.Int) {
+		if index.IsConvertableTo(cftypes.Int) {
 			debug.Log("Converting index %v to Int", index.RawValue())
 			index = index.ConvertTo(cftypes.Int)
 		} else {
@@ -34,5 +34,11 @@ func ResolveSelect(property *Property) (resolved *Property, success bool) {
 	}
 
 	listItems := list.AsList()
+
+	if len(listItems) <= index.AsInt() {
+		return nil, false
+	}
+
+
 	return listItems[index.AsInt()], true
 }

@@ -7,21 +7,22 @@ import (
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 )
 
-func (p *Property) CanBeConverted(conversionType cftypes.CfType) bool {
+func (p *Property) IsConvertableTo(conversionType cftypes.CfType) bool {
 	switch conversionType {
 	case cftypes.Int:
-		return p.canBeConvertedToInt()
+		return p.isConvertableToInt()
 	case cftypes.Bool:
-		return p.CanBeConvertedToBool()
+		return p.isConvertableToBool()
 	case cftypes.String:
-		return p.CanBeConvertedToString()
+		return p.isConvertableToString()
 	}
 	return false
 }
 
-func (p *Property) CanBeConvertedToString() bool {
+func (p *Property) isConvertableToString() bool {
 	switch p.Type() {
 	case cftypes.Map:
 		return false
@@ -35,7 +36,7 @@ func (p *Property) CanBeConvertedToString() bool {
 	return true
 }
 
-func (p *Property) CanBeConvertedToBool() bool {
+func (p *Property) isConvertableToBool() bool {
 	switch p.Type() {
 	case cftypes.String:
 		return p.EqualTo("true", IgnoreCase) || p.EqualTo("false", IgnoreCase) ||
@@ -47,7 +48,7 @@ func (p *Property) CanBeConvertedToBool() bool {
 	return false
 }
 
-func (p *Property) canBeConvertedToInt() bool {
+func (p *Property) isConvertableToInt() bool {
 	switch p.Type() {
 	case cftypes.String:
 		if _, err := strconv.Atoi(p.AsString()); err == nil {
@@ -61,7 +62,7 @@ func (p *Property) canBeConvertedToInt() bool {
 
 func (p *Property) ConvertTo(conversionType cftypes.CfType) *Property {
 
-	if !p.CanBeConverted(conversionType) {
+	if !p.IsConvertableTo(conversionType) {
 		_, _ = fmt.Fprintf(os.Stderr, "property of type %s cannot be converted to %s\n", p.Type(), conversionType)
 		return p
 	}
@@ -113,6 +114,7 @@ func (p *Property) convertToBool() *Property {
 }
 
 func (p *Property) convertToInt() *Property {
+	debug.Log("attempting to convert %v to int", p.RawValue())
 	switch p.Type() {
 	case cftypes.String:
 		if val, err := strconv.Atoi(p.AsString()); err == nil {

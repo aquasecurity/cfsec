@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +14,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type ErrNotCloudFormation struct {
+	source string
+}
 
+func NewErrNotCloudFormation(source string) *ErrNotCloudFormation {
+	return &ErrNotCloudFormation{
+		source: source,
+	}
+}
+
+func (e *ErrNotCloudFormation) Error() string{
+	return fmt.Sprintf("The file %s is not CloudFormation", e.source)
+}
 
 // Parser ...
 type Parser struct{
@@ -55,7 +68,13 @@ func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 			contexts = append(contexts, context)
 			return nil
 		}(); err != nil {
-			return nil, err
+			var err2 *ErrNotCloudFormation
+			if errors.As(err, &err2) {
+				debug.Log(err.Error())
+				continue
+			} else {
+				return nil, err
+			}
 		}
 	}
 	return contexts, nil
@@ -70,6 +89,8 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 		sourceFmt = JsonSourceFormat
 	}
 
+
+
 	content, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -77,26 +98,34 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 
 	lines := strings.Split(string(content), "\n")
 
-	context := FileContext{
+	if !checkIsCloudformation(lines, sourceFmt) {
+		return nil, NewErrNotCloudFormation(source)
+	}
+
+	context := &FileContext{
 		filepath:     source,
 		lines:        lines,
 		SourceFormat: sourceFmt,
 	}
 
 	if strings.HasSuffix(strings.ToLower(source), ".json") {
-		if err := jfather.Unmarshal(content, &context); err != nil {
+		if err := jfather.Unmarshal(content, context); err != nil {
 			return nil, fmt.Errorf("source '%s' contains invalid JSON: %w", source, err)
 		}
 	} else {
-		if err := yaml.Unmarshal(content, &context); err != nil {
+		if err := yaml.Unmarshal(content, context); err != nil {
 			return nil, fmt.Errorf("source '%s' contains invalid YAML: %w", source, err)
 		}
 	}
 
+	context.lines = lines
+	context.SourceFormat = sourceFmt
+	context.filepath = source
+
 	debug.Log("Context loaded from source %s", source)
 
 	for name, r := range context.Resources {
-		r.ConfigureResource(name, source, &context)
+		r.ConfigureResource(name, source, context)
 	}
 
 	if p.parameters != nil {
@@ -105,8 +134,25 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 		}
 	}
 
-	return &context, nil
+	return context, nil
 
+}
+
+func checkIsCloudformation(lines []string, sourceFmt SourceFormat) bool {
+	for _, line := range lines {
+		switch sourceFmt {
+		case YamlSourceFormat:
+			if strings.Contains(line, "Resources:") {
+				return true
+			}
+		case JsonSourceFormat:
+			if strings.Contains(line, "\"Resources\"") {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // ParseDirectory ...

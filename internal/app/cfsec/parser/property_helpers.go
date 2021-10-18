@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/cftypes"
@@ -111,7 +112,7 @@ func (p *Property) AsString() string {
 		if prop, success := p.resolveValue(); success {
 			return prop.AsString()
 		}
-		_ , _ = fmt.Fprintf(os.Stderr, "Could not resolve function at %s, returning type default", p.rng)
+		_, _ = fmt.Fprintf(os.Stderr, "Could not resolve function at %s, returning type default\n", p.rng)
 		return ""
 	}
 	if p.IsNil() {
@@ -135,8 +136,11 @@ func (p *Property) AsInt() int {
 		debug.Error("Could not resolve function at %s, returning type default", p.rng)
 		return 0
 	}
-	if p.IsNotInt() && p.canBeConvertedToInt() {
-		return p.convertToInt().AsInt()
+	if p.IsNotInt() {
+		if p.isConvertableToInt() {
+			return p.convertToInt().AsInt()
+		}
+		return 0
 	}
 
 	return p.Inner.Value.(int)
@@ -194,26 +198,34 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 		}
 	}
 
-	if p.IsNil() {
-		return checkValue == nil
+
+	switch checkerVal := checkValue.(type) {
+	case string:
+		if p.IsNil() {
+			return false
+		}
+
+		switch p.Inner.Type {
+		case cftypes.String:
+			if ignoreCase {
+				return strings.EqualFold(p.AsString(), checkerVal)
+			}
+			return p.AsString() == checkerVal
+		case cftypes.Int:
+			if val, err := strconv.Atoi(checkerVal); err == nil {
+				return p.AsInt() == val
+			}
+		}
+		return false
+	case bool:
+		return p.Inner.Value == checkerVal
+	case int:
+		return p.Inner.Value == checkerVal
 	}
 
-	if p.RawValue() == checkValue {
-		return true
-	}
 
-	switch p.Inner.Type {
-	case cftypes.String:
-		if ignoreCase {
-			return strings.EqualFold(p.AsString(), checkValue.(string))
-		}
-		return p.AsString() == checkValue.(string)
-	case cftypes.Int:
-		if val, ok := checkValue.(int); ok {
-			return p.AsInt() == val
-		}
-	}
-	return false
+return false
+
 }
 
 // IsTrue ...
@@ -266,4 +278,3 @@ func (p *Property) Contains(checkVal interface{}) bool {
 	}
 	return false
 }
-

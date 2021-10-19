@@ -1,6 +1,7 @@
 # cfsec
 
 [![GoReportCard](https://goreportcard.com/badge/github.com/aquasecurity/cfsec)](https://goreportcard.com/report/github.com/aquasecurity/cfsec)
+[![GitHub All Releases](https://img.shields.io/github/downloads/aquasecurity/cfsec/total)](https://github.com/aquasecurity/cfsec/releases)
 
 > NOTE: cfsec is early release status - please raise issues and be patient
 

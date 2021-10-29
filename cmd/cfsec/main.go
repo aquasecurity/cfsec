@@ -52,7 +52,7 @@ var rootCmd = &cobra.Command{
 		var dir string
 		var err error
 
-		if len(args) == 1 {
+		if len(args) > 0 {
 			dir, err = filepath.Abs(args[0])
 		} else {
 			dir, err = os.Getwd()
@@ -90,7 +90,7 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		return formatter(os.Stdout, results, "")
+		return formatter(os.Stdout, results, dir)
 	},
 }
 
@@ -110,6 +110,8 @@ func getFormatter() (formatters.Formatter, error) {
 		return formatters.FormatJSON, nil
 	case "csv":
 		return formatters.FormatCSV, nil
+	case "sarif":
+		return formatters.FormatSarif, nil
 	default:
 		return nil, fmt.Errorf("invalid format specified: '%s'", format)
 	}

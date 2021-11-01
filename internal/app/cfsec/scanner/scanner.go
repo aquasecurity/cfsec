@@ -8,6 +8,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/aquasecurity/defsec/rules"
 
 	cfRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
@@ -92,6 +93,9 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 							Status: scanResult.Status(),
 						}
 						addResult.SetProperty(location.ResolvedAttributeValue())
+						if addResult.Status == rules.StatusPassed && !scanner.includePassed {
+							continue
+						}
 						results = append(results, addResult)
 					}
 				}

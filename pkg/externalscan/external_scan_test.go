@@ -54,7 +54,7 @@ func TestExternal(t *testing.T) {
 	results, err := scanner.Scan(testFile)
 	require.NoError(t, err)
 
-	assert.Len(t, results, 9)
+	assert.Len(t, results, 6)
 
 	var failedChecks int
 	for _, result := range results {

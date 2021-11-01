@@ -29,7 +29,7 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 		}
 
 		results := scanTestSource(t, goodExample)
-		assertCheckCode(t, "", rule.ID(), results)
+		assertCheckCode(t, "", rule.LongID(), results)
 	}
 
 }
@@ -49,7 +49,7 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 		}
 		results := scanTestSource(t, badExample)
 
-		assertCheckCode(t, rule.ID(), "", results)
+		assertCheckCode(t, rule.LongID(), "", results)
 	}
 }
 

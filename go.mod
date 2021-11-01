@@ -4,8 +4,8 @@ go 1.16
 
 require (
 	github.com/apparentlymart/go-cidr v1.1.0
-	github.com/aquasecurity/defsec v0.0.28
-	github.com/aquasecurity/tfsec v0.58.14
+	github.com/aquasecurity/defsec v0.0.29-0.20211101165008-188469bf293f
+	github.com/aquasecurity/tfsec v0.58.14 // indirect
 	github.com/liamg/clinch v1.5.6
 	github.com/liamg/jfather v0.0.2
 	github.com/liamg/tml v0.4.0

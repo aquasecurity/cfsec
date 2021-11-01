@@ -32,7 +32,7 @@ Resources:
 	}
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	for _, result := range results {
-		if result.Rule().ID == ruleID {
+		if result.RuleID == ruleID {
 			t.Fatalf("Result was found but should not have been")
 		}
 	}
@@ -57,7 +57,7 @@ Resources:
 	}
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	for _, result := range results {
-		if result.Rule().ID == ruleID {
+		if result.RuleID == ruleID {
 			t.Fatalf("Result was found but should not have been")
 		}
 	}
@@ -83,7 +83,7 @@ Resources:
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	var found bool
 	for _, result := range results {
-		if result.Rule().ID == ruleID {
+		if result.RuleID == ruleID {
 			found = true
 			break
 		}
@@ -97,7 +97,10 @@ func registerExampleRule() string {
 	example := internalRules.Rule{
 		Base: rules.Register(
 			rules.Rule{
-				ID: "ABC0000123",
+				AVDID:     "ABCDEFG",
+				Provider:  "testcloud",
+				Service:   "badvms",
+				ShortCode: "checksomething",
 			},
 			func(s *state.State) (results rules.Results) {
 				for _, bucket := range s.AWS.S3.Buckets {
@@ -114,5 +117,5 @@ func registerExampleRule() string {
 	}
 
 	scanner.RegisterCheckRule(example)
-	return example.ID()
+	return example.LongID()
 }

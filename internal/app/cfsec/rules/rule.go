@@ -3,9 +3,7 @@ package rules
 import (
 	"github.com/aquasecurity/defsec/rules"
 	_ "github.com/aquasecurity/defsec/rules/aws/apigateway"
-
 )
-
 
 // Rule ...
 type Rule struct {
@@ -23,7 +21,7 @@ type Rule struct {
 
 // ID ...
 func (r Rule) ID() string {
-	return r.Base.Rule().ID
+	return r.Base.Rule().AVDID
 }
 
 func (r Rule) LongID() string {

@@ -5,11 +5,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/testutil/filesystem"
-	"github.com/aquasecurity/defsec/rules"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,7 +29,7 @@ func RunPassingExamplesTest(t *testing.T, expectedCode string) {
 		}
 
 		results := scanTestSource(t, goodExample)
-		testutil.AssertCheckCode(t, "", rule.ID(), results)
+		assertCheckCode(t, "", rule.ID(), results)
 	}
 
 }
@@ -48,11 +49,11 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 		}
 		results := scanTestSource(t, badExample)
 
-		testutil.AssertCheckCode(t, rule.ID(), "", results)
+		assertCheckCode(t, rule.ID(), "", results)
 	}
 }
 
-func scanTestSource(t *testing.T, source string) []rules.Result {
+func scanTestSource(t *testing.T, source string) []result.Result {
 	fileCtx, err := CreateFileContexts(t, source)
 	require.NoError(t, err)
 	s := scanner.New()
@@ -88,4 +89,25 @@ func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error
 	}
 	return fileCtx, nil
 
+}
+
+func assertCheckCode(t *testing.T, includeCode string, excludeCode string, results []result.Result) {
+
+	var foundInclude bool
+	var foundExclude bool
+
+	for _, res := range results {
+		if res.RuleID == excludeCode {
+			foundExclude = true
+		}
+		if res.RuleID == includeCode {
+			foundInclude = true
+			assert.NotEqual(t, -2, res.Location.StartLine)
+		}
+	}
+
+	assert.False(t, foundExclude, fmt.Sprintf("res with code '%s' was found but should not have been", excludeCode))
+	if includeCode != "" {
+		assert.True(t, foundInclude, fmt.Sprintf("res with code '%s' was not found but should have been", includeCode))
+	}
 }

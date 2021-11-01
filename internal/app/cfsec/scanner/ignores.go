@@ -13,7 +13,7 @@ func isIgnored(result rules.Result) bool {
 	if cfRef, ok := result.Reference().(*parser.CFReference); ok {
 		prop := cfRef.ResolvedAttributeValue()
 		if ignore, err := parseIgnore(prop.Comment()); err == nil {
-			if ignore.RuleID != result.Rule().ID && ignore.RuleID != result.Rule().LongID() {
+			if ignore.RuleID != result.Rule().AVDID && ignore.RuleID != result.Rule().LongID() {
 				return false
 			}
 			if ignore.Expiry == nil || time.Now().Before(*ignore.Expiry) {

@@ -76,6 +76,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 
 					if !isIgnored(scanResult) {
 						addResult := result.Result{
+							AVDID:       scanResult.Rule().AVDID,
 							RuleID:      scanResult.Rule().LongID(),
 							RuleSummary: scanResult.Rule().Summary,
 							Impact:      scanResult.Rule().Impact,

@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/aquasecurity/defsec/severity"
 	"github.com/owenrumney/go-sarif/sarif"
 )
@@ -19,7 +20,7 @@ func FormatSarif(w io.Writer, results []result.Result, _ string, _ ...FormatterO
 
 	for _, res := range results {
 
-		if res.Status == result.Passed {
+		if res.Status == rules.StatusPassed {
 			continue
 		}
 

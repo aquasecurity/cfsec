@@ -12,6 +12,7 @@ func getLaunchConfigurations(file parser.FileContext) (launchConfigurations []au
 	for _, r := range launchConfigResources {
 
 		launchConfig := autoscaling.LaunchConfiguration{
+			Metadata:          r.Metadata(),
 			Name:              r.GetStringProperty("Name"),
 			AssociatePublicIP: r.GetBoolProperty("AssociatePublicIpAddress"),
 			EBSBlockDevices:   []autoscaling.BlockDevice{},

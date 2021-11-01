@@ -11,6 +11,7 @@ func getReplicationGroups(ctx parser.FileContext) (replicationGroups []elasticac
 
 	for _, r := range replicationGroupResources {
 		replicationGroup := elasticache.ReplicationGroup{
+			Metadata:                 r.Metadata(),
 			TransitEncryptionEnabled: r.GetBoolProperty("TransitEncryptionEnabled"),
 		}
 

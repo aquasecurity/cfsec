@@ -20,7 +20,7 @@ github.com/acomagu/bufpipe
 # github.com/apparentlymart/go-cidr v1.1.0
 ## explicit
 github.com/apparentlymart/go-cidr/cidr
-# github.com/aquasecurity/defsec v0.0.29-0.20211101165008-188469bf293f
+# github.com/aquasecurity/defsec v0.0.29
 ## explicit
 github.com/aquasecurity/defsec/cidr
 github.com/aquasecurity/defsec/provider

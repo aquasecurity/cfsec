@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/aquasecurity/defsec/severity"
 )
 
@@ -44,7 +45,7 @@ type Result struct {
 	Description      string            `json:"description"`
 	RangeAnnotation  string            `json:"-"`
 	Severity         severity.Severity `json:"severity"`
-	Status           Status            `json:"status"`
+	Status           rules.Status      `json:"status"`
 	Location         LocationBlock     `json:"location"`
 	resolvedProperty parser.Property
 }

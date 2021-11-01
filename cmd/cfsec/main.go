@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
@@ -12,6 +13,7 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/liamg/tml"
 	"github.com/spf13/cobra"
 )
@@ -92,6 +94,12 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
+		}
+
+		if includePassed {
+			sort.Slice(results, func(i, j int) bool {
+				return results[i].Status == rules.StatusPassed && results[j].Status != rules.StatusPassed
+			})
 		}
 
 		return formatter(os.Stdout, results, dir, getFormatterOptions()...)

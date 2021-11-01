@@ -88,30 +88,13 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 								StartLine: location.ResourceRange().GetStartLine(),
 								EndLine:   location.ResourceRange().GetEndLine(),
 							},
-							Status: result.Failed,
+							Status: scanResult.Status(),
 						}
 						addResult.SetProperty(location.ResolvedAttributeValue())
 						results = append(results, addResult)
 					}
 				}
-			} else if scanner.includePassed {
-				base := rule.Base
-				r := ctx.Metadata()
-				results = append(results, result.Result{
-					RuleID:      rule.LongID(),
-					RuleSummary: base.Rule().Summary,
-					Impact:      base.Rule().Impact,
-					Resolution:  base.Rule().Resolution,
-					Links:       base.Rule().Links,
-					Severity:    base.Rule().Severity,
-					Status:      result.Passed,
-					Location: result.LocationBlock{
-						Filename: r.Range().GetFilename(),
-					},
-				},
-				)
 			}
-
 		}
 	}
 	return results

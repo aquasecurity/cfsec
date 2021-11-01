@@ -9,6 +9,7 @@ import (
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/aquasecurity/defsec/severity"
 	"github.com/liamg/clinch/terminal"
 	"github.com/liamg/tml"
@@ -42,7 +43,7 @@ func FormatDefault(_ io.Writer, results []result.Result, _ string, options ...Fo
 
 	var failedResults int
 	for _, r := range results {
-		if r.Status == result.Failed {
+		if r.Status == rules.StatusFailed {
 			failedResults += 1
 		}
 	}
@@ -56,7 +57,7 @@ func FormatDefault(_ io.Writer, results []result.Result, _ string, options ...Fo
 func printResult(res result.Result, i int, includePassedChecks bool) {
 	resultHeader := fmt.Sprintf("  <underline>Result %d</underline>\n", i+1)
 	var severity string
-	if includePassedChecks && res.Status == result.Passed {
+	if includePassedChecks && res.Status == rules.StatusPassed {
 		terminal.PrintSuccessf(resultHeader)
 		severity = tml.Sprintf("<green>PASSED</green>")
 	} else {
@@ -74,7 +75,7 @@ func printResult(res result.Result, i int, includePassedChecks bool) {
 		fmt.Fprint(os.Stderr, err.Error())
 	}
 
-	if res.Status == result.Failed {
+	if res.Status == rules.StatusFailed {
 		tml.Println(render)
 	}
 	fmt.Printf("\n\n")

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/aquasecurity/defsec/rules"
 )
 
 // FormatCSV ...
@@ -22,7 +23,7 @@ func FormatCSV(w io.Writer, results []result.Result, _ string, _ ...FormatterOpt
 			link = r.Links[0]
 		}
 
-		records = append(records, []string {
+		records = append(records, []string{
 			r.Location.Filename,
 			strconv.Itoa(r.Location.StartLine),
 			strconv.Itoa(r.Location.EndLine),
@@ -30,7 +31,7 @@ func FormatCSV(w io.Writer, results []result.Result, _ string, _ ...FormatterOpt
 			string(r.Severity),
 			r.Description,
 			link,
-			strconv.FormatBool(r.Status == result.Passed),
+			strconv.FormatBool(r.Status == rules.StatusPassed),
 		})
 	}
 

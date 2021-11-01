@@ -12,6 +12,7 @@ func getProjects(ctx parser.FileContext) (projects []codebuild.Project) {
 
 	for _, r := range projectResources {
 		project := codebuild.Project{
+			Metadata:                  r.Metadata(),
 			ArtifactSettings:          getArtifactSettings(r),
 			SecondaryArtifactSettings: getSecondaryArtifactSettings(r),
 		}
@@ -51,6 +52,7 @@ func getSetting(property *parser.Property) codebuild.ArtifactSettings {
 	}
 
 	return codebuild.ArtifactSettings{
+		Metadata:          property.Metadata(),
 		EncryptionEnabled: result,
 	}
 }

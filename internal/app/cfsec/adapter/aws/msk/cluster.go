@@ -9,6 +9,7 @@ func getClusters(ctx parser.FileContext) (clusters []msk.Cluster) {
 	for _, r := range ctx.GetResourceByType("AWS::MSK::Cluster") {
 
 		cluster := msk.Cluster{
+			Metadata: r.Metadata(),
 			EncryptionInTransit: msk.EncryptionInTransit{
 				ClientBroker: r.GetStringProperty("EncryptionInfo.EncryptionInTransit.ClientBroker", "TLS"),
 			},

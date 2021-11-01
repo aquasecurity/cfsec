@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aquasecurity/defsec/rules"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -52,5 +54,13 @@ func TestExternal(t *testing.T) {
 	results, err := scanner.Scan(testFile)
 	require.NoError(t, err)
 
-	require.Len(t, results, 6)
+	assert.Len(t, results, 9)
+
+	var failedChecks int
+	for _, result := range results {
+		if result.Status == rules.StatusFailed {
+			failedChecks += 1
+		}
+	}
+	assert.Equal(t, 6, failedChecks)
 }

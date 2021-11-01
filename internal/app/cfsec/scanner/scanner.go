@@ -7,13 +7,12 @@ import (
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
+	"github.com/aquasecurity/cfsec/pkg/result"
 
 	cfRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
-	"github.com/aquasecurity/defsec/rules"
 )
-
 
 var ruleMu sync.Mutex
 var registeredRules []cfRules.Rule
@@ -23,7 +22,6 @@ func RegisterCheckRule(rules ...cfRules.Rule) {
 		cfsecLink := fmt.Sprintf("https://cfsec.dev/docs/%s/%s/#%s", rule.Base.Rule().Service, rule.Base.Rule().ShortCode, rule.Base.Rule().Service)
 		rules[i].Base.AddLink(cfsecLink)
 	}
-
 
 	ruleMu.Lock()
 	defer ruleMu.Unlock()
@@ -42,7 +40,6 @@ func DeregisterRuleByID(id string) {
 	}
 	registeredRules = filtered
 }
-
 
 // Scanner ...
 type Scanner struct {
@@ -65,8 +62,8 @@ func New(options ...Option) *Scanner {
 }
 
 // Scan ...
-func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
-	var results []rules.Result
+func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
+	var results []result.Result
 	for _, ctx := range contexts {
 		state := adapter.Adapt(*ctx)
 		for _, rule := range GetRegisteredRules() {
@@ -74,12 +71,47 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 			evalResult := rule.Base.Evaluate(state)
 			if len(evalResult) > 0 {
 				debug.Log("Found %d results for %s", len(evalResult), rule.LongID())
-			}
-			for _, result := range evalResult {
-				if !isIgnored(result) {
-					results = append(results, result)
+				for _, scanResult := range evalResult {
+					location := scanResult.Reference().(*parser.CFReference)
+
+					if !isIgnored(scanResult) {
+						addResult := result.Result{
+							RuleID:      scanResult.Rule().LongID(),
+							RuleSummary: scanResult.Rule().Summary,
+							Impact:      scanResult.Rule().Impact,
+							Resolution:  scanResult.Rule().Resolution,
+							Links:       scanResult.Rule().Links,
+							Description: scanResult.Description(),
+							Severity:    scanResult.Rule().Severity,
+							Location: result.LocationBlock{
+								Filename:  location.ResourceRange().GetFilename(),
+								StartLine: location.ResourceRange().GetStartLine(),
+								EndLine:   location.ResourceRange().GetEndLine(),
+							},
+							Status: result.Failed,
+						}
+						addResult.SetProperty(location.ResolvedAttributeValue())
+						results = append(results, addResult)
+					}
 				}
+			} else if scanner.includePassed {
+				base := rule.Base
+				r := ctx.Metadata()
+				results = append(results, result.Result{
+					RuleID:      rule.LongID(),
+					RuleSummary: base.Rule().Summary,
+					Impact:      base.Rule().Impact,
+					Resolution:  base.Rule().Resolution,
+					Links:       base.Rule().Links,
+					Severity:    base.Rule().Severity,
+					Status:      result.Passed,
+					Location: result.LocationBlock{
+						Filename: r.Range().GetFilename(),
+					},
+				},
+				)
 			}
+
 		}
 	}
 	return results

@@ -6,31 +6,31 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/aquasecurity/defsec/rules"
+	"github.com/aquasecurity/cfsec/pkg/result"
 )
 
 // FormatCSV ...
-func FormatCSV(w io.Writer, results []rules.Result, _ string, _ ...FormatterOption) error {
+func FormatCSV(w io.Writer, results []result.Result, _ string, _ ...FormatterOption) error {
 
 	records := [][]string{
 		{"file", "start_line", "end_line", "rule_id", "severity", "description", "link", "passed"},
 	}
 
 	for _, r := range results {
-		res := r.Flatten()
 		var link string
-		if len(res.Links) > 0 {
-			link = res.Links[0]
+		if len(r.Links) > 0 {
+			link = r.Links[0]
 		}
-		records = append(records, []string{
-			res.Location.Filename,
-			strconv.Itoa(res.Location.StartLine),
-			strconv.Itoa(res.Location.EndLine),
-			res.RuleID,
-			string(res.Severity),
-			res.Description,
+
+		records = append(records, []string {
+			r.Location.Filename,
+			strconv.Itoa(r.Location.StartLine),
+			strconv.Itoa(r.Location.EndLine),
+			r.RuleID,
+			string(r.Severity),
+			r.Description,
 			link,
-			strconv.FormatBool(res.Status == rules.StatusPassed),
+			strconv.FormatBool(r.Status == result.Passed),
 		})
 	}
 

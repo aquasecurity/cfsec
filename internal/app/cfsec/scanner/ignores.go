@@ -11,16 +11,16 @@ import (
 
 func isIgnored(result rules.Result) bool {
 	if cfRef, ok := result.Reference().(*parser.CFReference); ok {
-		if prop, ok := cfRef.ResolvedAttributeValue().(parser.Property); ok {
-			if ignore, err := parseIgnore(prop.Comment()); err == nil {
-				if ignore.RuleID != result.Rule().ID && ignore.RuleID != result.Rule().LongID() {
-					return false
-				}
-				if ignore.Expiry == nil || time.Now().Before(*ignore.Expiry) {
-					return true
-				}
+		prop := cfRef.ResolvedAttributeValue()
+		if ignore, err := parseIgnore(prop.Comment()); err == nil {
+			if ignore.RuleID != result.Rule().ID && ignore.RuleID != result.Rule().LongID() {
+				return false
+			}
+			if ignore.Expiry == nil || time.Now().Before(*ignore.Expiry) {
+				return true
 			}
 		}
+
 	}
 	return false
 }

@@ -3,7 +3,7 @@ package formatters
 import (
 	"io"
 
-	"github.com/aquasecurity/defsec/rules"
+	"github.com/aquasecurity/cfsec/pkg/result"
 )
 
 // FormatterOption ...
@@ -17,4 +17,4 @@ const (
 )
 
 // Formatter formats scan results into a specific format
-type Formatter func(w io.Writer, results []rules.Result, scanPath string, options ...FormatterOption) error
+type Formatter func(w io.Writer, results []result.Result, scanPath string, options ...FormatterOption) error

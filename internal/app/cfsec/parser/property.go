@@ -192,6 +192,10 @@ func (p *Property) GetBoolProperty(path string, defaultValue ...bool) types.Bool
 
 	prop := p.GetProperty(path)
 
+	if prop.isFunction() {
+		prop, _ = prop.resolveValue()
+	}
+
 	if prop.IsNotBool() {
 		return p.inferBool(prop, defVal)
 	}
@@ -212,7 +216,6 @@ func (p *Property) GetIntProperty(path string, defaultValue ...int) types.IntVal
 	}
 	return prop.AsIntValue()
 }
-
 
 // BoolDefault ...
 func (p *Property) BoolDefault(defaultValue bool) types.BoolValue {
@@ -249,7 +252,7 @@ func (p *Property) GetProperty(path string) *Property {
 	}
 
 	if nestedProperty := property.GetProperty(strings.Join(pathParts[1:], ".")); nestedProperty != nil {
-		resolved, _ :=  nestedProperty.resolveValue()
+		resolved, _ := nestedProperty.resolveValue()
 		return resolved
 	}
 
@@ -310,7 +313,7 @@ func (p *Property) String() string {
 	case cftypes.String:
 		r = p.AsString()
 	case cftypes.Int:
-		r = strconv.Itoa( p.AsInt())
+		r = strconv.Itoa(p.AsInt())
 	}
 	return r
 }

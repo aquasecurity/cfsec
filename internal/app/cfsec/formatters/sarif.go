@@ -1,13 +1,14 @@
 package formatters
 
 import (
-	"github.com/aquasecurity/defsec/rules"
+	"io"
+
+	"github.com/aquasecurity/cfsec/pkg/result"
 	"github.com/aquasecurity/defsec/severity"
 	"github.com/owenrumney/go-sarif/sarif"
-	"io"
 )
 
-func FormatSarif(w io.Writer, results []rules.Result, _ string, _ ...FormatterOption) error {
+func FormatSarif(w io.Writer, results []result.Result, _ string, _ ...FormatterOption) error {
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
 		return err
@@ -16,10 +17,9 @@ func FormatSarif(w io.Writer, results []rules.Result, _ string, _ ...FormatterOp
 	run := sarif.NewRun("cfsec", "https://cfsec.dev")
 	report.AddRun(run)
 
-	for _, wrappedRes := range results {
+	for _, res := range results {
 
-		res:= wrappedRes.Flatten()
-		if res.Status == rules.StatusPassed {
+		if res.Status == result.Passed {
 			continue
 		}
 

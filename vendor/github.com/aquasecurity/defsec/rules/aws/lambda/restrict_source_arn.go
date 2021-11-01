@@ -9,6 +9,7 @@ import (
 
 var CheckRestrictSourceArn = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0067",
 		Provider:   provider.AWSProvider,
 		Service:    "lambda",
 		ShortCode:  "restrict-source-arn",
@@ -36,6 +37,8 @@ For S3, this should be the ARN of the S3 Bucket. For CloudWatch Events, this sho
 						"Lambda permission lacks source ARN for *.amazonaws.com principal.",
 						permission.SourceARN,
 					)
+				} else {
+					results.AddPassed(&function)
 				}
 			}
 		}

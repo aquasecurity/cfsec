@@ -9,6 +9,7 @@ import (
 
 var CheckEnableLogging = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0010",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudfront",
 		ShortCode:   "enable-logging",
@@ -28,6 +29,8 @@ var CheckEnableLogging = rules.Register(
 					"Distribution does not have logging enabled.",
 					dist.Logging.Bucket,
 				)
+			} else {
+				results.AddPassed(&dist)
 			}
 		}
 		return

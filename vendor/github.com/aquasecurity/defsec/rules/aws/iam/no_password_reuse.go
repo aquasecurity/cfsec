@@ -9,6 +9,7 @@ import (
 
 var CheckNoPasswordReuse = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0056",
 		Provider:   provider.AWSProvider,
 		Service:    "iam",
 		ShortCode:  "no-password-reuse",
@@ -35,6 +36,8 @@ The account password policy should be set to prevent using any of the last five 
 				"Password policy allows reuse of recent passwords.",
 				policy.ReusePreventionCount,
 			)
+		} else {
+			results.AddPassed(&policy)
 		}
 		return
 	},

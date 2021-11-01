@@ -41,6 +41,6 @@ func (cf *CFReference) ResourceRange() types.Range {
 }
 
 // ResolvedAttributeValue ...
-func (cf *CFReference) ResolvedAttributeValue() interface{} {
+func (cf *CFReference) ResolvedAttributeValue() Property {
 	return cf.resolvedValue
 }

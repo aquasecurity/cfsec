@@ -9,6 +9,7 @@ import (
 
 var CheckEnableBackupRetention = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0050",
 		Provider:    provider.AWSProvider,
 		Service:     "elasticache",
 		ShortCode:   "enable-backup-retention",
@@ -36,6 +37,8 @@ var CheckEnableBackupRetention = rules.Register(
 					"Cluster snapshot retention is not enabled.",
 					cluster.SnapshotRetentionLimit,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

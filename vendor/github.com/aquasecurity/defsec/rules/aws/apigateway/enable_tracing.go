@@ -10,6 +10,7 @@ import (
 
 var CheckEnableTracing = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0003",
 		Provider:    provider.AWSProvider,
 		Service:     "api-gateway",
 		ShortCode:   "enable-tracing",
@@ -34,6 +35,8 @@ var CheckEnableTracing = rules.Register(
 						"X-Ray tracing is not enabled,",
 						stage.XRayTracingEnabled,
 					)
+				} else {
+					results.AddPassed(&stage)
 				}
 			}
 		}

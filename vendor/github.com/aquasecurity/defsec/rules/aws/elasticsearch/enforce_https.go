@@ -9,6 +9,7 @@ import (
 
 var CheckEnforceHttps = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0046",
 		Provider:   provider.AWSProvider,
 		Service:    "elastic-search",
 		ShortCode:  "enforce-https",
@@ -30,6 +31,8 @@ You should use HTTPS, which is HTTP over an encrypted (TLS) connection, meaning 
 					"Domain does not enfroce HTTPS.",
 					domain.Endpoint.EnforceHTTPS,
 				)
+			} else {
+				results.AddPassed(&domain)
 			}
 		}
 		return

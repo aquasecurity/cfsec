@@ -9,6 +9,7 @@ import (
 
 var CheckEncryptInstanceStorageData = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0080",
 		Provider:   provider.AWSProvider,
 		Service:    "rds",
 		ShortCode:  "encrypt-instance-storage-data",
@@ -33,6 +34,8 @@ When enabling encryption by setting the kms_key_id.`,
 					"Instance does not have storage encryption enabled.",
 					instance.Encryption.EncryptStorage,
 				)
+			} else {
+				results.AddPassed(&instance)
 			}
 		}
 		return

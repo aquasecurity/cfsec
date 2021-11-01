@@ -10,6 +10,7 @@ func getClusters(ctx parser.FileContext) (clusters []neptune.Cluster) {
 	for _, r := range ctx.GetResourceByType("AWS::Neptune::DBCluster") {
 
 		cluster := neptune.Cluster{
+			Metadata:          r.Metadata(),
 			Logging: neptune.Logging{
 				Audit: getAuditLog(r),
 			},

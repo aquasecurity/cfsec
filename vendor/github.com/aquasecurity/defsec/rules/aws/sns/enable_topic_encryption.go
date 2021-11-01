@@ -9,6 +9,7 @@ import (
 
 var CheckEnableTopicEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0095",
 		Provider:    provider.AWSProvider,
 		Service:     "sns",
 		ShortCode:   "enable-topic-encryption",
@@ -33,6 +34,8 @@ var CheckEnableTopicEncryption = rules.Register(
 					"Topic encryption does not use a customer managed key.",
 					topic.Encryption.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&topic)
 			}
 		}
 		return

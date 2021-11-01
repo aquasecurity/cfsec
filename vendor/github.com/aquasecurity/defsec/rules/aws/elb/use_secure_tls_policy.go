@@ -16,6 +16,7 @@ var outdatedSSLPolicies = []string{
 
 var CheckUseSecureTlsPolicy = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0047",
 		Provider:    provider.AWSProvider,
 		Service:     "elb",
 		ShortCode:   "use-secure-tls-policy",
@@ -35,6 +36,8 @@ var CheckUseSecureTlsPolicy = rules.Register(
 							"Listener uses an outdated TLS policy.",
 							listener.TLSPolicy,
 						)
+					} else {
+						results.AddPassed(&listener)
 					}
 				}
 			}

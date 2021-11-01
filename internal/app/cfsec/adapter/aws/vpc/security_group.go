@@ -23,7 +23,9 @@ func getSecurityGroups(ctx parser.FileContext) (groups []vpc.SecurityGroup) {
 func getIngressRules(r *parser.Resource) (sgRules []vpc.SecurityGroupRule) {
 	if ingressProp := r.GetProperty("SecurityGroupIngress"); ingressProp.IsList() {
 		for _, ingress := range ingressProp.AsList() {
-			rule := vpc.SecurityGroupRule{}
+			rule := vpc.SecurityGroupRule{
+				Metadata: r.Metadata(),
+			}
 			rule.Description = ingress.GetStringProperty("Description")
 			v4Cidr := ingress.GetProperty("CidrIp")
 			if v4Cidr.IsString() && v4Cidr.AsStringValue().IsNotEmpty() {
@@ -43,7 +45,9 @@ func getIngressRules(r *parser.Resource) (sgRules []vpc.SecurityGroupRule) {
 func getEgressRules(r *parser.Resource) (sgRules []vpc.SecurityGroupRule) {
 	if egressProp := r.GetProperty("SecurityGroupEgress"); egressProp.IsList() {
 		for _, egress := range egressProp.AsList() {
-			rule := vpc.SecurityGroupRule{}
+			rule := vpc.SecurityGroupRule{
+				Metadata: r.Metadata(),
+			}
 			rule.Description = egress.GetStringProperty("Description")
 			v4Cidr := egress.GetProperty("CidrIp")
 			if v4Cidr.IsString() && v4Cidr.AsStringValue().IsNotEmpty() {

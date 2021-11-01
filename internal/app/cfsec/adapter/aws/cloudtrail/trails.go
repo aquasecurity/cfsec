@@ -11,6 +11,7 @@ func getCloudTrails(ctx parser.FileContext) (trails []cloudtrail.Trail) {
 
 	for _, r := range cloudtrailResources {
 		ct := cloudtrail.Trail{
+			Metadata:          r.Metadata(),
 			Name:                    r.GetStringProperty("TrailName"),
 			EnableLogFileValidation: r.GetBoolProperty("EnableLogFileValidation"),
 			IsMultiRegion:           r.GetBoolProperty("IsMultiRegionTrail"),

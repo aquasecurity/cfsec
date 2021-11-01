@@ -9,6 +9,7 @@ import (
 
 var CheckUsesVPC = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0085",
 		Provider:   provider.AWSProvider,
 		Service:    "redshift",
 		ShortCode:  "use-vpc",
@@ -30,6 +31,8 @@ In order to benefit from the additional security features achieved with using an
 					"Cluster is deployed outside of a VPC.",
 					cluster.SubnetGroupName,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

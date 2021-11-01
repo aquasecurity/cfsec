@@ -9,6 +9,7 @@ import (
 
 var CheckVersioningIsEnabled = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0090",
 		Provider:   provider.AWSProvider,
 		Service:    "s3",
 		ShortCode:  "enable-versioning",
@@ -32,6 +33,8 @@ With versioning you can recover more easily from both unintended user actions an
 					"Bucket does not have versioning enabled",
 					bucket.Versioning.Enabled,
 				)
+			} else {
+				results.AddPassed(&bucket)
 			}
 		}
 		return results

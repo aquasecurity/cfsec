@@ -9,6 +9,7 @@ import (
 
 var CheckLogGroupCustomerKey = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0017",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudwatch",
 		ShortCode:   "log-group-customer-key",
@@ -28,6 +29,8 @@ var CheckLogGroupCustomerKey = rules.Register(
 					"Log group is not encrypted.",
 					group.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&group)
 			}
 		}
 		return

@@ -12,6 +12,7 @@ func getDistributions(ctx parser.FileContext) (distributions []cloudfront.Distri
 
 	for _, r := range distributionResources {
 		distribution := cloudfront.Distribution{
+			Metadata:          r.Metadata(),
 			WAFID: r.GetStringProperty("DistributionConfig.WebACLId"),
 			Logging: cloudfront.Logging{
 				Bucket: r.GetStringProperty("DistributionConfig.Logging.Bucket"),

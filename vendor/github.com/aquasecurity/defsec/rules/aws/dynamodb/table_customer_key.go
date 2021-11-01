@@ -9,6 +9,7 @@ import (
 
 var CheckTableCustomerKey = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0025",
 		Provider:    provider.AWSProvider,
 		Service:     "dynamodb",
 		ShortCode:   "table-customer-key",
@@ -31,6 +32,8 @@ var CheckTableCustomerKey = rules.Register(
 					"Cluster encryption does not use a customer-managed KMS key.",
 					cluster.ServerSideEncryption.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

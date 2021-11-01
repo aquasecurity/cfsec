@@ -11,6 +11,7 @@ import (
 
 var CheckNoWildcardsInPolicyDocuments = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0097",
 		Provider:   provider.AWSProvider,
 		Service:    "sqs",
 		ShortCode:  "no-wildcards-in-policy-documents",
@@ -27,6 +28,7 @@ This ensures that the queue itself cannot be modified or deleted, and prevents p
 	},
 	func(s *state.State) (results rules.Results) {
 		for _, queue := range s.AWS.SQS.Queues {
+			var fail bool
 			for _, statement := range queue.Policy.Statements {
 				if strings.ToLower(statement.Effect) != "allow" {
 					continue
@@ -34,6 +36,7 @@ This ensures that the queue itself cannot be modified or deleted, and prevents p
 				for _, action := range statement.Action {
 					action = strings.ToLower(action)
 					if action == "*" || action == "sqs:*" {
+						fail = true
 						results.Add(
 							"Queue policy does not restrict actions to a known set.",
 							queue.Policy,
@@ -41,6 +44,9 @@ This ensures that the queue itself cannot be modified or deleted, and prevents p
 						break
 					}
 				}
+			}
+			if !fail {
+				results.AddPassed(&queue)
 			}
 		}
 		return

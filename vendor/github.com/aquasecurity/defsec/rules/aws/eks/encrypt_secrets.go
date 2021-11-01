@@ -9,6 +9,7 @@ import (
 
 var CheckEncryptSecrets = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0039",
 		Provider:    provider.AWSProvider,
 		Service:     "eks",
 		ShortCode:   "encrypt-secrets",
@@ -33,6 +34,8 @@ var CheckEncryptSecrets = rules.Register(
 					"Cluster encryption requires a KMS key ID, which is missing",
 					cluster.Encryption.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

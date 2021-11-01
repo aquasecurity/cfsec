@@ -9,6 +9,7 @@ import (
 
 var CheckEnableInTransitEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0043",
 		Provider:    provider.AWSProvider,
 		Service:     "elastic-search",
 		ShortCode:   "enable-in-transit-encryption",
@@ -28,6 +29,8 @@ var CheckEnableInTransitEncryption = rules.Register(
 					"Domain does not have in-transit encryption enabled.",
 					domain.TransitEncryption.Enabled,
 				)
+			} else {
+				results.AddPassed(&domain)
 			}
 		}
 		return

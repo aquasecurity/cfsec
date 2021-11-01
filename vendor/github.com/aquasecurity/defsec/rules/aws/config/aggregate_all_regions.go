@@ -9,6 +9,7 @@ import (
 
 var CheckAggregateAllRegions = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0019",
 		Provider:   provider.AWSProvider,
 		Service:    "config",
 		ShortCode:  "aggregate-all-regions",
@@ -32,6 +33,8 @@ This will help limit the risk of any unmonitored configuration in regions that a
 				"Configuration aggregation is not set to source from all regions.",
 				s.AWS.Config.ConfigurationAggregrator.SourceAllRegions,
 			)
+		} else {
+			results.AddPassed(s.AWS.Config.ConfigurationAggregrator.SourceAllRegions)
 		}
 		return
 	},

@@ -10,6 +10,7 @@ import (
 
 var CheckAlbNotPublic = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0053",
 		Provider:    provider.AWSProvider,
 		Service:     "elb",
 		ShortCode:   "alb-not-public",
@@ -30,6 +31,8 @@ var CheckAlbNotPublic = rules.Register(
 					"Load balancer is exposed publicly.",
 					lb.Internal,
 				)
+			} else {
+				results.AddPassed(&lb)
 			}
 		}
 		return

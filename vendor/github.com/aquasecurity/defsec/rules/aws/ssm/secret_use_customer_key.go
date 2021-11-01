@@ -9,6 +9,7 @@ import (
 
 var CheckSecretUseCustomerKey = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0098",
 		Provider:    provider.AWSProvider,
 		Service:     "ssm",
 		ShortCode:   "secret-use-customer-key",
@@ -28,6 +29,8 @@ var CheckSecretUseCustomerKey = rules.Register(
 					"Secret is not encrypted with a customer managed key.",
 					secret.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&secret)
 			}
 		}
 		return

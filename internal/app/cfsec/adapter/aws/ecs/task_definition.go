@@ -43,7 +43,9 @@ func getVolumes(r *parser.Resource) (volumes []ecs.Volume) {
 
 	for _, v := range volumesList.AsList() {
 		volume := ecs.Volume{
+			Metadata: r.Metadata(),
 			EFSVolumeConfiguration: ecs.EFSVolumeConfiguration{
+				Metadata:                 r.Metadata(),
 				TransitEncryptionEnabled: types.BoolDefault(false, r.Metadata()),
 			},
 		}

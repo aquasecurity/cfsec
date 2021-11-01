@@ -11,6 +11,7 @@ func getLogGroups(ctx parser.FileContext) (logGroups []cloudwatch.LogGroup) {
 
 	for _, r := range logGroupResources {
 		group := cloudwatch.LogGroup{
+			Metadata:          r.Metadata(),
 			Name:     r.GetStringProperty("LogGroupName"),
 			KMSKeyID: r.GetStringProperty("KmsKeyId"),
 		}

@@ -9,6 +9,7 @@ import (
 
 var CheckEnableStorageEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0076",
 		Provider:    provider.AWSProvider,
 		Service:     "neptune",
 		ShortCode:   "enable-storage-encryption",
@@ -16,10 +17,10 @@ var CheckEnableStorageEncryption = rules.Register(
 		Impact:      "Unencrypted sensitive data is vulnerable to compromise.",
 		Resolution:  "Enable encryption of Neptune storage",
 		Explanation: `Encryption of Neptune storage ensures that if their is compromise of the disks, the data is still protected.`,
-		Links:       []string{
+		Links: []string{
 			"https://docs.aws.amazon.com/neptune/latest/userguide/encrypt.html",
 		},
-		Severity:    severity.High,
+		Severity: severity.High,
 	},
 	func(s *state.State) (results rules.Results) {
 		for _, cluster := range s.AWS.Neptune.Clusters {
@@ -33,6 +34,8 @@ var CheckEnableStorageEncryption = rules.Register(
 					"Cluster does not encrypt data with a customer managed key.",
 					cluster.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

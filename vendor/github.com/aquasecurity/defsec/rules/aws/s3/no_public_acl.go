@@ -11,6 +11,7 @@ import (
 
 var CheckForPublicACL = rules.Register(
 	rules.Rule{
+		AVDID:     "AVD-AWS-0092",
 		Provider:  provider.AWSProvider,
 		Service:   "s3",
 		ShortCode: "no-public-access-with-acl",
@@ -40,6 +41,8 @@ Buckets should have logging enabled so that access can be audited.
 						bucket.ACL,
 					)
 				}
+			} else {
+				results.AddPassed(&bucket)
 			}
 		}
 		return results

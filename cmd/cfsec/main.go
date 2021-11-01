@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
@@ -12,6 +13,7 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/liamg/tml"
 	"github.com/spf13/cobra"
 )
@@ -19,12 +21,16 @@ import (
 var disableColours = false
 var format string
 var parameters string
+var includePassed = false
+var includeIgnored = false
 
 func init() {
 	rootCmd.Flags().BoolVar(&debug.Enabled, "verbose", debug.Enabled, "Enable verbose logging")
 	rootCmd.Flags().BoolVar(&disableColours, "no-colour", disableColours, "Disable coloured output")
 	rootCmd.Flags().BoolVar(&disableColours, "no-color", disableColours, "Disable colored output (American style!)")
 	rootCmd.Flags().StringVarP(&format, "format", "f", format, "Select output format: default, json, csv")
+	rootCmd.Flags().BoolVar(&includePassed, "include-passed", includePassed, "Resources that pass checks are included in the result output")
+	rootCmd.Flags().BoolVar(&includeIgnored, "include-ignored", includeIgnored, "Ignore comments with have no effect and all resources will be scanned")
 	rootCmd.Flags().StringVarP(&parameters, "parameters", "p", parameters, "Pass comma separated parameter values. eg; Key1=Value1,Key2=Value2")
 }
 
@@ -81,7 +87,7 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		s := scanner.New()
+		s := scanner.New(getScannerOptions()...)
 		results := s.Scan(contexts)
 
 		formatter, err := getFormatter()
@@ -90,7 +96,13 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		return formatter(os.Stdout, results, dir)
+		if includePassed {
+			sort.Slice(results, func(i, j int) bool {
+				return results[i].Status == rules.StatusPassed && results[j].Status != rules.StatusPassed
+			})
+		}
+
+		return formatter(os.Stdout, results, dir, getFormatterOptions()...)
 	},
 }
 
@@ -115,4 +127,23 @@ func getFormatter() (formatters.Formatter, error) {
 	default:
 		return nil, fmt.Errorf("invalid format specified: '%s'", format)
 	}
+}
+
+func getScannerOptions() []scanner.Option {
+	var options []scanner.Option
+	if includePassed {
+		options = append(options, scanner.OptionIncludePassed())
+	}
+	if includeIgnored {
+		options = append(options, scanner.OptionIncludeIgnored())
+	}
+	return options
+}
+
+func getFormatterOptions() []formatters.FormatterOption {
+	var options []formatters.FormatterOption
+	if includePassed {
+		options = append(options, formatters.IncludePassed)
+	}
+	return options
 }

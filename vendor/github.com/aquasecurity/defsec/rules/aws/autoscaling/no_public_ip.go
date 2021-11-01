@@ -9,6 +9,7 @@ import (
 
 var CheckNoPublicIp = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0009",
 		Provider:    provider.AWSProvider,
 		Service:     "autoscaling",
 		ShortCode:   "no-public-ip",
@@ -28,6 +29,8 @@ var CheckNoPublicIp = rules.Register(
 					"Launch configuration associates public IP address.",
 					launchConfig.AssociatePublicIP,
 				)
+			} else {
+				results.AddPassed(&launchConfig)
 			}
 		}
 		return

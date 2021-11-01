@@ -9,6 +9,7 @@ import (
 
 var CheckUseSecureTlsPolicy = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0047",
 		Provider:    provider.AWSProvider,
 		Service:     "elastic-search",
 		ShortCode:   "use-secure-tls-policy",
@@ -28,6 +29,8 @@ var CheckUseSecureTlsPolicy = rules.Register(
 					"Domain does not have a secure TLS policy.",
 					domain.Endpoint.TLSPolicy,
 				)
+			} else {
+				results.AddPassed(&domain)
 			}
 		}
 		return

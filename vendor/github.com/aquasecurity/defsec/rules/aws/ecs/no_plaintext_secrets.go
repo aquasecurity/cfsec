@@ -13,6 +13,7 @@ import (
 
 var CheckNoPlaintextSecrets = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0036",
 		Provider:    provider.AWSProvider,
 		Service:     "ecs",
 		ShortCode:   "no-plaintext-secrets",
@@ -41,6 +42,8 @@ var CheckNoPlaintextSecrets = rules.Register(
 						fmt.Sprintf("Container definition contains a potentially sensitive environment variable '%s': %s", key, result.Description),
 						definition.ContainerDefinitions,
 					)
+				} else {
+					results.AddPassed(&definition)
 				}
 			}
 		}

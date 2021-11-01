@@ -9,6 +9,7 @@ import (
 
 var CheckEnableStorageEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0021",
 		Provider:    provider.AWSProvider,
 		Service:     "documentdb",
 		ShortCode:   "enable-storage-encryption",
@@ -26,6 +27,8 @@ var CheckEnableStorageEncryption = rules.Register(
 					"Cluster storage does not have encryption enabled.",
 					cluster.StorageEncrypted,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

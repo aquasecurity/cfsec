@@ -9,6 +9,7 @@ import (
 
 var CheckLoggingIsEnabled = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0089",
 		Provider:    provider.AWSProvider,
 		Service:     "s3",
 		ShortCode:   "enable-bucket-logging",
@@ -28,6 +29,8 @@ var CheckLoggingIsEnabled = rules.Register(
 					"Bucket does not have logging enabled",
 					bucket.Logging.Enabled,
 				)
+			} else {
+				results.AddPassed(&bucket)
 			}
 		}
 		return results

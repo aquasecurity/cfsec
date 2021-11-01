@@ -3,7 +3,7 @@ package elasticsearch
 import "github.com/aquasecurity/defsec/types"
 
 type Elasticsearch struct {
-	Domains           []Domain
+	Domains []Domain
 }
 
 type Domain struct {
@@ -30,4 +30,12 @@ type TransitEncryption struct {
 
 type AtRestEncryption struct {
 	Enabled types.BoolValue
+}
+
+func (c *Domain) GetMetadata() *types.Metadata {
+	return &c.Metadata
+}
+
+func (c *Domain) GetRawValue() interface{} {
+	return nil
 }

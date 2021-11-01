@@ -9,6 +9,7 @@ import (
 
 var CheckNoExcessivePortAccess = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0102",
 		Provider:    provider.AWSProvider,
 		Service:     "vpc",
 		ShortCode:   "no-excessive-port-access",
@@ -29,6 +30,8 @@ var CheckNoExcessivePortAccess = rules.Register(
 						"Network ACL rule allows access using ALL ports.",
 						rule.Protocol,
 					)
+				} else {
+					results.AddPassed(&rule)
 				}
 			}
 		}

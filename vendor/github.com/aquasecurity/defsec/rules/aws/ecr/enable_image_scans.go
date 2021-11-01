@@ -9,6 +9,7 @@ import (
 
 var CheckEnableImageScans = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0030",
 		Provider:    provider.AWSProvider,
 		Service:     "ecr",
 		ShortCode:   "enable-image-scans",
@@ -28,6 +29,8 @@ var CheckEnableImageScans = rules.Register(
 					"Image scanning is not enabled.",
 					repo.ImageScanning.ScanOnPush,
 				)
+			} else {
+				results.AddPassed(&repo)
 			}
 		}
 		return

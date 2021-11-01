@@ -9,6 +9,7 @@ import (
 
 var CheckPublicPoliciesAreBlocked = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0087",
 		Provider:   provider.AWSProvider,
 		Service:    "s3",
 		ShortCode:  "block-public-policy",
@@ -28,13 +29,13 @@ S3 bucket policy should have block public policy to prevent users from putting a
 		for _, bucket := range s.AWS.S3.Buckets {
 			if bucket.PublicAccessBlock == nil {
 				results.Add("No public access block so not blocking public policies", &bucket)
-				return results
-			}
-			if bucket.PublicAccessBlock.BlockPublicPolicy.IsFalse() {
+			} else if bucket.PublicAccessBlock.BlockPublicPolicy.IsFalse() {
 				results.Add(
 					"Public access block does not block public policies",
 					bucket.PublicAccessBlock.BlockPublicPolicy,
 				)
+			} else {
+				results.AddPassed(&bucket)
 			}
 		}
 		return results

@@ -9,6 +9,7 @@ import (
 
 var CheckEnableContainerInsight = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0034",
 		Provider:    provider.AWSProvider,
 		Service:     "ecs",
 		ShortCode:   "enable-container-insight",
@@ -28,6 +29,8 @@ var CheckEnableContainerInsight = rules.Register(
 					"Cluster does not have container insights enabled.",
 					cluster.Settings.ContainerInsightsEnabled,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

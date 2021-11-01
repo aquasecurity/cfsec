@@ -14,6 +14,7 @@ var scanner = squealer.NewStringScanner()
 
 var CheckNoSecretsInUserData = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0029",
 		Provider:    provider.AWSProvider,
 		Service:     "ec2",
 		ShortCode:   "no-secrets-in-user-data",
@@ -36,6 +37,8 @@ var CheckNoSecretsInUserData = rules.Register(
 					fmt.Sprintf("Sensitive data found in instance user data: %s", result.Description),
 					instance.UserData,
 				)
+			} else {
+				results.AddPassed(&instance)
 			}
 		}
 		return

@@ -9,6 +9,7 @@ import (
 
 var CheckEnableLogValidation = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0016",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudtrail",
 		ShortCode:   "enable-log-validation",
@@ -28,6 +29,8 @@ var CheckEnableLogValidation = rules.Register(
 					"Trail does not have log validation enabled.",
 					trail.EnableLogFileValidation,
 				)
+			} else {
+				results.AddPassed(&trail)
 			}
 		}
 		return

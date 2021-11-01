@@ -10,6 +10,7 @@ import (
 
 var CheckNoPublicIngressSgr = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0107",
 		Provider:    provider.AWSProvider,
 		Service:     "vpc",
 		ShortCode:   "no-public-ingress-sgr",
@@ -25,13 +26,18 @@ var CheckNoPublicIngressSgr = rules.Register(
 	func(s *state.State) (results rules.Results) {
 		for _, group := range s.AWS.VPC.SecurityGroups {
 			for _, rule := range group.IngressRules {
+				var failed bool
 				for _, block := range rule.CIDRs {
 					if cidr.IsPublic(block.Value()) {
+						failed = true
 						results.Add(
 							"Security group rule allows ingress from public internet.",
 							block,
 						)
 					}
+				}
+				if !failed {
+					results.AddPassed(&rule)
 				}
 			}
 		}

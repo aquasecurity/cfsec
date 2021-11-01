@@ -9,6 +9,7 @@ import (
 
 var CheckUseSecureTlsPolicy = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0005",
 		Provider:    provider.AWSProvider,
 		Service:     "api-gateway",
 		ShortCode:   "use-secure-tls-policy",
@@ -28,6 +29,8 @@ var CheckUseSecureTlsPolicy = rules.Register(
 					"Domain name is configured with an outdated TLS policy.",
 					domain.SecurityPolicy,
 				)
+			} else {
+				results.AddPassed(&domain)
 			}
 		}
 		return

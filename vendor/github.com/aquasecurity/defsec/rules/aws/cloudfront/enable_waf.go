@@ -9,6 +9,7 @@ import (
 
 var CheckEnableWaf = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0011",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudfront",
 		ShortCode:   "enable-waf",
@@ -28,6 +29,8 @@ var CheckEnableWaf = rules.Register(
 					"Distribution does not utilise a WAF.",
 					dist.WAFID,
 				)
+			} else {
+				results.AddPassed(&dist)
 			}
 		}
 		return

@@ -9,6 +9,7 @@ import (
 
 var CheckEnableQueueEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0096",
 		Provider:    provider.AWSProvider,
 		Service:     "sqs",
 		ShortCode:   "enable-queue-encryption",
@@ -28,6 +29,8 @@ var CheckEnableQueueEncryption = rules.Register(
 					"Queue is not encrypted with a customer managed key.",
 					queue.Encryption.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&queue)
 			}
 		}
 		return

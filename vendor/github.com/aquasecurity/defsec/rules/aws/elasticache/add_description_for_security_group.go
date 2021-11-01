@@ -9,6 +9,7 @@ import (
 
 var CheckAddDescriptionForSecurityGroup = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0049",
 		Provider:   provider.AWSProvider,
 		Service:    "elasticache",
 		ShortCode:  "add-description-for-security-group",
@@ -18,7 +19,7 @@ var CheckAddDescriptionForSecurityGroup = rules.Register(
 		Explanation: `Security groups and security group rules should include a description for auditing purposes.
 
 Simplifies auditing, debugging, and managing security groups.`,
-		Links:    []string{
+		Links: []string{
 			"https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/SecurityGroups.Creating.html",
 		},
 		Severity: severity.Low,
@@ -30,6 +31,8 @@ Simplifies auditing, debugging, and managing security groups.`,
 					"Security group does not have a description.",
 					sg.Description,
 				)
+			} else {
+				results.AddPassed(&sg)
 			}
 		}
 		return

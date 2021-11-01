@@ -9,6 +9,7 @@ import (
 
 var CheckAddDescriptionToSecurityGroup = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0083",
 		Provider:   provider.AWSProvider,
 		Service:    "redshift",
 		ShortCode:  "add-description-to-security-group",
@@ -30,6 +31,8 @@ Simplifies auditing, debugging, and managing security groups.`,
 					"Security group has no description.",
 					group.Description,
 				)
+			} else {
+				results.AddPassed(&group)
 			}
 		}
 		return

@@ -9,6 +9,7 @@ import (
 
 var CheckRequireNumbersInPasswords = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0059",
 		Provider:    provider.AWSProvider,
 		Service:     "iam",
 		ShortCode:   "require-numbers-in-passwords",
@@ -32,6 +33,8 @@ var CheckRequireNumbersInPasswords = rules.Register(
 				"Password policy does not require numbers.",
 				policy.RequireNumbers,
 			)
+		} else {
+			results.AddPassed(&policy)
 		}
 		return
 	},

@@ -9,6 +9,7 @@ import (
 
 var CheckIMDSAccessRequiresToken = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0028",
 		Provider:   provider.AWSProvider,
 		Service:    "ec2",
 		ShortCode:  "enforce-http-token-imds",
@@ -34,6 +35,8 @@ To fully protect IMDS you need to enable session tokens by using <code>metadata_
 					"Instance does not require IMDS access to require a token",
 					instance.MetadataOptions.HttpTokens,
 				)
+			} else {
+				results.AddPassed(&instance)
 			}
 		}
 		return results

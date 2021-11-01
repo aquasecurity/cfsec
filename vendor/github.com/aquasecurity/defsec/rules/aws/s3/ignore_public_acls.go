@@ -9,6 +9,7 @@ import (
 
 var CheckPublicACLsAreIgnored = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0091",
 		Provider:   provider.AWSProvider,
 		Service:    "s3",
 		ShortCode:  "ignore-public-acls",
@@ -27,13 +28,13 @@ S3 buckets should ignore public ACLs on buckets and any objects they contain. By
 		for _, bucket := range s.AWS.S3.Buckets {
 			if bucket.PublicAccessBlock == nil {
 				results.Add("No public access block so not ignoring public acls", &bucket)
-				return results
-			}
-			if bucket.PublicAccessBlock.IgnorePublicACLs.IsFalse() {
+			} else if bucket.PublicAccessBlock.IgnorePublicACLs.IsFalse() {
 				results.Add(
 					"Public access block does not ignore public ACLs",
 					bucket.PublicAccessBlock.IgnorePublicACLs,
 				)
+			} else {
+				results.AddPassed(&bucket)
 			}
 		}
 		return results

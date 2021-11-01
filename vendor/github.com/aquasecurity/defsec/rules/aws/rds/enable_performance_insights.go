@@ -9,6 +9,7 @@ import (
 
 var CheckEnablePerformanceInsights = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0078",
 		Provider:   provider.AWSProvider,
 		Service:    "rds",
 		ShortCode:  "enable-performance-insights",
@@ -38,6 +39,8 @@ The encryption key specified in ` + "`" + `performance_insights_kms_key_id` + "`
 					"Cluster has performance insights enabled without encryption.",
 					cluster.PerformanceInsights.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		for _, instance := range s.AWS.RDS.Instances {
@@ -54,6 +57,8 @@ The encryption key specified in ` + "`" + `performance_insights_kms_key_id` + "`
 					"Instance has performance insights enabled without encryption.",
 					instance.PerformanceInsights.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&instance)
 			}
 		}
 

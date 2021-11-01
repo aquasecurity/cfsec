@@ -9,6 +9,7 @@ import (
 
 var CheckEncryptClusterStorageData = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0079",
 		Provider:   provider.AWSProvider,
 		Service:    "rds",
 		ShortCode:  "encrypt-cluster-storage-data",
@@ -33,14 +34,13 @@ When enabling encryption by setting the kms_key_id, the storage_encrypted must a
 					"Cluster does not have storage encryption enabled.",
 					cluster.Encryption.EncryptStorage,
 				)
-				continue
-			}
-			if cluster.Encryption.KMSKeyID.IsEmpty() {
+			} else if cluster.Encryption.KMSKeyID.IsEmpty() {
 				results.Add(
 					"Cluster does not specify a customer managed key for storage encryption.",
 					cluster.Encryption.KMSKeyID,
 				)
-				continue
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

@@ -10,6 +10,7 @@ import (
 
 var CheckEnableInTransitEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0064",
 		Provider:    provider.AWSProvider,
 		Service:     "kinesis",
 		ShortCode:   "enable-in-transit-encryption",
@@ -34,6 +35,8 @@ var CheckEnableInTransitEncryption = rules.Register(
 					"Stream does not use a custom-managed KMS key.",
 					stream.Encryption.KMSKeyID,
 				)
+			} else {
+				results.AddPassed(&stream)
 			}
 		}
 		return

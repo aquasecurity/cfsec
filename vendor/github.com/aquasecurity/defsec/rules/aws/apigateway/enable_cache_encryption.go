@@ -10,6 +10,7 @@ import (
 
 var CheckEnableCacheEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0002",
 		Provider:    provider.AWSProvider,
 		Service:     "api-gateway",
 		ShortCode:   "enable-cache-encryption",
@@ -34,6 +35,8 @@ var CheckEnableCacheEncryption = rules.Register(
 						"Cache data is not encrypted.",
 						stage.RESTMethodSettings.CacheDataEncrypted,
 					)
+				} else {
+					results.AddPassed(&stage)
 				}
 			}
 		}

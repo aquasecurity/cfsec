@@ -9,6 +9,7 @@ import (
 
 var CheckEnableInTransitEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0051",
 		Provider:    provider.AWSProvider,
 		Service:     "elasticache",
 		ShortCode:   "enable-in-transit-encryption",
@@ -28,6 +29,8 @@ var CheckEnableInTransitEncryption = rules.Register(
 					"Replication group does not have transit encryption enabled.",
 					group.TransitEncryptionEnabled,
 				)
+			} else {
+				results.AddPassed(&group)
 			}
 		}
 		return

@@ -10,6 +10,7 @@ import (
 
 var CheckDropInvalidHeaders = rules.Register(
 	rules.Rule{
+		AVDID:      "AVD-AWS-0052",
 		Provider:   provider.AWSProvider,
 		Service:    "elb",
 		ShortCode:  "drop-invalid-headers",
@@ -34,6 +35,8 @@ By setting drop_invalid_header_fields to true, anything that doe not conform to 
 					"Application load balancer is not set to drop invalid headers.",
 					lb.DropInvalidHeaderFields,
 				)
+			} else {
+				results.AddPassed(&lb)
 			}
 		}
 		return

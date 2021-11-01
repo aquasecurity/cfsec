@@ -9,6 +9,7 @@ import (
 
 var CheckEnableAtRestEncryption = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0023",
 		Provider:    provider.AWSProvider,
 		Service:     "dynamodb",
 		ShortCode:   "enable-at-rest-encryption",
@@ -32,6 +33,8 @@ var CheckEnableAtRestEncryption = rules.Register(
 					"Cluster encryption is not enabled.",
 					cluster.ServerSideEncryption.Enabled,
 				)
+			} else {
+				results.AddPassed(&cluster)
 			}
 		}
 		return

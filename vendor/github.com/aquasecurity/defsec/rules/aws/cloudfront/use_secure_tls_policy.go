@@ -10,6 +10,7 @@ import (
 
 var CheckUseSecureTlsPolicy = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0013",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudfront",
 		ShortCode:   "use-secure-tls-policy",
@@ -29,6 +30,8 @@ var CheckUseSecureTlsPolicy = rules.Register(
 					"Distribution allows unencrypted communications.",
 					dist.ViewerCertificate.MinimumProtocolVersion,
 				)
+			} else {
+				results.AddPassed(&dist)
 			}
 		}
 		return

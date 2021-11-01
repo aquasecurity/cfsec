@@ -9,6 +9,7 @@ import (
 
 var CheckEnableAccessLogging = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0001",
 		Provider:    provider.AWSProvider,
 		Service:     "api-gateway",
 		ShortCode:   "enable-access-logging",
@@ -35,6 +36,8 @@ var CheckEnableAccessLogging = rules.Register(
 						"Access logging is not configured.",
 						stage.AccessLogging.CloudwatchLogGroupARN,
 					)
+				} else {
+					results.AddPassed(&api)
 				}
 			}
 		}

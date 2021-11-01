@@ -9,6 +9,7 @@ import (
 
 var CheckEnableAllRegions = rules.Register(
 	rules.Rule{
+		AVDID:       "AVD-AWS-0014",
 		Provider:    provider.AWSProvider,
 		Service:     "cloudtrail",
 		ShortCode:   "enable-all-regions",
@@ -28,6 +29,8 @@ var CheckEnableAllRegions = rules.Register(
 					"Trail is not enabled across all regions.",
 					trail.IsMultiRegion,
 				)
+			} else {
+				results.AddPassed(&trail)
 			}
 		}
 		return

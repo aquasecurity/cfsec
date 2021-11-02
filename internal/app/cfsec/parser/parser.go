@@ -47,6 +47,11 @@ func NewParser(options ...Option) *Parser {
 func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 	var contexts FileContexts
 	for _, path := range filepaths {
+		path, err := filepath.Abs(path)
+		if err != nil {
+			return nil, err
+		}
+
 		if err := func() error {
 			debug.Log("Starting to process file %s", path)
 
@@ -58,7 +63,7 @@ func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 			if err != nil {
 				return err
 			}
-			defer file.Close()
+			defer func() {_ =  file.Close()}()
 
 			context, err := p.Parse(file, path)
 			if err != nil {
@@ -88,8 +93,6 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 	if strings.HasSuffix(strings.ToLower(source), ".json") {
 		sourceFmt = JsonSourceFormat
 	}
-
-
 
 	content, err := ioutil.ReadAll(reader)
 	if err != nil {

@@ -6,13 +6,15 @@ import (
 
 // CFReference ...
 type CFReference struct {
+	logicalId string
 	resourceRange types.Range
 	resolvedValue Property
 }
 
 // NewCFReference ...
-func NewCFReference(resourceRange types.Range) types.Reference {
+func NewCFReference(id string, resourceRange types.Range) types.Reference {
 	return &CFReference{
+		logicalId: id,
 		resourceRange: resourceRange,
 	}
 }
@@ -28,6 +30,10 @@ func NewCFReferenceWithValue(resourceRange types.Range, resolvedValue Property) 
 // String ...
 func (cf *CFReference) String() string {
 	return cf.resourceRange.String()
+}
+
+func (cf *CFReference) LogicalID() string {
+	return cf.logicalId
 }
 
 // RefersTo ...

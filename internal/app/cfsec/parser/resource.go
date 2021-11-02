@@ -95,7 +95,7 @@ func (r *Resource) SourceFormat() SourceFormat {
 
 // Metadata ...
 func (r *Resource) Metadata() types.Metadata {
-	return types.NewMetadata(r.Range(), NewCFReference(r.rng))
+	return types.NewMetadata(r.Range(), NewCFReference(r.id, r.rng))
 }
 
 func (r *Resource) properties() map[string]*Property {

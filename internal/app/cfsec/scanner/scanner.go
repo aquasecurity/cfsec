@@ -75,7 +75,9 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 				for _, scanResult := range evalResult {
 					location := scanResult.Reference().(*parser.CFReference)
 
+
 					if !isIgnored(scanResult) {
+						description := getDescription(scanResult, location)
 						addResult := result.Result{
 							AVDID:       scanResult.Rule().AVDID,
 							RuleID:      scanResult.Rule().LongID(),
@@ -83,7 +85,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 							Impact:      scanResult.Rule().Impact,
 							Resolution:  scanResult.Rule().Resolution,
 							Links:       scanResult.Rule().Links,
-							Description: scanResult.Description(),
+							Description: description,
 							Severity:    scanResult.Rule().Severity,
 							Location: result.LocationBlock{
 								Filename:  location.ResourceRange().GetFilename(),
@@ -103,6 +105,13 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 		}
 	}
 	return results
+}
+
+func getDescription(scanResult rules.Result, location *parser.CFReference) string {
+	if scanResult.Status() != rules.StatusPassed {
+		return scanResult.Description()
+	}
+	return fmt.Sprintf("Resource '%s' passed check: %s", location.LogicalID(), scanResult.Rule().Summary)
 }
 
 // GetRegisteredRules provides all Checks which have been registered with this package

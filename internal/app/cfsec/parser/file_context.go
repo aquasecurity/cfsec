@@ -55,5 +55,5 @@ func (t *FileContext) GetResourceByType(names ...string) []*Resource {
 func (t *FileContext) Metadata() types.Metadata {
 	rng := types.NewRange(t.filepath, 1, len(t.lines))
 
-	return types.NewMetadata(rng, NewCFReference(rng))
+	return types.NewMetadata(rng, NewCFReference("Template", rng))
 }

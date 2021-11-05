@@ -1,5 +1,11 @@
 # cfsec
 
+<p align="center">
+  <img width="354" src="./logonav.png">
+</p>
+
+
+
 [![GoReportCard](https://goreportcard.com/badge/github.com/aquasecurity/cfsec)](https://goreportcard.com/report/github.com/aquasecurity/cfsec)
 [![GitHub All Releases](https://img.shields.io/github/downloads/aquasecurity/cfsec/total)](https://github.com/aquasecurity/cfsec/releases)
 

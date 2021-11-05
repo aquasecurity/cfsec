@@ -1,7 +1,7 @@
 # cfsec
 
 <p align="center">
-  <img width="354" src="./logonav.png">
+  <img width="354" src="./logo.png">
 </p>
 
 

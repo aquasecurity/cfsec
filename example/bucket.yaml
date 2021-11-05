@@ -1,7 +1,10 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: An example Stack for a bucket
 Parameters:
   BucketName: 
     Type: String
-    Default: naughty
+    Default: naughty-bucket
   EncryptBucket:
     Type: Boolean
     Default: false

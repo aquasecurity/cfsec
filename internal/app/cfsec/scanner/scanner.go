@@ -85,7 +85,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 							Impact:      scanResult.Rule().Impact,
 							Resolution:  scanResult.Rule().Resolution,
 							Links:       scanResult.Rule().Links,
-							Description: description,
+							Description: fmt.Sprintf("Resource '%s': %s", location.LogicalID(), description),
 							Severity:    scanResult.Rule().Severity,
 							Location: result.LocationBlock{
 								Filename:  location.ResourceRange().GetFilename(),

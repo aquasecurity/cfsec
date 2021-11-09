@@ -56,6 +56,7 @@ func (r *Resource) setContext(ctx *FileContext) {
 	r.ctx = ctx
 
 	for _, p := range r.Inner.Properties {
+		p.SetLogicalResource(r.id)
 		p.setContext(ctx)
 	}
 }

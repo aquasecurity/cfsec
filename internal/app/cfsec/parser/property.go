@@ -27,6 +27,7 @@ type Property struct {
 	rng         types.Range
 	parentRange types.Range
 	Inner       PropertyInner
+	logicalId   string
 }
 
 // PropertyInner ...
@@ -120,13 +121,13 @@ func (p *Property) Range() types.Range {
 // Metadata ...
 func (p *Property) Metadata() types.Metadata {
 	resolved, _ := p.resolveValue()
-	ref := NewCFReferenceWithValue(p.parentRange, *resolved)
+	ref := NewCFReferenceWithValue(p.parentRange, *resolved, p.logicalId)
 	return types.NewMetadata(p.Range(), ref)
 }
 
 // MetadataWithValue ...
 func (p *Property) MetadataWithValue(resolvedValue *Property) types.Metadata {
-	ref := NewCFReferenceWithValue(p.parentRange, *resolvedValue)
+	ref := NewCFReferenceWithValue(p.parentRange, *resolvedValue, p.logicalId)
 	return types.NewMetadata(p.Range(), ref)
 }
 
@@ -266,6 +267,7 @@ func (p *Property) deriveResolved(propType cftypes.CfType, propValue interface{}
 		comment:     p.comment,
 		rng:         p.rng,
 		parentRange: p.parentRange,
+		logicalId: p.logicalId,
 		Inner: PropertyInner{
 			Type:  propType,
 			Value: propValue,
@@ -316,4 +318,28 @@ func (p *Property) String() string {
 		r = strconv.Itoa(p.AsInt())
 	}
 	return r
+}
+
+func (p *Property) SetLogicalResource(id string) {
+	p.logicalId = id
+
+	if p.isFunction() {
+		return
+	}
+
+	if p.IsMap() {
+		for _, subProp := range p.AsMap() {
+			if subProp == nil {
+				continue
+			}
+			subProp.SetLogicalResource(id)
+		}
+	}
+
+	if p.IsList() {
+		for _, subProp := range p.AsList() {
+			subProp.SetLogicalResource(id)
+		}
+	}
+
 }

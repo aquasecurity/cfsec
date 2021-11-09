@@ -20,10 +20,11 @@ func NewCFReference(id string, resourceRange types.Range) types.Reference {
 }
 
 // NewCFReferenceWithValue ...
-func NewCFReferenceWithValue(resourceRange types.Range, resolvedValue Property) types.Reference {
+func NewCFReferenceWithValue(resourceRange types.Range, resolvedValue Property, logicalId string) types.Reference {
 	return &CFReference{
 		resourceRange: resourceRange,
 		resolvedValue: resolvedValue,
+		logicalId: logicalId,
 	}
 }
 

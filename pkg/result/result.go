@@ -47,6 +47,7 @@ type Result struct {
 	Severity         severity.Severity `json:"severity"`
 	Status           rules.Status      `json:"status"`
 	Location         LocationBlock     `json:"location"`
+	Resource         string            `json:"resource"`
 	resolvedProperty parser.Property
 }
 

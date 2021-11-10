@@ -75,7 +75,6 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 				for _, scanResult := range evalResult {
 					location := scanResult.Reference().(*parser.CFReference)
 
-
 					if !isIgnored(scanResult) {
 						description := getDescription(scanResult, location)
 						addResult := result.Result{
@@ -87,6 +86,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 							Links:       scanResult.Rule().Links,
 							Description: description,
 							Severity:    scanResult.Rule().Severity,
+							Resource:    location.LogicalID(),
 							Location: result.LocationBlock{
 								Filename:  location.ResourceRange().GetFilename(),
 								StartLine: location.ResourceRange().GetStartLine(),
@@ -109,7 +109,7 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
 
 func getDescription(scanResult rules.Result, location *parser.CFReference) string {
 	if scanResult.Status() != rules.StatusPassed {
-		return fmt.Sprintf("Resource '%s' %s", location.LogicalID(), scanResult.Description())
+		return scanResult.Description()
 	}
 	return fmt.Sprintf("Resource '%s' passed check: %s", location.LogicalID(), scanResult.Rule().Summary)
 }

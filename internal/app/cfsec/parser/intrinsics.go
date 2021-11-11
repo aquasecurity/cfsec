@@ -12,23 +12,24 @@ var intrinsicFuncs map[string]func(property *Property) (*Property, bool)
 
 func init() {
 	intrinsicFuncs = map[string]func(property *Property) (*Property, bool){
-		"Ref":           ResolveReference,
-		"Fn::Base64":    ResolveBase64,
-		"Fn::Equals":    ResolveEquals,
-		"Fn::Join":      ResolveJoin,
-		"Fn::Split":     ResolveSplit,
-		"Fn::Sub":       ResolveSub,
-		"Fn::FindInMap": ResolveFindInMap,
-		"Fn::Select":    ResolveSelect,
-		"Fn::GetAtt":    ResolveGetAtt,
-		"Fn::GetAZs":    GetAzs,
-		"Fn::Cidr":      GetCidr,
+		"Ref":             ResolveReference,
+		"Fn::Base64":      ResolveBase64,
+		"Fn::Equals":      ResolveEquals,
+		"Fn::Join":        ResolveJoin,
+		"Fn::Split":       ResolveSplit,
+		"Fn::Sub":         ResolveSub,
+		"Fn::FindInMap":   ResolveFindInMap,
+		"Fn::Select":      ResolveSelect,
+		"Fn::GetAtt":      ResolveGetAtt,
+		"Fn::GetAZs":      GetAzs,
+		"Fn::Cidr":        GetCidr,
+		"Fn::ImportValue": PassthroughResolution,
 		// "Fn::If":        PassthroughResolution,
 	}
 }
 
 func PassthroughResolution(property *Property) (*Property, bool) {
-	return property, true
+	return property, false
 }
 
 func IsIntrinsicFunc(node *yaml.Node) bool {

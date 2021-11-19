@@ -292,9 +292,9 @@ In yaml configurations, cfsec supports both standard an short notation i.e; `!Ba
 ## Limitations
 
 - Not all intrinsic functions are supported
-- `GetAtt` is extremely naive. We don't have visibility of attribute values so it is best effort
-- Formats are limited to `default`, `json`, `csv`. [tfsec](https://tfsec.dev) support `default`, `json`, `csv`, `checkstyle`, `junit` and `sarif`. We aim to support these soon
-- No support for nested stacks. cfsec takes the individual files in isolation with no visibility of 
+  - `ImportValue` requires access to the AWS account which is not currently supported
+  - `GetAtt` is extremely naive. We don't have visibility of attribute values so it is best effort
+- No support for nested stacks. cfsec takes the individual files in isolation with no visibility of what exists in the AWS account
 
 ## Comments, Suggestions, Issues
 

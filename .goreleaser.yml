@@ -48,72 +48,17 @@ release:
     owner: aquasecurity
     name: cfsec
 
-#dockers:
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile
-#    skip_push: auto
-#    image_templates:
-#    - "aquasec/cfsec:latest"
-#    - "aquasec/cfsec:{{ .Tag }}"
-#    - "aquasec/cfsec:v{{ .Major }}.{{ .Minor }}"
-#    - "aquasec/cfsec-alpine:latest"
-#    - "aquasec/cfsec-alpine:{{ .Tag }}"
-#    - "aquasec/cfsec-alpine:v{{ .Major }}.{{ .Minor }}"
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile.scratch
-#    skip_push: auto
-#    image_templates:
-#    - "aquasec/cfsec-scratch:latest"
-#    - "aquasec/cfsec-scratch:{{ .Tag }}"
-#    - "aquasec/cfsec-scratch:v{{ .Major }}.{{ .Minor }}"
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile.ci
-#    skip_push: auto
-#    image_templates:
-#    - "aquasec/cfsec-ci:latest"
-#    - "aquasec/cfsec-ci:{{ .Tag }}"
-#    - "aquasec/cfsec-ci:v{{ .Major }}.{{ .Minor }}"
-#
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile
-#    image_templates:
-#    - "aquasec/cfsec:{{ .Tag }}"
-#    - "aquasec/cfsec-alpine:{{ .Tag }}"
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile.scratch
-#    image_templates:
-#    - "aquasec/cfsec-scratch:{{ .Tag }}"
-#  -
-#    goos: linux
-#    goarch: amd64
-#    ids:
-#    - tfsec
-#
-#    dockerfile: Dockerfile.ci
-#    image_templates:
-#    - "aquasec/cfsec-ci:{{ .Tag }}"
+dockers:
+  -
+    goos: linux
+    goarch: amd64
+    ids:
+    - cfsec
+
+    dockerfile: Dockerfile
+    skip_push: auto
+    image_templates:
+    - "aquasec/cfsec:latest"
+    - "aquasec/cfsec:{{ .Tag }}"
+    - "aquasec/cfsec:v{{ .Major }}.{{ .Minor }}"
+

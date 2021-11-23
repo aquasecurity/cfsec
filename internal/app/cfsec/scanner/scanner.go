@@ -89,7 +89,8 @@ func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 								reference.PropertyRange(),
 								reference,
 							)
-							scanResult.OverrideIssueBlockMetadata(&meta)
+							_ = meta
+							//scanResult.OverrideIssueBlockMetadata(&meta)
 							scanResult.OverrideAnnotation(reference.DisplayValue())
 						}
 						if scanResult.Status() == rules.StatusPassed && !scanner.includePassed {

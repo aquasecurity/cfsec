@@ -32,7 +32,7 @@ Resources:
 	}
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	for _, result := range results {
-		if result.RuleID == ruleID {
+		if result.Rule().LongID() == ruleID {
 			t.Fatalf("Result was found but should not have been")
 		}
 	}
@@ -57,7 +57,7 @@ Resources:
 	}
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	for _, result := range results {
-		if result.RuleID == ruleID {
+		if result.Rule().LongID() == ruleID {
 			t.Fatalf("Result was found but should not have been")
 		}
 	}
@@ -83,7 +83,7 @@ Resources:
 	results := scanner.New().Scan([]*parser.FileContext{ctx})
 	var found bool
 	for _, result := range results {
-		if result.RuleID == ruleID {
+		if result.Rule().LongID() == ruleID {
 			found = true
 			break
 		}

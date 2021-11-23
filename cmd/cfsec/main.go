@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
-	"github.com/aquasecurity/cfsec/internal/app/cfsec/formatters"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
+	"github.com/aquasecurity/defsec/formatters"
 	"github.com/aquasecurity/defsec/rules"
 	"github.com/liamg/tml"
 	"github.com/spf13/cobra"
@@ -98,7 +98,7 @@ var rootCmd = &cobra.Command{
 
 		if includePassed {
 			sort.Slice(results, func(i, j int) bool {
-				return results[i].Status == rules.StatusPassed && results[j].Status != rules.StatusPassed
+				return results[i].Status() == rules.StatusPassed && results[j].Status() != rules.StatusPassed
 			})
 		}
 

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aquasecurity/cfsec/pkg/result"
+	"github.com/aquasecurity/defsec/rules"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
@@ -53,7 +53,7 @@ func RunFailureExamplesTest(t *testing.T, expectedCode string) {
 	}
 }
 
-func scanTestSource(t *testing.T, source string) []result.Result {
+func scanTestSource(t *testing.T, source string) []rules.Result {
 	fileCtx, err := CreateFileContexts(t, source)
 	require.NoError(t, err)
 	s := scanner.New()
@@ -61,12 +61,12 @@ func scanTestSource(t *testing.T, source string) []result.Result {
 }
 
 // CreateFileContexts ...
-func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error) {
+func CreateFileContexts(_ *testing.T, source string) (parser.FileContexts, error) {
 	fs, err := filesystem.New()
 	if err != nil {
 		return nil, err
 	}
-	defer fs.Close()
+	defer func() { _ = fs.Close() }()
 
 	ext := "yaml"
 	if source[0] == '{' {
@@ -91,18 +91,18 @@ func CreateFileContexts(t *testing.T, source string) (parser.FileContexts, error
 
 }
 
-func assertCheckCode(t *testing.T, includeCode string, excludeCode string, results []result.Result) {
+func assertCheckCode(t *testing.T, includeCode string, excludeCode string, results []rules.Result) {
 
 	var foundInclude bool
 	var foundExclude bool
 
 	for _, res := range results {
-		if res.RuleID == excludeCode {
+		if res.Rule().LongID() == excludeCode {
 			foundExclude = true
 		}
-		if res.RuleID == includeCode {
+		if res.Rule().LongID() == includeCode {
 			foundInclude = true
-			assert.NotEqual(t, -2, res.Location.StartLine)
+			assert.Greater(t, res.NarrowestRange().GetStartLine(), 0)
 		}
 	}
 

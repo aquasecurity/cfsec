@@ -267,12 +267,16 @@ func (p *Property) deriveResolved(propType cftypes.CfType, propValue interface{}
 		comment:     p.comment,
 		rng:         p.rng,
 		parentRange: p.parentRange,
-		logicalId: p.logicalId,
+		logicalId:   p.logicalId,
 		Inner: PropertyInner{
 			Type:  propType,
 			Value: propValue,
 		},
 	}
+}
+
+func (p *Property) ParentRange() types.Range {
+	return p.parentRange
 }
 
 func (p *Property) inferBool(prop *Property, defaultValue bool) types.BoolValue {

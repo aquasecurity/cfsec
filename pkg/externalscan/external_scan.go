@@ -3,11 +3,12 @@ package externalscan
 import (
 	"fmt"
 
+	"github.com/aquasecurity/defsec/rules"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
-	"github.com/aquasecurity/cfsec/pkg/result"
 )
 
 type ExternalScanner struct {
@@ -22,7 +23,7 @@ func NewExternalScanner(options ...Option) *ExternalScanner {
 	return external
 }
 
-func (t *ExternalScanner) Scan(toScan string) ([]result.Result, error) {
+func (t *ExternalScanner) Scan(toScan string) ([]rules.FlatResult, error) {
 	defer func() {
 		if r := recover(); r != nil {
 			debug.Log("error: %v", r)
@@ -34,10 +35,12 @@ func (t *ExternalScanner) Scan(toScan string) ([]result.Result, error) {
 		return nil, err
 	}
 
-	var results []result.Result
+	var results []rules.FlatResult
 	internal := scanner.New(t.internalOptions...)
 
-	results = append(results, internal.Scan(fileContexts)...)
+	for _, res := range internal.Scan(fileContexts) {
+		results = append(results, res.Flatten())
+	}
 
 	return results, nil
 }

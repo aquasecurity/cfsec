@@ -60,6 +60,8 @@ github.com/apparentlymart/go-textseg v1.0.0/go.mod h1:z96Txxhf3xSFMPmb5X/1W05FF/
 github.com/apparentlymart/go-textseg/v13 v13.0.0/go.mod h1:ZK2fH7c4NqDTLtiYLvIkEghdlcqw7yxLeM89kiTRPUo=
 github.com/aquasecurity/defsec v0.0.31-0.20211123152940-bf00dd4f156c h1:ju5saJJ98gYMIvqG7sDFiPZwmPPT2tBKukhzO7446bw=
 github.com/aquasecurity/defsec v0.0.31-0.20211123152940-bf00dd4f156c/go.mod h1:EjSsCi122fNbpi89jctQhsR0ykh9ZwBcbHXxZ9mqOzA=
+github.com/aquasecurity/defsec v0.0.31 h1:SUgl4/ZS79FPPqBLLH8VtOOMVPdo1j32AJG8yTfpsWI=
+github.com/aquasecurity/defsec v0.0.31/go.mod h1:EjSsCi122fNbpi89jctQhsR0ykh9ZwBcbHXxZ9mqOzA=
 github.com/aquasecurity/tfsec v0.60.1/go.mod h1:MR3uDlWu+fBTisFndR+NwjSGt06RBhkE++JzKRJ0Ggs=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=

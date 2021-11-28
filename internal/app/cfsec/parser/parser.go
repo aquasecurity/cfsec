@@ -14,22 +14,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type ErrNotCloudFormation struct {
-	source string
-}
 
-func NewErrNotCloudFormation(source string) *ErrNotCloudFormation {
-	return &ErrNotCloudFormation{
-		source: source,
-	}
-}
-
-func (e *ErrNotCloudFormation) Error() string{
-	return fmt.Sprintf("The file %s is not CloudFormation", e.source)
-}
 
 // Parser ...
-type Parser struct{
+type Parser struct {
 	parameters map[string]Parameter
 }
 
@@ -63,7 +51,7 @@ func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 			if err != nil {
 				return err
 			}
-			defer func() {_ =  file.Close()}()
+			defer func() { _ = file.Close() }()
 
 			context, err := p.Parse(file, path)
 			if err != nil {
@@ -113,11 +101,11 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 
 	if strings.HasSuffix(strings.ToLower(source), ".json") {
 		if err := jfather.Unmarshal(content, context); err != nil {
-			return nil, fmt.Errorf("source '%s' contains invalid JSON: %w", source, err)
+			return nil, NewErrInvalidContent(source, err)
 		}
 	} else {
 		if err := yaml.Unmarshal(content, context); err != nil {
-			return nil, fmt.Errorf("source '%s' contains invalid YAML: %w", source, err)
+			return nil, NewErrInvalidContent(source, err)
 		}
 	}
 

@@ -26,10 +26,11 @@ nav:
 - HOME: index.md
 - Getting Started:
   - Installation: getting-started/installation.md
-  - Signature Verification: getting-started/signing.md
   - Quick Start: getting-started/quickstart.md
   - Parameters: getting-started/usage.md
   - Credits: getting-started/credit.md
+  - GitHub Actions:
+      - GitHub Action: getting-started/configuration/github-actions/github-action.md
 - Checks:
   - api-gateway:
     - enable-access-logging: checks/api-gateway/enable-access-logging.md

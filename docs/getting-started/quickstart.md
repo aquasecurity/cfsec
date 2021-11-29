@@ -6,12 +6,12 @@ The easiest way to run `cfsec` is to run it in the directory you want to scan.
 cfsec
 ```
 
-`cfsec` will traverse the directory till it finds a valid [CloudFormation] file; the directory it finds this file in will be considered to the working directory.
+`cfsec` will traverse the directory structure processing valid [CloudFormation] file.
 
 If you want to run on a specific location, this can be passed as an argument;
 
 ```bash
-cfsec ./stacks/prod
+cfsec ./stacks/prod/bucket.yaml
 ```
 
 
@@ -44,4 +44,5 @@ This page only covers the basics of what `cfsec` can do - much more is achievabl
 
 
 [CloudFormation]: https://aws.amazon.com/cloudformation/
+[GitHub Action]: ../configuration/github-actions/github-action
 [Parameters]: ../usage

@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -112,7 +110,7 @@ func (p *Property) AsString() string {
 		if prop, success := p.resolveValue(); success {
 			return prop.AsString()
 		}
-		_, _ = fmt.Fprintf(os.Stderr, "Could not resolve function at %s, returning type default\n", p.rng)
+		debug.Error("Could not resolve function at %s, returning type default\n", p.rng)
 		return ""
 	}
 	if p.IsNil() {
@@ -198,7 +196,6 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 		}
 	}
 
-
 	switch checkerVal := checkValue.(type) {
 	case string:
 		if p.IsNil() {
@@ -223,8 +220,7 @@ func (p *Property) EqualTo(checkValue interface{}, equalityOptions ...EqualityOp
 		return p.Inner.Value == checkerVal
 	}
 
-
-return false
+	return false
 
 }
 

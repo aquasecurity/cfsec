@@ -65,5 +65,5 @@ dockers:
 
 announce:
   twitter:
-    enabled: true
+    enabled: false
     message_template: "🎉 cfsec {{.Tag}} is available now!! See what's new here - https://github.com/aquasecurity/cfsec/releases/tag/{{.Tag}}"

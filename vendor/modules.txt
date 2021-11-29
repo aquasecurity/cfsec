@@ -20,7 +20,7 @@ github.com/acomagu/bufpipe
 # github.com/apparentlymart/go-cidr v1.1.0
 ## explicit
 github.com/apparentlymart/go-cidr/cidr
-# github.com/aquasecurity/defsec v0.0.33
+# github.com/aquasecurity/defsec v0.0.36
 ## explicit
 github.com/aquasecurity/defsec/cidr
 github.com/aquasecurity/defsec/formatters
@@ -130,6 +130,8 @@ github.com/aquasecurity/defsec/rules/aws/workspaces
 github.com/aquasecurity/defsec/severity
 github.com/aquasecurity/defsec/state
 github.com/aquasecurity/defsec/types
+# github.com/aquasecurity/tfsec v0.60.1
+## explicit
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/emirpasic/gods v1.12.0

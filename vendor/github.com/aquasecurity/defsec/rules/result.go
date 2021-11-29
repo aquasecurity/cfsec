@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/aquasecurity/defsec/severity"
+
 	"github.com/aquasecurity/defsec/types"
 )
 
@@ -15,11 +17,36 @@ const (
 )
 
 type Result struct {
-	rule        Rule
-	description string
-	annotation  string
-	status      Status
-	metadata    *types.Metadata
+	rule             Rule
+	description      string
+	annotation       string
+	status           Status
+	codeBlock        *types.Metadata
+	issueBlock       *types.Metadata
+	severityOverride *severity.Severity
+}
+
+func (r Result) Severity() severity.Severity {
+	if r.severityOverride != nil {
+		return *r.severityOverride
+	}
+	return r.Rule().Severity
+}
+
+func (r *Result) OverrideSeverity(s severity.Severity) {
+	r.severityOverride = &s
+}
+
+func (r *Result) OverrideDescription(description string) {
+	r.description = description
+}
+
+func (r *Result) OverrideIssueBlockMetadata(metadata *types.Metadata) {
+	r.issueBlock = metadata
+}
+
+func (r *Result) OverrideAnnotation(annotation string) {
+	r.annotation = annotation
 }
 
 func (r Result) Status() Status {
@@ -38,12 +65,19 @@ func (r Result) Annotation() string {
 	return r.annotation
 }
 
-func (r Result) Metadata() *types.Metadata {
-	return r.metadata
+func (r Result) IssueBlockMetadata() *types.Metadata {
+	return r.issueBlock
 }
 
-func (r Result) Reference() types.Reference {
-	return r.metadata.Reference()
+func (r Result) CodeBlockMetadata() *types.Metadata {
+	return r.codeBlock
+}
+
+func (r Result) NarrowestRange() types.Range {
+	if r.issueBlock != nil {
+		return r.issueBlock.Range()
+	}
+	return r.codeBlock.Range()
 }
 
 type Results []Result
@@ -53,19 +87,25 @@ type MetadataProvider interface {
 	GetRawValue() interface{}
 }
 
-func (r *Results) Add(description string, source MetadataProvider) {
+func (r *Results) Add(description string, source MetadataProvider, issueBlock ...MetadataProvider) {
 	var annotationStr string
-	metadata := source.GetMetadata()
-	if metadata != nil && metadata.IsExplicit() {
-		annotationStr = rawToString(source.GetRawValue())
+
+	result := Result{
+		description: description,
+		codeBlock:   source.GetMetadata(),
 	}
-	*r = append(*r,
-		Result{
-			description: description,
-			metadata:    metadata,
-			annotation:  annotationStr,
-		},
-	)
+
+	if len(issueBlock) > 0 {
+		metadata := issueBlock[0].GetMetadata()
+		if metadata != nil && metadata.IsExplicit() {
+			annotationStr = rawToString(issueBlock[0].GetRawValue())
+
+		}
+		result.annotation = annotationStr
+		result.issueBlock = issueBlock[0].GetMetadata()
+	}
+
+	*r = append(*r, result)
 }
 
 func (r *Results) AddPassed(source MetadataProvider, descriptions ...string) {
@@ -75,7 +115,7 @@ func (r *Results) AddPassed(source MetadataProvider, descriptions ...string) {
 		Result{
 			description: strings.Join(descriptions, " "),
 			status:      StatusPassed,
-			metadata:    metadata,
+			codeBlock:   metadata,
 		},
 	)
 }

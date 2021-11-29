@@ -9,11 +9,14 @@ import (
 	"github.com/aquasecurity/defsec/rules"
 )
 
-func isIgnored(result rules.Result) bool {
-	if cfRef, ok := result.Reference().(*parser.CFReference); ok {
-		prop := cfRef.ResolvedAttributeValue()
-		if ignore, err := parseIgnore(prop.Comment()); err == nil {
-			if ignore.RuleID != result.Rule().AVDID && ignore.RuleID != result.Rule().LongID() {
+func isIgnored(scanResult rules.Result) bool {
+	ref := scanResult.CodeBlockMetadata().Reference()
+	if scanResult.IssueBlockMetadata() != nil {
+		ref = scanResult.IssueBlockMetadata().Reference()
+	}
+	if cfRef, ok := ref.(*parser.CFReference); ok {
+		if ignore, err := parseIgnore(cfRef.Comment()); err == nil {
+			if ignore.RuleID != scanResult.Rule().AVDID && ignore.RuleID != scanResult.Rule().LongID() {
 				return false
 			}
 			if ignore.Expiry == nil || time.Now().Before(*ignore.Expiry) {

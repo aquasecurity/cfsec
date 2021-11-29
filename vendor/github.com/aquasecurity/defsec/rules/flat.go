@@ -34,11 +34,15 @@ func (r Results) Flatten() []FlatResult {
 }
 
 func (r *Result) Flatten() FlatResult {
+	rng := r.CodeBlockMetadata().Range()
+	if r.IssueBlockMetadata() != nil {
+		rng = r.IssueBlockMetadata().Range()
+	}
 	return FlatResult{
 		RuleID:          r.rule.AVDID,
 		RuleSummary:     r.rule.Summary,
 		RuleProvider:    r.rule.Provider,
-		Impact:          r.rule.AVDID,
+		Impact:          r.rule.Impact,
 		Resolution:      r.rule.Resolution,
 		Links:           r.rule.Links,
 		Description:     r.Description(),
@@ -46,9 +50,9 @@ func (r *Result) Flatten() FlatResult {
 		Severity:        r.rule.Severity,
 		Status:          r.status,
 		Location: FlatRange{
-			Filename:  r.metadata.Range().GetFilename(),
-			StartLine: r.metadata.Range().GetStartLine(),
-			EndLine:   r.metadata.Range().GetEndLine(),
+			Filename:  rng.GetFilename(),
+			StartLine: rng.GetStartLine(),
+			EndLine:   rng.GetEndLine(),
 		},
 	}
 }

@@ -19,7 +19,7 @@ var (
 )
 
 func init() {
-	defaultWebDocsPath := fmt.Sprintf("%s/checkdocs", projectRoot)
+	defaultWebDocsPath := fmt.Sprintf("%s/docs/checks", projectRoot)
 	rootCmd.Flags().StringVar(&webPath, "web-path", defaultWebDocsPath, "The path to generate web into, defaults to ./checkdocs")
 }
 
@@ -48,10 +48,6 @@ func getSortedChecks() []rules.Rule {
 	sort.Slice(checks, func(i, j int) bool {
 		return checks[i].ID() < checks[j].ID()
 	})
-
-	if err := generateNavIndexFile(checks); err != nil {
-		panic(err)
-	}
 
 	return checks
 }

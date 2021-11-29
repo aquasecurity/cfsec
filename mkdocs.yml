@@ -1,0 +1,168 @@
+site_name: cfsec
+
+site_url: https://aquasecurity.github.io/cfsec/
+
+site_description: A static analysis security scanner for your yaml and json CloudFormation code
+
+docs_dir: docs/
+
+repo_name: aquasecurity/cfsec
+
+repo_url: https://github.com/aquasecurity/cfsec
+
+edit_uri: ''
+
+theme:
+  favicon: favicon.ico
+  features:
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.sections
+  language: en
+  logo: imgs/logo.png
+  name: material
+
+nav:
+- HOME: index.md
+- Getting Started:
+  - Installation: getting-started/installation.md
+  - Quick Start: getting-started/quickstart.md
+  - Parameters: getting-started/usage.md
+  - Credits: getting-started/credit.md
+  - GitHub Actions:
+      - GitHub Action: getting-started/configuration/github-actions/github-action.md
+- Checks:
+  - api-gateway:
+    - enable-access-logging: checks/api-gateway/enable-access-logging.md
+  - athena:
+    - enable-at-rest-encryption: checks/athena/enable-at-rest-encryption.md
+    - no-encryption-override: checks/athena/no-encryption-override.md
+  - autoscaling:
+    - enable-at-rest-encryption: checks/autoscaling/enable-at-rest-encryption.md
+    - no-public-ip: checks/autoscaling/no-public-ip.md
+  - cloudfront:
+    - enable-logging: checks/cloudfront/enable-logging.md
+    - enable-waf: checks/cloudfront/enable-waf.md
+    - enforce-https: checks/cloudfront/enforce-https.md
+    - use-secure-tls-policy: checks/cloudfront/use-secure-tls-policy.md
+  - cloudtrail:
+    - enable-all-regions: checks/cloudtrail/enable-all-regions.md
+    - enable-at-rest-encryption: checks/cloudtrail/enable-at-rest-encryption.md
+    - enable-log-validation: checks/cloudtrail/enable-log-validation.md
+  - cloudwatch:
+    - log-group-customer-key: checks/cloudwatch/log-group-customer-key.md
+  - codebuild:
+    - enable-encryption: checks/codebuild/enable-encryption.md
+  - config:
+    - aggregate-all-regions: checks/config/aggregate-all-regions.md
+  - documentdb:
+    - enable-log-export: checks/documentdb/enable-log-export.md
+    - enable-storage-encryption: checks/documentdb/enable-storage-encryption.md
+    - encryption-customer-key: checks/documentdb/encryption-customer-key.md
+  - dynamodb:
+    - enable-at-rest-encryption: checks/dynamodb/enable-at-rest-encryption.md
+  - ebs:
+    - enable-volume-encryption: checks/ebs/enable-volume-encryption.md
+    - encryption-customer-key: checks/ebs/encryption-customer-key.md
+  - ec2:
+    - no-secrets-in-user-data: checks/ec2/no-secrets-in-user-data.md
+  - ecr:
+    - enable-image-scans: checks/ecr/enable-image-scans.md
+    - enforce-immutable-repository: checks/ecr/enforce-immutable-repository.md
+    - no-public-access: checks/ecr/no-public-access.md
+    - repository-customer-key: checks/ecr/repository-customer-key.md
+  - ecs:
+    - enable-container-insight: checks/ecs/enable-container-insight.md
+    - enable-in-transit-encryption: checks/ecs/enable-in-transit-encryption.md
+    - no-plaintext-secrets: checks/ecs/no-plaintext-secrets.md
+  - efs:
+    - enable-at-rest-encryption: checks/efs/enable-at-rest-encryption.md
+  - eks:
+    - encrypt-secrets: checks/eks/encrypt-secrets.md
+  - elastic-search:
+    - enable-domain-encryption: checks/elastic-search/enable-domain-encryption.md
+    - enable-domain-logging: checks/elastic-search/enable-domain-logging.md
+    - enable-in-transit-encryption: checks/elastic-search/enable-in-transit-encryption.md
+    - enforce-https: checks/elastic-search/enforce-https.md
+    - use-secure-tls-policy: checks/elastic-search/use-secure-tls-policy.md
+  - elasticache:
+    - add-description-for-security-group: checks/elasticache/add-description-for-security-group.md
+    - enable-backup-retention: checks/elasticache/enable-backup-retention.md
+    - enable-in-transit-encryption: checks/elasticache/enable-in-transit-encryption.md
+  - iam:
+    - no-policy-wildcards: checks/iam/no-policy-wildcards.md
+  - kinesis:
+    - enable-in-transit-encryption: checks/kinesis/enable-in-transit-encryption.md
+  - lambda:
+    - enable-tracing: checks/lambda/enable-tracing.md
+    - restrict-source-arn: checks/lambda/restrict-source-arn.md
+  - mq:
+    - enable-audit-logging: checks/mq/enable-audit-logging.md
+    - enable-general-logging: checks/mq/enable-general-logging.md
+    - no-public-access: checks/mq/no-public-access.md
+  - msk:
+    - enable-in-transit-encryption: checks/msk/enable-in-transit-encryption.md
+    - enable-logging: checks/msk/enable-logging.md
+  - neptune:
+    - enable-log-export: checks/neptune/enable-log-export.md
+    - enable-storage-encryption: checks/neptune/enable-storage-encryption.md
+  - rds:
+    - enable-performance-insights: checks/rds/enable-performance-insights.md
+    - encrypt-cluster-storage-data: checks/rds/encrypt-cluster-storage-data.md
+    - encrypt-instance-storage-data: checks/rds/encrypt-instance-storage-data.md
+    - no-classic-resources: checks/rds/no-classic-resources.md
+    - no-public-db-access: checks/rds/no-public-db-access.md
+    - specify-backup-retention: checks/rds/specify-backup-retention.md
+  - redshift:
+    - add-description-to-security-group: checks/redshift/add-description-to-security-group.md
+    - encryption-customer-key: checks/redshift/encryption-customer-key.md
+    - no-classic-resources: checks/redshift/no-classic-resources.md
+    - use-vpc: checks/redshift/use-vpc.md
+  - s3:
+    - block-public-acls: checks/s3/block-public-acls.md
+    - block-public-policy: checks/s3/block-public-policy.md
+    - enable-bucket-encryption: checks/s3/enable-bucket-encryption.md
+    - enable-bucket-logging: checks/s3/enable-bucket-logging.md
+    - enable-versioning: checks/s3/enable-versioning.md
+    - ignore-public-acls: checks/s3/ignore-public-acls.md
+    - no-public-access-with-acl: checks/s3/no-public-access-with-acl.md
+    - no-public-buckets: checks/s3/no-public-buckets.md
+    - specify-public-access-block: checks/s3/specify-public-access-block.md
+  - sns:
+    - enable-topic-encryption: checks/sns/enable-topic-encryption.md
+  - sqs:
+    - enable-queue-encryption: checks/sqs/enable-queue-encryption.md
+    - no-wildcards-in-policy-documents: checks/sqs/no-wildcards-in-policy-documents.md
+  - ssm:
+    - secret-use-customer-key: checks/ssm/secret-use-customer-key.md
+  - vpc:
+    - add-description-to-security-group-rule: checks/vpc/add-description-to-security-group-rule.md
+    - add-description-to-security-group: checks/vpc/add-description-to-security-group.md
+    - no-excessive-port-access: checks/vpc/no-excessive-port-access.md
+    - no-public-egress-sgr: checks/vpc/no-public-egress-sgr.md
+    - no-public-ingress-acl: checks/vpc/no-public-ingress-acl.md
+    - no-public-ingress-sgr: checks/vpc/no-public-ingress-sgr.md
+  - workspaces:
+    - enable-disk-encryption: checks/workspaces/enable-disk-encryption.md
+
+plugins:
+- search
+- macros
+- include-markdown
+
+extra:
+  generator: false
+  version:
+    method: mike
+    provider: mike
+
+markdown_extensions:
+- pymdownx.highlight
+- pymdownx.superfences
+- admonition
+- footnotes
+- attr_list
+- pymdownx.tabbed
+- def_list
+- pymdownx.details
+- tables

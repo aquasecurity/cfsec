@@ -81,7 +81,6 @@ func newEntry(check rules.Rule) docEntry {
 		links = append(links, link)
 	}
 
-
 	return docEntry{
 		Summary:     check.Base.Rule().Summary,
 		ID:          check.ID(),
@@ -98,7 +97,7 @@ func newEntry(check rules.Rule) docEntry {
 
 func generateWebPages(fileContents []rules.Rule) error {
 	for _, check := range fileContents {
-		webProviderPath := fmt.Sprintf("%s/docs/%s", webPath, strings.ToLower(check.Base.Rule().Service))
+		webProviderPath := fmt.Sprintf("docs/checks/%s", strings.ToLower(check.Base.Rule().Service))
 		entry := newEntry(check)
 		if err := generateWebPage(webProviderPath, entry); err != nil {
 			return err

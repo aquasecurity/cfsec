@@ -27,6 +27,12 @@ type ResourceInner struct {
 // ConfigureResource ...
 func (r *Resource) ConfigureResource(id, filepath string, ctx *FileContext) {
 
+	defer func() {
+		if r := recover(); r != nil {
+			debug.Log("Captured an error processing %s", id)
+		}
+	}()
+
 	r.setId(id)
 	r.setFile(filepath)
 	r.setContext(ctx)
@@ -125,7 +131,7 @@ func (r *Resource) GetProperty(path string) *Property {
 	}
 
 	if len(pathParts) == 1 || property.IsNil() {
-		resolved, _ :=  property.resolveValue()
+		resolved, _ := property.resolveValue()
 		return resolved
 	}
 
@@ -218,7 +224,7 @@ func (r *Resource) inferBool(prop *Property, defaultValue bool) types.BoolValue 
 		}
 	}
 
-	if prop.IsInt(){
+	if prop.IsInt() {
 		if prop.EqualTo(0) {
 			return types.Bool(false, prop.Metadata())
 		}

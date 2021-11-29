@@ -2,16 +2,19 @@ package externalscan
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/aquasecurity/defsec/rules"
 
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/loader"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/scanner"
-	"github.com/aquasecurity/cfsec/pkg/result"
 )
 
 type ExternalScanner struct {
 	internalOptions []scanner.Option
+	debugEnabled    bool
 }
 
 func NewExternalScanner(options ...Option) *ExternalScanner {
@@ -22,7 +25,7 @@ func NewExternalScanner(options ...Option) *ExternalScanner {
 	return external
 }
 
-func (t *ExternalScanner) Scan(toScan string) ([]result.Result, error) {
+func (t *ExternalScanner) Scan(toScan string) ([]rules.FlatResult, error) {
 	defer func() {
 		if r := recover(); r != nil {
 			debug.Log("error: %v", r)
@@ -31,13 +34,21 @@ func (t *ExternalScanner) Scan(toScan string) ([]result.Result, error) {
 	}()
 	fileContexts, err := parser.NewParser().ParseFiles(toScan)
 	if err != nil {
-		return nil, err
+		switch err.(type) {
+		case *parser.ErrParsingErrors:
+			fmt.Fprintf(os.Stderr, "There were issues with parsing some files. %v", err)
+		default:
+			_, _ = fmt.Fprintf(os.Stderr, "An unrecoverable error occurred during parsing. %v", err)
+			os.Exit(1)
+		}
 	}
 
-	var results []result.Result
+	var results []rules.FlatResult
 	internal := scanner.New(t.internalOptions...)
 
-	results = append(results, internal.Scan(fileContexts)...)
+	for _, res := range internal.Scan(fileContexts) {
+		results = append(results, res.Flatten())
+	}
 
 	return results, nil
 }

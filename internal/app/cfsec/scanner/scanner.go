@@ -5,9 +5,10 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/aquasecurity/defsec/types"
+
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
-	"github.com/aquasecurity/cfsec/pkg/result"
 	"github.com/aquasecurity/defsec/rules"
 
 	cfRules "github.com/aquasecurity/cfsec/internal/app/cfsec/rules"
@@ -63,42 +64,44 @@ func New(options ...Option) *Scanner {
 }
 
 // Scan ...
-func (scanner *Scanner) Scan(contexts parser.FileContexts) []result.Result {
-	var results []result.Result
+func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
+	var results []rules.Result
 	for _, ctx := range contexts {
-		state := adapter.Adapt(*ctx)
+		if ctx == nil {
+			continue
+		}
+		s := adapter.Adapt(*ctx)
+		if s == nil {
+			continue
+		}
 		for _, rule := range GetRegisteredRules() {
 			debug.Log("Executing rule: %s", rule.LongID())
-			evalResult := rule.Base.Evaluate(state)
+			evalResult := rule.Base.Evaluate(s)
 			if len(evalResult) > 0 {
 				debug.Log("Found %d results for %s", len(evalResult), rule.LongID())
 				for _, scanResult := range evalResult {
-					location := scanResult.Reference().(*parser.CFReference)
+
+					ref := scanResult.CodeBlockMetadata().Reference()
+					if scanResult.IssueBlockMetadata() != nil {
+						ref = scanResult.IssueBlockMetadata().Reference()
+					}
+					reference := ref.(*parser.CFReference)
 
 					if !isIgnored(scanResult) {
-						description := getDescription(scanResult, location)
-						addResult := result.Result{
-							AVDID:       scanResult.Rule().AVDID,
-							RuleID:      scanResult.Rule().LongID(),
-							RuleSummary: scanResult.Rule().Summary,
-							Impact:      scanResult.Rule().Impact,
-							Resolution:  scanResult.Rule().Resolution,
-							Links:       scanResult.Rule().Links,
-							Description: description,
-							Severity:    scanResult.Rule().Severity,
-							Resource:    location.LogicalID(),
-							Location: result.LocationBlock{
-								Filename:  location.ResourceRange().GetFilename(),
-								StartLine: location.ResourceRange().GetStartLine(),
-								EndLine:   location.ResourceRange().GetEndLine(),
-							},
-							Status: scanResult.Status(),
+						description := getDescription(scanResult, reference)
+						scanResult.OverrideDescription(description)
+						if reference.PropertyRange() != nil {
+							meta := types.NewMetadata(
+								reference.PropertyRange(),
+								reference,
+							)
+							scanResult.OverrideIssueBlockMetadata(&meta)
+							scanResult.OverrideAnnotation(reference.DisplayValue())
 						}
-						addResult.SetProperty(location.ResolvedAttributeValue())
-						if addResult.Status == rules.StatusPassed && !scanner.includePassed {
+						if scanResult.Status() == rules.StatusPassed && !scanner.includePassed {
 							continue
 						}
-						results = append(results, addResult)
+						results = append(results, scanResult)
 					}
 				}
 			}

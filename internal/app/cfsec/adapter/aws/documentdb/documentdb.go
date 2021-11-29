@@ -1,15 +1,24 @@
 package documentdb
 
 import (
+	"reflect"
+
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/debug"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/parser"
 	"github.com/aquasecurity/defsec/provider/aws/documentdb"
 )
 
 // Adapt ...
-func Adapt(cfFile parser.FileContext) documentdb.DocumentDB {
+func Adapt(cfFile parser.FileContext) (result documentdb.DocumentDB) {
 
-	return documentdb.DocumentDB{
-		Clusters: getClusters(cfFile),
-	}
+	defer func() {
+		if r := recover(); r != nil {
+			metadata := cfFile.Metadata()
+			debug.Log("There were errors adapting %s from %s", reflect.TypeOf(result), metadata.Range().GetFilename())
+		}
+	}()
+
+	result.Clusters = getClusters(cfFile)
+	return result
 
 }

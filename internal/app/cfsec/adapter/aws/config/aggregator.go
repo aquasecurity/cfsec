@@ -8,6 +8,8 @@ import (
 
 func getConfiguraionAggregator(ctx parser.FileContext) (aggregator config.ConfigurationAggregrator) {
 
+
+
 	aggregatorResources := ctx.GetResourceByType("AWS::Config::ConfigurationAggregator")
 
 	if len(aggregatorResources) == 0 {

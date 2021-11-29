@@ -67,10 +67,16 @@ func New(options ...Option) *Scanner {
 func (scanner *Scanner) Scan(contexts parser.FileContexts) []rules.Result {
 	var results []rules.Result
 	for _, ctx := range contexts {
-		state := adapter.Adapt(*ctx)
+		if ctx == nil {
+			continue
+		}
+		s := adapter.Adapt(*ctx)
+		if s == nil {
+			continue
+		}
 		for _, rule := range GetRegisteredRules() {
 			debug.Log("Executing rule: %s", rule.LongID())
-			evalResult := rule.Base.Evaluate(state)
+			evalResult := rule.Base.Evaluate(s)
 			if len(evalResult) > 0 {
 				debug.Log("Found %d results for %s", len(evalResult), rule.LongID())
 				for _, scanResult := range evalResult {

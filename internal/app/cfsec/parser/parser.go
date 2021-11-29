@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -13,8 +14,6 @@ import (
 	"github.com/liamg/jfather"
 	"gopkg.in/yaml.v3"
 )
-
-
 
 // Parser ...
 type Parser struct {
@@ -33,6 +32,7 @@ func NewParser(options ...Option) *Parser {
 
 // ParseFiles ...
 func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
+	var parsingErrors []error
 	var contexts FileContexts
 	for _, path := range filepaths {
 		path, err := filepath.Abs(path)
@@ -55,7 +55,7 @@ func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 
 			context, err := p.Parse(file, path)
 			if err != nil {
-				return err
+				parsingErrors = append(parsingErrors, err)
 			}
 
 			contexts = append(contexts, context)
@@ -70,6 +70,10 @@ func (p *Parser) ParseFiles(filepaths ...string) (FileContexts, error) {
 			}
 		}
 	}
+	if len(parsingErrors) > 0 {
+		return contexts, NewErrParsingErrors(parsingErrors)
+	}
+
 	return contexts, nil
 }
 
@@ -89,8 +93,9 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 
 	lines := strings.Split(string(content), "\n")
 
-	if !checkIsCloudformation(lines, sourceFmt) {
-		return nil, NewErrNotCloudFormation(source)
+	if !checkIsCloudformation(content, sourceFmt) {
+		debug.Log("%s not a CloudFormation file, skipping", source)
+		return nil, nil
 	}
 
 	context := &FileContext{
@@ -129,17 +134,23 @@ func (p *Parser) Parse(reader io.Reader, source string) (*FileContext, error) {
 
 }
 
-func checkIsCloudformation(lines []string, sourceFmt SourceFormat) bool {
-	for _, line := range lines {
-		switch sourceFmt {
-		case YamlSourceFormat:
-			if strings.Contains(line, "Resources:") {
-				return true
-			}
-		case JsonSourceFormat:
-			if strings.Contains(line, "\"Resources\"") {
-				return true
-			}
+func checkIsCloudformation(content []byte, sourceFmt SourceFormat) bool {
+	checker := make(map[string]interface{})
+
+	switch sourceFmt {
+	case YamlSourceFormat:
+		if err := yaml.Unmarshal(content, &checker); err != nil {
+			return false
+		}
+	case JsonSourceFormat:
+		if err := json.Unmarshal(content, &checker); err != nil {
+			return false
+		}
+	}
+
+	for key := range checker {
+		if key == "Resources" {
+			return true
 		}
 	}
 

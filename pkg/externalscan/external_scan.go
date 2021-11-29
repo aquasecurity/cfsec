@@ -2,6 +2,7 @@ package externalscan
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aquasecurity/defsec/rules"
 
@@ -13,6 +14,7 @@ import (
 
 type ExternalScanner struct {
 	internalOptions []scanner.Option
+	debugEnabled    bool
 }
 
 func NewExternalScanner(options ...Option) *ExternalScanner {
@@ -32,7 +34,13 @@ func (t *ExternalScanner) Scan(toScan string) ([]rules.FlatResult, error) {
 	}()
 	fileContexts, err := parser.NewParser().ParseFiles(toScan)
 	if err != nil {
-		return nil, err
+		switch err.(type) {
+		case *parser.ErrParsingErrors:
+			fmt.Fprintf(os.Stderr, "There were issues with parsing some files. %v", err)
+		default:
+			_, _ = fmt.Fprintf(os.Stderr, "An unrecoverable error occurred during parsing. %v", err)
+			os.Exit(1)
+		}
 	}
 
 	var results []rules.FlatResult

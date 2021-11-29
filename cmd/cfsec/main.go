@@ -78,10 +78,17 @@ var rootCmd = &cobra.Command{
 				contexts, err = p.ParseFiles(dir)
 			}
 			if err != nil {
-				return err
+				switch err.(type) {
+				case *parser.ErrParsingErrors:
+					_, _ = fmt.Fprintf(os.Stderr, "There were issues with parsing some files. %v\n", err)
+				default:
+					_, _ = fmt.Fprintf(os.Stderr, "An unrecoverable error occurred during parsing. %v", err)
+					os.Exit(1)
+				}
 			}
 		} else {
-			panic(fmt.Errorf("couldn't find the filepath when stating"))
+			_, _ = fmt.Fprintf(os.Stderr, "Coudd not find %s", dir)
+			os.Exit(1)
 		}
 
 		if err != nil {

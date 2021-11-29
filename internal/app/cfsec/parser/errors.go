@@ -1,6 +1,9 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type ErrNotCloudFormation struct {
 	source string
@@ -28,9 +31,29 @@ func NewErrInvalidContent(source string, err error) *ErrInvalidContent {
 	}
 }
 func (e *ErrInvalidContent) Error() string {
-	return fmt.Sprintf("Invalid content in file: %s", e.source)
+	return fmt.Sprintf("Invalid content in file: %s. Error: %v", e.source, e.err)
 }
 
 func (e *ErrInvalidContent) Reason() error {
 	return e.err
+}
+
+type ErrParsingErrors struct {
+	errs       []error
+	errStrings []string
+}
+
+func NewErrParsingErrors(errs []error) *ErrParsingErrors {
+	var errStrings []string
+	for _, err := range errs {
+		errStrings = append(errStrings, err.Error())
+	}
+	return &ErrParsingErrors{
+		errs:       errs,
+		errStrings: errStrings,
+	}
+}
+
+func (e *ErrParsingErrors) Error() string {
+	return fmt.Sprintf("There were parsing errors:\n %s", strings.Join(e.errStrings, "\n"))
 }

@@ -9,3 +9,9 @@ func OptionIncludePassed() Option {
 		e.internalOptions = append(e.internalOptions, scanner.OptionIncludePassed())
 	}
 }
+
+func OptionDebugEnabled() Option {
+	return func(e *ExternalScanner) {
+		e.debugEnabled = true
+	}
+}

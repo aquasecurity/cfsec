@@ -62,3 +62,8 @@ dockers:
     - "aquasec/cfsec:{{ .Tag }}"
     - "aquasec/cfsec:v{{ .Major }}.{{ .Minor }}"
 
+
+announce:
+  twitter:
+    enabled: true
+    message_template: "🎉 cfsec {{.Tag}} is available now!! See what's new here - https://github.com/aquasecurity/cfsec/releases/tag/{{.Tag}}"

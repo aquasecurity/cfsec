@@ -14,12 +14,13 @@ func init() {
 AWSTemplateFormatVersion: 2010-09-09
 Description: Bad Example of SAM API
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
     Properties:
-      Name: Bad SAM API example
+    Properties:
+      Name: Good SAM API example
       StageName: Prod
-      TracingEnabled: false
+      Tracing: Passthrough
 `,
 		},
 
@@ -29,19 +30,17 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Good Example of SAM API
 Resources:
   ApiGatewayApi:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::HttpApi
     Properties:
       Name: Good SAM API example
       StageName: Prod
-      TracingEnabled: false
-      Domain:
-        SecurityPolicy: TLS_1_2
+      Tracing: Activey
       AccessLogSetting:
         DestinationArn: gateway-logging
         Format: json
 `,
 		},
 
-		Base: sam.CheckEnableAccessLogging,
+		Base: sam.CheckEnableHttpApiAccessLogging,
 	})
 }

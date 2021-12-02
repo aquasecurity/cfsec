@@ -36,9 +36,12 @@ Resources:
       TracingEnabled: false
       Domain:
         SecurityPolicy: TLS_1_2
+      AccessLogSetting:
+        DestinationArn: gateway-logging
+        Format: json
 `,
 		},
 
-		Base: sam.CheckUseSecureTlsPolicy,
+		Base: sam.CheckEnableApiAccessLogging,
 	})
 }

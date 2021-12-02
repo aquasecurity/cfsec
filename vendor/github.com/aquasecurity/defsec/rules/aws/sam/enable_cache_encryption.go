@@ -7,17 +7,19 @@ import (
 	"github.com/aquasecurity/defsec/state"
 )
 
-var CheckEnableCacheEncryption = rules.Register(
+var CheckEnableApiCacheEncryption = rules.Register(
 	rules.Rule{
 		AVDID:       "AVD-AWS-0110",
 		Provider:    provider.AWSProvider,
 		Service:     "sam",
-		ShortCode:   "enable-cache-encryption",
+		ShortCode:   "enable-api-cache-encryption",
 		Summary:     "SAM API must have data cache enabled",
 		Impact:      "Data stored in the cache that is unencrypted may be vulnerable to compromise",
 		Resolution:  "Enable cache encryption",
 		Explanation: `Method cache encryption ensures that any sensitive data in the cache is not vulnerable to compromise in the event of interception`,
-		Links:       []string{},
+		Links:       []string{
+			"https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachedataencrypted",
+		},
 		Severity:    severity.Medium,
 	},
 	func(s *state.State) (results rules.Results) {

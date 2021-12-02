@@ -351,6 +351,56 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/api-use-secure-tls-policy/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-api-access-logging/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-api-cache-encryption/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-api-tracing/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-function-tracing/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-http-api-access-logging/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-state-machine-tracing/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/enable-table-encryption/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/no-function-policy-wildcards/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sam/no-state-machine-policy-wildcards/</loc>
+         <lastmod>2021-12-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://aquasecurity.github.io/cfsec/v0.3.0/checks/sns/enable-topic-encryption/</loc>
          <lastmod>2021-12-02</lastmod>
          <changefreq>daily</changefreq>

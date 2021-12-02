@@ -12,40 +12,39 @@ func init() {
 		BadExample: []string{
 			`---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bad Example of SAM API
+Description: Bad Example of SAM Table
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
+  BadFunction:
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      Name: Bad SAM API example
-      StageName: Prod
-      TracingEnabled: false
+      TableName: Bad Table
+      SSESpecification:
+        SSEEnabled: false
 `, `---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bad Example of SAM API
+Description: Bad Example of SAM Table
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
+  BadFunction:
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      Name: Bad SAM API example
-      StageName: Prod
+      TableName: Bad Table
 `,
 		},
 
 		GoodExample: []string{
 			`---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Good Example of SAM API
+Description: Good Example of SAM Table
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
+  GoodFunction:
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      Name: Good SAM API example
-      StageName: Prod
-      TracingEnabled: true
+      TableName: GoodTable
+      SSESpecification:
+        SSEEnabled: true
 `,
 		},
 
-		Base: sam.CheckEnableTracing,
+		Base: sam.CheckEnableTableEncryption,
 	})
 }

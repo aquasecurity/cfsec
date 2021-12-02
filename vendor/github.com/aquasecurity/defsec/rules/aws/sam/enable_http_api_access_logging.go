@@ -7,23 +7,23 @@ import (
 	"github.com/aquasecurity/defsec/state"
 )
 
-var CheckEnableAccessLogging = rules.Register(
+var CheckEnableHttpApiAccessLogging = rules.Register(
 	rules.Rule{
-		AVDID:       "AVD-AWS-0113",
+		AVDID:       "AVD-AWS-0116",
 		Provider:    provider.AWSProvider,
 		Service:     "sam",
-		ShortCode:   "enable-access-logging",
-		Summary:     "SAM API stages for V1 and V2 should have access logging enabled",
+		ShortCode:   "enable-http-api-access-logging",
+		Summary:     "SAM HTTP API stages for V1 and V2 should have access logging enabled",
 		Impact:      "Logging provides vital information about access and usage",
 		Resolution:  "Enable logging for API Gateway stages",
 		Explanation: `API Gateway stages should have access log settings block configured to track all access to a particular stage. This should be applied to both v1 and v2 gateway stages.`,
 		Links: []string{
-			"https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html",
+			"https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-httpapi.html#sam-httpapi-accesslogsettings",
 		},
 		Severity: severity.Medium,
 	},
 	func(s *state.State) (results rules.Results) {
-		for _, api := range s.AWS.SAM.APIs {
+		for _, api := range s.AWS.SAM.HttpAPIs {
 			if !api.IsManaged() {
 				continue
 			}

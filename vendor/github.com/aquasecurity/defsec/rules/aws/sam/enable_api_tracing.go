@@ -7,22 +7,24 @@ import (
 	"github.com/aquasecurity/defsec/state"
 )
 
-var CheckEnableTracing = rules.Register(
+var CheckEnableApiTracing = rules.Register(
 	rules.Rule{
 		AVDID:       "AVD-AWS-0111",
 		Provider:    provider.AWSProvider,
 		Service:     "sam",
-		ShortCode:   "enable-tracing",
+		ShortCode:   "enable-api-tracing",
 		Summary:     "SAM API must have X-Ray tracing enabled",
 		Impact:      "Without full tracing enabled it is difficult to trace the flow of logs",
 		Resolution:  "Enable tracing",
 		Explanation: `X-Ray tracing enables end-to-end debugging and analysis of all API Gateway HTTP requests.`,
-		Links:       []string{},
+		Links:       []string{
+			"https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-api.html#sam-api-tracingenabled",
+		},
 		Severity:    severity.Low,
 	},
 	func(s *state.State) (results rules.Results) {
 		for _, api := range s.AWS.SAM.APIs {
-			if !api.IsManaged(){
+			if !api.IsManaged() {
 				continue
 			}
 

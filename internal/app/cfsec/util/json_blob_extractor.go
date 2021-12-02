@@ -9,13 +9,17 @@ import (
 )
 
 // GetJsonBytes ...
-func GetJsonBytes(policyProp *parser.Property, format parser.SourceFormat) []byte {
+func GetJsonBytes(policyProp *parser.Property, format parser.SourceFormat, squashList ...bool) []byte {
 	lines, err := policyProp.AsRawStrings()
 	if err != nil {
 		return nil
 	}
 	if format == parser.JsonSourceFormat {
 		return []byte(strings.Join(lines, " "))
+	}
+
+	if len(squashList) > 0 {
+		lines[0] = strings.Replace(lines[0], "-", " ", 1)
 	}
 
 	lines = removeLeftMargin(lines)

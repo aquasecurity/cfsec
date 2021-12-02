@@ -2,7 +2,8 @@ site_name: cfsec
 
 site_url: https://aquasecurity.github.io/cfsec/
 
-site_description: A static analysis security scanner for your yaml and json CloudFormation code
+site_description: A static analysis security scanner for your yaml and json CloudFormation
+  code
 
 docs_dir: docs/
 
@@ -30,7 +31,7 @@ nav:
   - Parameters: getting-started/usage.md
   - Credits: getting-started/credit.md
   - GitHub Actions:
-      - GitHub Action: getting-started/configuration/github-actions/github-action.md
+    - GitHub Action: getting-started/configuration/github-actions/github-action.md
 - Checks:
   - api-gateway:
     - enable-access-logging: checks/api-gateway/enable-access-logging.md
@@ -128,6 +129,17 @@ nav:
     - no-public-access-with-acl: checks/s3/no-public-access-with-acl.md
     - no-public-buckets: checks/s3/no-public-buckets.md
     - specify-public-access-block: checks/s3/specify-public-access-block.md
+  - sam:
+    - api-use-secure-tls-policy: checks/sam/api-use-secure-tls-policy.md
+    - enable-api-access-logging: checks/sam/enable-api-access-logging.md
+    - enable-api-cache-encryption: checks/sam/enable-api-cache-encryption.md
+    - enable-api-tracing: checks/sam/enable-api-tracing.md
+    - enable-function-tracing: checks/sam/enable-function-tracing.md
+    - enable-http-api-access-logging: checks/sam/enable-http-api-access-logging.md
+    - enable-state-machine-tracing: checks/sam/enable-state-machine-tracing.md
+    - enable-table-encryption: checks/sam/enable-table-encryption.md
+    - no-function-policy-wildcards: checks/sam/no-function-policy-wildcards.md
+    - no-state-machine-policy-wildcards: checks/sam/no-state-machine-policy-wildcards.md
   - sns:
     - enable-topic-encryption: checks/sns/enable-topic-encryption.md
   - sqs:

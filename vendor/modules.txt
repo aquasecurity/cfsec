@@ -20,7 +20,7 @@ github.com/acomagu/bufpipe
 # github.com/apparentlymart/go-cidr v1.1.0
 ## explicit
 github.com/apparentlymart/go-cidr/cidr
-# github.com/aquasecurity/defsec v0.0.37
+# github.com/aquasecurity/defsec v0.0.38-0.20211202114943-52f01d551cdf
 ## explicit
 github.com/aquasecurity/defsec/cidr
 github.com/aquasecurity/defsec/formatters
@@ -55,6 +55,7 @@ github.com/aquasecurity/defsec/provider/aws/neptune
 github.com/aquasecurity/defsec/provider/aws/rds
 github.com/aquasecurity/defsec/provider/aws/redshift
 github.com/aquasecurity/defsec/provider/aws/s3
+github.com/aquasecurity/defsec/provider/aws/sam
 github.com/aquasecurity/defsec/provider/aws/sns
 github.com/aquasecurity/defsec/provider/aws/sqs
 github.com/aquasecurity/defsec/provider/aws/ssm
@@ -122,6 +123,7 @@ github.com/aquasecurity/defsec/rules/aws/neptune
 github.com/aquasecurity/defsec/rules/aws/rds
 github.com/aquasecurity/defsec/rules/aws/redshift
 github.com/aquasecurity/defsec/rules/aws/s3
+github.com/aquasecurity/defsec/rules/aws/sam
 github.com/aquasecurity/defsec/rules/aws/sns
 github.com/aquasecurity/defsec/rules/aws/sqs
 github.com/aquasecurity/defsec/rules/aws/ssm

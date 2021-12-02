@@ -28,6 +28,7 @@ import (
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/rds"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/redshift"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/s3"
+	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/sam"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/sns"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/sqs"
 	_ "github.com/aquasecurity/cfsec/internal/app/cfsec/rules/aws/ssm"

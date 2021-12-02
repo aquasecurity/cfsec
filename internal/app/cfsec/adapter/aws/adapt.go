@@ -29,6 +29,7 @@ import (
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/rds"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/redshift"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/s3"
+	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/sam"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/sns"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/sqs"
 	"github.com/aquasecurity/cfsec/internal/app/cfsec/adapter/aws/ssm"
@@ -69,6 +70,7 @@ func Adapt(cfFile parser.FileContext) aws.AWS {
 		RDS:           rds.Adapt(cfFile),
 		Redshift:      redshift.Adapt(cfFile),
 		S3:            s3.Adapt(cfFile),
+		SAM:           sam.Adapt(cfFile),
 		SNS:           sns.Adapt(cfFile),
 		SQS:           sqs.Adapt(cfFile),
 		SSM:           ssm.Adapt(cfFile),

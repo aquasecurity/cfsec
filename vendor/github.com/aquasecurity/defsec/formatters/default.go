@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/aquasecurity/defsec/metrics"
+
 	"github.com/aquasecurity/defsec/rules"
 	"github.com/aquasecurity/defsec/severity"
 	"github.com/liamg/clinch/terminal"
@@ -17,21 +19,24 @@ var severityFormat map[severity.Severity]string
 
 func FormatDefault(_ io.Writer, results []rules.Result, _ string, options ...FormatterOption) error {
 
+	showDebug := false
 	showSuccessOutput := true
-	includePassedChecks := false
+	showMetrics := true
 
 	var showGif bool
 
 	for _, option := range options {
 		switch option {
-		case IncludePassed:
-			includePassedChecks = true
 		case ConciseOutput:
 			showSuccessOutput = false
+			showMetrics = false
 		case PassingGif:
 			showGif = true
+			showMetrics = false
 		case NoColour:
 			tml.DisableFormatting()
+		case WithDebug:
+			showDebug = true
 		}
 	}
 
@@ -45,7 +50,9 @@ func FormatDefault(_ io.Writer, results []rules.Result, _ string, options ...For
 		}
 	}
 
-	if len(results) == 0 || len(results) == countPassedResults(results) {
+	passCount := countPassedResults(results)
+
+	if len(results) == 0 || len(results) == passCount {
 		if showGif {
 			if renderer, err := ascii.FromURL("https://media.giphy.com/media/kyLYXonQYYfwYDIeZl/source.gif"); err == nil {
 				renderer.SetFill(true)
@@ -60,21 +67,48 @@ func FormatDefault(_ io.Writer, results []rules.Result, _ string, options ...For
 
 	fmt.Println("")
 	for i, res := range results {
-		printResult(res, i, includePassedChecks)
+		printResult(res, i)
 	}
 
-	terminal.PrintErrorf("\n  %d potential problems detected.\n\n", len(results)-countPassedResults(results))
+	if showMetrics {
+		printMetrics(showDebug)
+	}
+
+	var passInfo string
+	if passCount > 0 {
+		passInfo = fmt.Sprintf("%d passed, ", passCount)
+	}
+
+	terminal.PrintErrorf("\n  %s%d potential problems detected.\n\n", passInfo, len(results)-countPassedResults(results))
 
 	return nil
 
 }
 
-func printResult(res rules.Result, i int, includePassedChecks bool) {
+func printMetrics(debug bool) {
+
+	categories := metrics.General()
+
+	if debug {
+		categories = append(categories, metrics.Debug()...)
+	}
+
+	for _, category := range categories {
+		_ = tml.Printf("  <blue>%s</blue>\n  %s\n", category.Name(), strings.Repeat("-", 42))
+		for _, metric := range category.Metrics() {
+			_ = tml.Printf("  <blue>%-20s</blue> %s\n", metric.Name(), metric.Value())
+		}
+		fmt.Printf("\n")
+	}
+
+}
+
+func printResult(res rules.Result, i int) {
 
 	resultHeader := fmt.Sprintf("  <underline>Result %d</underline>\n", i+1)
 
 	var severityFormatted string
-	if includePassedChecks && res.Status() == rules.StatusPassed {
+	if res.Status() == rules.StatusPassed {
 		terminal.PrintSuccessf(resultHeader)
 		severityFormatted = tml.Sprintf("<green>PASSED</green>")
 	} else {
@@ -93,11 +127,8 @@ func printResult(res rules.Result, i int, includePassedChecks bool) {
 
 `, severityFormatted, res.Description(), rng)
 
-	if code, err := highlightCode(res); err == nil {
-		_ = tml.Printf(code)
-		tml.Println("\n")
-	} else if err != nil {
-		terminal.PrintErrorf("Source code not available\n\n")
+	if err := highlightCode(res); err != nil {
+		_ = tml.Printf("<red>Failed to render source code: %s</red>\n", err)
 	}
 
 	_ = tml.Printf("  <white>ID:         </white><blue>%s</blue>\n", res.Rule().LongID())
@@ -128,47 +159,50 @@ func countPassedResults(results []rules.Result) int {
 	return passed
 }
 
-func highlightCode(result rules.Result) (string, error) {
+func highlightCode(result rules.Result) error {
 
-	rng := result.CodeBlockMetadata().Range()
-
-	if rng == nil {
-		return "", nil
+	outerRange := result.CodeBlockMetadata().Range()
+	innerRange := outerRange
+	if result.IssueBlockMetadata() != nil {
+		innerRange = result.IssueBlockMetadata().Range()
 	}
-	var resolvedValue string
-	content, err := ioutil.ReadFile(rng.GetFilename())
+
+	content, err := ioutil.ReadFile(outerRange.GetFilename())
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	hasAnnotation := result.Annotation() != "" && result.IssueBlockMetadata() != nil
+	hasAnnotation := result.Annotation() != ""
 
-	bodyStrings := strings.Split(string(content), "\n")
+	for i, bodyString := range strings.Split(string(content), "\n") {
 
-	var coloured []string
-	for i, bodyString := range bodyStrings {
-		resolvedValue = ""
-		if i >= rng.GetStartLine()-1 && i <= rng.GetEndLine() {
-			// TODO: Fix this for json
-			if !strings.HasSuffix(rng.GetFilename(), ".json") {
-				if hasAnnotation && result.IssueBlockMetadata().Range().GetStartLine() == i+1 {
-					resolvedValue = fmt.Sprintf("<blue>[%s]</blue>", result.Annotation())
-				}
-			}
+		line := i + 1
 
-			if hasAnnotation {
-				if resolvedValue == "" {
-					coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> <dim>┃</dim> <yellow>%s</yellow>", i, bodyString))
-				} else {
-					coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> <dim>┃</dim> <red>%s    %s</red>", i, bodyString, resolvedValue))
-				}
+		// this line is outside the range, skip it
+		if line < outerRange.GetStartLine() || line > outerRange.GetEndLine() {
+			continue
+		}
+
+		// if we're not rendering json, we have an annotation, and we're rendering the line to show the annotation on,
+		// render the line with the annotation afterwards
+		if !strings.HasSuffix(outerRange.GetFilename(), ".json") && hasAnnotation && line == innerRange.GetStartLine() {
+			annotation := tml.Sprintf("<blue>[%s]</blue>", result.Annotation())
+			_ = tml.Printf("<blue>% 5d</blue> <dim>┃</dim> <red>%s    %s</red>\n", line, bodyString, annotation)
+			continue
+		}
+
+		// if we're rendering the actual issue lines, use red
+		if i+1 >= innerRange.GetStartLine() && i < innerRange.GetEndLine() {
+			if result.Status() == rules.StatusPassed {
+				_ = tml.Printf("<blue>% 5d</blue> <dim>┃</dim> <green>%s</green>\n", line, bodyString)
 			} else {
-				coloured = append(coloured, fmt.Sprintf("<blue>% 5d</blue> <dim>┃</dim> <red>%s</red>", i, bodyString))
-
+				_ = tml.Printf("<blue>% 5d</blue> <dim>┃</dim> <red>%s</red>\n", line, bodyString)
 			}
+		} else {
+			_ = tml.Printf("<blue>% 5d</blue> <dim>┃</dim> <yellow>%s</yellow>\n", line, bodyString)
 		}
 	}
 
-	return strings.Join(coloured, "\n"), nil
-
+	fmt.Printf("\n\n")
+	return nil
 }

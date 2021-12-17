@@ -10,9 +10,9 @@ type FormatterOption int
 
 const (
 	ConciseOutput FormatterOption = iota
-	IncludePassed
 	PassingGif
 	NoColour
+	WithDebug
 )
 
 // Formatter formats scan results into a specific format

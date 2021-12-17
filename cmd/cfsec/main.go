@@ -149,8 +149,8 @@ func getScannerOptions() []scanner.Option {
 
 func getFormatterOptions() []formatters.FormatterOption {
 	var options []formatters.FormatterOption
-	if includePassed {
-		options = append(options, formatters.IncludePassed)
-	}
+
+	// TODO add formatting options here
+
 	return options
 }

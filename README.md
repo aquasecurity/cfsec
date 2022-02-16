@@ -1,4 +1,5 @@
-# cfsec
+> ⚠️ The CloudFormation scanning logic is now integrated with [Aquasecurity Trivy](https://github.com/aquasecurity/trivy). cfsec will no longer be maintained as a stand alone scanner and Trivy should be used
+
 
 <p align="center">
   <img width="354" src="logo.png">
